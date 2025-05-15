@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -21,5 +23,17 @@ public class MainActivity extends AppCompatActivity {
           v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
           return insets;
         });
+
+    setupLoginButton();
+  }
+
+  private void setupLoginButton() {
+    Button loginButton = findViewById(R.id.loginButton);
+    loginButton.setOnClickListener(v -> navigateToLogin());
+  }
+
+  private void navigateToLogin() {
+    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+    startActivity(intent);
   }
 }
