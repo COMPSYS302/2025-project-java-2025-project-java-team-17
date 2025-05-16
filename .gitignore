@@ -38,6 +38,7 @@ local.properties
 *.ap_
 *.aab
 
+
 # Keystore files
 *.jks
 *.keystore
@@ -45,6 +46,8 @@ keystore.properties
 
 # Log Files
 *.log
+
+*.pdf
 
 # Android Studio captures folder
 captures/
