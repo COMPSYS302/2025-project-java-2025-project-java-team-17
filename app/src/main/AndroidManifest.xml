@@ -27,6 +27,12 @@
             android:exported="false">
     
         </activity>
+
+        <activity
+            android:name=".RegistrationActivity"
+            android:exported="false">
+    
+        </activity>
     </application>
 
 </manifest>
