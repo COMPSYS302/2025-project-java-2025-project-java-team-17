@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
     setupLoginButton();
+    setupRegisterButton();
   }
 
   private void setupLoginButton() {
@@ -34,6 +35,16 @@ public class MainActivity extends AppCompatActivity {
 
   private void navigateToLogin() {
     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+    startActivity(intent);
+  }
+
+  private void setupRegisterButton() {
+    Button registerButton = findViewById(R.id.registerButton);
+    registerButton.setOnClickListener(v -> navigateToRegister());
+  }
+
+  private void navigateToRegister() {
+    Intent intent = new Intent(MainActivity.this, RegistrationActivity.class);
     startActivity(intent);
   }
 }
