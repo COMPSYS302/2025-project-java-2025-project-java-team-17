@@ -2,9 +2,11 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -26,6 +28,21 @@ public class MainActivity extends AppCompatActivity {
 
     setupLoginButton();
     setupRegisterButton();
+
+    CardView guidanceCard = findViewById(R.id.guidanceCard);
+    CardView successCard = findViewById(R.id.successCard);
+    CardView meditationCard = findViewById(R.id.meditationCard);
+
+    View.OnClickListener goToCategoryActivity = new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent(MainActivity.this, CategoryActivity.class);
+        startActivity(intent);
+      }
+    };
+    guidanceCard.setOnClickListener(goToCategoryActivity);
+    successCard.setOnClickListener(goToCategoryActivity);
+    meditationCard.setOnClickListener(goToCategoryActivity);
   }
 
   private void setupLoginButton() {
