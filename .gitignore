@@ -3,7 +3,7 @@
 build/
 .idea/gradle.xml
 .idea/jarRepositories.xml
-gradle.properties
+
 
 # Local configuration file
 local.properties
@@ -37,7 +37,6 @@ local.properties
 *.aar
 *.ap_
 *.aab
-
 
 # Keystore files
 *.jks
