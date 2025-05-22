@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "277264137894",
+    "project_id": "crysta-d58f8",
+    "storage_bucket": "crysta-d58f8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:277264137894:android:5180113d0e1258dfa27e67",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACdkPEX3-mc3BanPG11e3tI9aGk7OPkCQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
