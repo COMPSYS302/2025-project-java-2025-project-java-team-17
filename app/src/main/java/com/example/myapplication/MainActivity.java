@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +11,8 @@ import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.myapplication.utils.CrystalSeeder;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,6 +35,15 @@ public class MainActivity extends AppCompatActivity {
     CardView guidanceCard = findViewById(R.id.guidanceCard);
     CardView successCard = findViewById(R.id.successCard);
     CardView meditationCard = findViewById(R.id.meditationCard);
+
+    SharedPreferences prefs = getSharedPreferences("appPrefs", MODE_PRIVATE);
+    boolean seeded = prefs.getBoolean("crystalsSeeded", false);
+
+    if (!seeded) {
+      CrystalSeeder.seedCrystalsToFirestore();
+
+      prefs.edit().putBoolean("crystalsSeeded", true).apply();
+    }
 
     View.OnClickListener goToCategoryActivity = new View.OnClickListener() {
       @Override
