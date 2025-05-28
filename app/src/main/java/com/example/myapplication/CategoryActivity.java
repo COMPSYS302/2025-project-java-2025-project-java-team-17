@@ -18,18 +18,20 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryActivity extends AppCompatActivity  {
-
+public class CategoryActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
 
+        // ✅ Retrieve category name passed from MainActivity
+        String categoryName = getIntent().getStringExtra("categoryName");
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Calm & Stress Relief");
+            getSupportActionBar().setTitle(categoryName); // dynamic title
         }
         toolbar.setNavigationOnClickListener(v -> finish());
 
@@ -41,9 +43,9 @@ public class CategoryActivity extends AppCompatActivity  {
         crystalGrid.setLayoutManager(new GridLayoutManager(this, 2));
         crystalGrid.setAdapter(adapter);
 
-// Fetch crystals from Firestore
+        // ✅ Use categoryName in the query
         db.collection("crystals")
-                .whereEqualTo("category", "Calm & Stress Relief") // optional filter
+                .whereEqualTo("category", categoryName)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
@@ -56,6 +58,5 @@ public class CategoryActivity extends AppCompatActivity  {
                         Log.e("Firestore", "Error fetching crystals", e)
                 );
     }
-
-
 }
+
