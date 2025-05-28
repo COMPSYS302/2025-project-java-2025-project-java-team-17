@@ -22,9 +22,6 @@
         android:id="@+id/categoryTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Calm &amp; Stress Relief"
-        android:textStyle="bold"
-        android:textSize="30sp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="8dp" />
