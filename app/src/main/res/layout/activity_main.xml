@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,26 +5,24 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     tools:context=".MainActivity">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="32dp">
 
-
-    <SearchView
+        <SearchView
             android:id="@+id/searchView"
             android:layout_width="0dp"
-            app:layout_constraintWidth_percent="0.8"
             android:layout_height="wrap_content"
             android:queryHint="Search Product Name"
             android:iconifiedByDefault="false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:background="@drawable/rounded_border"
-
-
-            />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_percent="0.8" />
 
         <TextView
             android:id="@+id/categoriesHeading"
@@ -36,160 +33,17 @@
             android:textStyle="bold"
             android:layout_marginTop="24dp"
             app:layout_constraintTop_toBottomOf="@id/searchView"
-            app:layout_constraintStart_toStartOf="@id/searchView"
+            app:layout_constraintStart_toStartOf="@id/searchView" />
 
-            />
-
-        <LinearLayout
-            android:id="@+id/categoryCardsContainer"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/categoryRecyclerView"
             android:layout_width="0dp"
-            app:layout_constraintWidth_percent="0.8"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="12dp"
+            android:padding="16dp"
+            android:clipToPadding="false"
             app:layout_constraintTop_toBottomOf="@id/categoriesHeading"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:padding="8dp">
-
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/guidanceCard"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginBottom="12dp"
-
-                android:elevation="4dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="12dp">
-
-                    <!-- TextView on left -->
-                    <TextView
-                        android:id="@+id/categoryTitle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="Guidance"
-                        android:textStyle="bold"
-                        android:textSize="24sp"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/categoryImage"
-                        app:layout_constraintHorizontal_bias="0"
-                        android:gravity="center_vertical" />
-
-
-                    <ImageView
-                        android:id="@+id/categoryImage"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/crystal"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintWidth_percent="0.4"
-                        />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-
-
-
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/successCard"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginBottom="12dp"
-
-                android:elevation="4dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="12dp">
-
-
-                    <TextView
-                        android:id="@+id/categoryTitle2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="Success"
-                        android:textStyle="bold"
-                        android:textSize="24sp"
-
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/categoryImage2"
-                        app:layout_constraintHorizontal_bias="0"
-                        android:gravity="center_vertical" />
-
-                    <ImageView
-                        android:id="@+id/categoryImage2"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/crystal"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintWidth_percent="0.4"
-                        />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/meditationCard"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginBottom="12dp"
-
-                android:elevation="4dp">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="12dp">
-
-
-                    <TextView
-                        android:id="@+id/categoryTitle3"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="Meditation"
-                        android:textStyle="bold"
-                        android:textSize="24sp"
-
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/categoryImage3"
-                        app:layout_constraintHorizontal_bias="0"
-                        android:gravity="center_vertical" />
-
-
-                    <ImageView
-                        android:id="@+id/categoryImage3"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/crystal"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintWidth_percent="0.4"
-                        />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-
-        </LinearLayout>
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <Button
             android:id="@+id/loginButton"
@@ -197,16 +51,16 @@
             android:layout_height="wrap_content"
             android:text="Login"
             android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@id/categoryCardsContainer"
+            app:layout_constraintTop_toBottomOf="@id/categoryRecyclerView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-            <Button
+        <Button
             android:id="@+id/registerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Register"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintTop_toBottomOf="@id/loginButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

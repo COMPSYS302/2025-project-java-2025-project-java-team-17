@@ -11,8 +11,15 @@ import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.adapters.CategoryAdapter;
+import com.example.myapplication.models.Category;
 import com.example.myapplication.utils.CrystalSeeder;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,29 +39,36 @@ public class MainActivity extends AppCompatActivity {
     setupLoginButton();
     setupRegisterButton();
 
-    CardView guidanceCard = findViewById(R.id.guidanceCard);
-    CardView successCard = findViewById(R.id.successCard);
-    CardView meditationCard = findViewById(R.id.meditationCard);
 
+    // Seed Firestore data only once
     SharedPreferences prefs = getSharedPreferences("appPrefs", MODE_PRIVATE);
     boolean seeded = prefs.getBoolean("crystalsSeeded", false);
-
     if (!seeded) {
       CrystalSeeder.seedCrystalsToFirestore();
-
       prefs.edit().putBoolean("crystalsSeeded", true).apply();
     }
 
-    View.OnClickListener goToCategoryActivity = new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        Intent intent = new Intent(MainActivity.this, CategoryActivity.class);
-        startActivity(intent);
-      }
-    };
-    guidanceCard.setOnClickListener(goToCategoryActivity);
-    successCard.setOnClickListener(goToCategoryActivity);
-    meditationCard.setOnClickListener(goToCategoryActivity);
+    //  Define category list
+    List<Category> categories = Arrays.asList(
+            new Category("Calm & Stress Relief", R.drawable.cat_1),
+            new Category("Success", R.drawable.cat_2),
+            new Category("Meditation", R.drawable.cat_3)
+    );
+
+    // ✅ Setup RecyclerView
+    RecyclerView recyclerView = findViewById(R.id.categoryRecyclerView);
+    recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+    // ✅ Set adapter with click listener
+    CategoryAdapter adapter = new CategoryAdapter(this, categories, view -> {
+      int position = recyclerView.getChildAdapterPosition(view);
+      String selectedCategory = categories.get(position).getName();
+      Intent intent = new Intent(MainActivity.this, CategoryActivity.class);
+      intent.putExtra("categoryName", selectedCategory);
+      startActivity(intent);
+    });
+
+    recyclerView.setAdapter(adapter);
   }
 
   private void setupLoginButton() {
