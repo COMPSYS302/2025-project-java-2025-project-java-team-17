@@ -29,10 +29,13 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
         ImageView crystalImage;
         TextView crystalName;
 
+        TextView crystalPrice;
+
         public ViewHolder(View itemView) {
             super(itemView);
             crystalImage = itemView.findViewById(R.id.crystalImage);
             crystalName = itemView.findViewById(R.id.crystalName);
+            crystalPrice = itemView.findViewById(R.id.crystalPrice);
         }
     }
 
@@ -46,9 +49,11 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         Crystal crystal = crystalList.get(position);
         holder.crystalName.setText(crystal.getName());
-
+        holder.crystalPrice.setText(crystal.getPrice() + " $/kg");
         Glide.with(context)
-                .load(crystal.getImageUrls().get(0))  // Load first image
+                .load(crystal.getImageUrls().get(0))  // First image
+                .placeholder(R.drawable.crystal)
+                .error(R.drawable.crystal)       // Optional: show something if loading fails
                 .into(holder.crystalImage);
     }
 
