@@ -40,13 +40,8 @@ public class MainActivity extends AppCompatActivity {
     setupRegisterButton();
 
 
-    // Seed Firestore data only once
-    SharedPreferences prefs = getSharedPreferences("appPrefs", MODE_PRIVATE);
-    boolean seeded = prefs.getBoolean("crystalsSeeded", false);
-    if (!seeded) {
-      CrystalSeeder.seedCrystalsToFirestore();
-      prefs.edit().putBoolean("crystalsSeeded", true).apply();
-    }
+
+    CrystalSeeder.seedCrystalsToFirestore();
 
     //  Define category list
     List<Category> categories = Arrays.asList(
