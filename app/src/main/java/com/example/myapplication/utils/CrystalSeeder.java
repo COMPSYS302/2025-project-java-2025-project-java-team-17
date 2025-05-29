@@ -167,7 +167,171 @@ public class CrystalSeeder {
                         2.5,
                         10,
                         0
+                ),
+
+                new Crystal(
+                        "crystal018",
+                        "Azurite",
+                        "A soothing stone that enhances spiritual awareness and promotes inner peace.",
+                        "Meditation",
+                        Arrays.asList("clarity", "intuition", "blue"),
+                        Arrays.asList(
+                               "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FAzurite%2Fazurite_1.png?alt=media&token=d803411d-8fa6-4719-a77b-dbe16d429b70",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FAzurite%2Fazurite_2.png?alt=media&token=dfe2facb-cbf0-44e4-8ba9-a429893b6679",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FAzurite%2Fazurite_3.png?alt=media&token=45463811-7df3-42e5-a375-a3aed16fec2d"
+                        ),
+                        2.5,
+                        10,
+                        0
+                ),
+
+                new Crystal(
+                        "crystal019",
+                        "Black Tourmaline",
+                        "A grounding crystal that shields against negative energies and EMFs.",
+                        "Meditation",
+                        Arrays.asList("protection", "grounding", "black"),
+                        Arrays.asList(
+                               "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FBlack%20Tourmaline%2FBlackTourmaline_1.png?alt=media&token=972dc212-ddd5-4e5c-8baa-5ec58d7ecff9",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FBlack%20Tourmaline%2FBlackTourmaline_2.png?alt=media&token=584b2ea5-a796-4e7c-b8f0-ddb357392a7a",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FBlack%20Tourmaline%2FBlackTourmaline_3.png?alt=media&token=416956b9-e690-4f3a-a79c-5efc9af0dc61"
+                        ),
+                        2.5,
+                        10,
+                        0
+                ),
+
+                new Crystal(
+                        "crystal020",
+                        "Clear Quartz",
+                        "A powerful energy amplifier that brings clarity and balances all chakras.",
+                        "Meditation",
+                        Arrays.asList("clarity", "energy", "clear"),
+                        Arrays.asList(
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FClear%20Quartz%2FClearQuartz_1.png?alt=media&token=952732e5-c62c-4203-8593-e2bdd0abb657",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FClear%20Quartz%2FClearQuartz_2.png?alt=media&token=daa1d28d-8940-4ce7-a769-612bb1554e65",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FClear%20Quartz%2FClearQuartz_3.png?alt=media&token=b1f4cf6c-4f85-4138-a9d8-c91e47e64f77"
+                        ),
+                        2.5,
+                        10,
+                        0
+                ),
+
+                new Crystal(
+                        "crystal021",
+                        "Danburite",
+                        "Facilitates deep spiritual connection and access to higher consciousness.",
+                        "Meditation",
+                        Arrays.asList("purity", "connection", "clear"),
+                        Arrays.asList(
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FDanburite%2FDanburite_1.png?alt=media&token=3111f140-36ff-4bab-b579-6417b060a58e",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FDanburite%2FDanburite_2.png?alt=media&token=953af613-5bcb-40cb-a54f-452e8acd7461",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FDanburite%2FDanburite_3.png?alt=media&token=5ed3921a-6de5-4589-84a0-4eca8bbf3d22"
+                        ),
+                        2.5,
+                        10,
+                        0
+                ),
+
+                new Crystal(
+                        "crystal022",
+                        "Hematite",
+                        "Strongly grounding, it brings mental organization and focus.",
+                        "Meditation",
+                        Arrays.asList("grounding", "protection", "silver"),
+                        Arrays.asList(
+                               "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FHematite%2FHematite_1.png?alt=media&token=8d0a3ca1-574e-44ee-8a49-47cdd38463ef",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FHematite%2FHematite_2.png?alt=media&token=3748ef53-65de-45c6-8a92-a8fb64da3d31",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FHematite%2FHematite_3.png?alt=media&token=583c189a-4385-40d8-90b8-b0beae586d6b"
+                        ),
+                        2.5,
+                        10,
+                        0
+                ),
+
+                new Crystal(
+                        "crystal023",
+                        "Kyanite",
+                        "Aligns all chakras instantly and promotes clear communication and energy flow.",
+                        "Meditation",
+                        Arrays.asList("energy", "alignment", "blue"),
+                        Arrays.asList(
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FKyanite%2FKyanite_1.png?alt=media&token=f4c327fa-129e-45b8-a777-36ef0dcca80f",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FKyanite%2FKyanite_2.png?alt=media&token=f0c25f9f-c9c4-42ef-aeb3-df8fd4c4148e",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FKyanite%2FKyanite_3.png?alt=media&token=5229b2b8-72dd-4901-9bf4-1b0a350fb392"
+                        ),
+                        2.5,
+                        10,
+                        0
+                ),
+
+                new Crystal(
+                        "crystal024",
+                        "Labradorite",
+                        "Awakens psychic abilities and protects during spiritual work.",
+                        "Meditation",
+                        Arrays.asList("protection", "intuition", "chrome"),
+                        Arrays.asList(
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FLabradorite%2FLabradorite_1.png?alt=media&token=3897943c-34e2-474e-83ea-972c2478adb7",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FLabradorite%2FLabradorite_2.png?alt=media&token=656deddf-f8be-4ff2-9d85-659b7a9c10b6",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FLabradorite%2FLabradorite_3.png?alt=media&token=9af82882-8371-4e76-8761-3c0ba267fc65"
+                        ),
+                        2.5,
+                        10,
+                        0
+                ),
+
+                new Crystal(
+                        "crystal025",
+                        "Lapis Lazuli",
+                        "Stimulates intuition and truth, supporting deep inner self-discovery.",
+                        "Meditation",
+                        Arrays.asList("intuition", "wisdom", "blue"),
+                        Arrays.asList(
+                               "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FLapis%20Lazuli%2FLapisLazuli_1.png?alt=media&token=103f5ba4-0c23-496b-8384-081d396ccb4b",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FLapis%20Lazuli%2FLapisLazuli_2.png?alt=media&token=2a162bd7-3781-435e-b0c0-4784de31d09d",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FLapis%20Lazuli%2FLapisLazuli_3.png?alt=media&token=3956bcc2-e03e-4af8-9f1d-5d8d3f69e90b"
+                        ),
+                        2.5,
+                        10,
+                        0
+                ),
+
+                new Crystal(
+                        "crystal026",
+                        "Rose Quartz",
+                        "The stone of unconditional love, encouraging compassion and emotional healing.",
+                        "Meditation",
+                        Arrays.asList("love", "healing", "pink"),
+                        Arrays.asList(
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FRose%20Quartz%2FRoseQuartz_1.png?alt=media&token=acd68e2a-d2eb-4094-9c76-e03bee7af18e",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FRose%20Quartz%2FRoseQuartz_2.png?alt=media&token=3b211147-7e25-40a9-bde6-202c1b3090c4",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FRose%20Quartz%2FRoseQuartz_3.png?alt=media&token=008c68bf-0399-4c95-8564-876198523b43"
+                        ),
+                        2.5,
+                        10,
+                        0
+                ),
+
+                new Crystal(
+                        "crystal027",
+                        "Tigers Eye",
+                        "Enhances willpower, confidence, and balanced decision-making.",
+                        "Meditation",
+                        Arrays.asList("protection", "confidence", "brown"),
+                        Arrays.asList(
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FTigers%20Eye%2FTigersEye_1.png?alt=media&token=62ba7930-33ff-4bc7-a713-4b65c0d47f62",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FTigers%20Eye%2FTigersEye_2.png?alt=media&token=480b2c15-bdbb-4917-9307-a3d241a30192",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FTigers%20Eye%2FTigersEye_3.png?alt=media&token=579fa4fe-89d0-427f-bab6-7a8d1f440c29"
+                        ),
+                        2.5,
+                        10,
+                        0
                 )
+
+
+
+
         );
         for (Crystal crystal : crystals) {
             seedSingleCrystalIfMissing(crystal);
