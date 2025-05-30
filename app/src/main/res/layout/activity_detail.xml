@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailActivity">
+
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:menu="@menu/top_app_bar_menu"
+        app:navigationIcon="@drawable/back_button">
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/crystalImages"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        android:scrollbars="horizontal" />
+
+    <TextView
+        android:id="@+id/crystalInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/categoryTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp" />
+
+
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:menu="@menu/bottom_nav_menu" />
+
+</LinearLayout>
