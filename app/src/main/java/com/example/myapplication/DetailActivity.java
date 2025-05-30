@@ -36,11 +36,16 @@ public class DetailActivity extends AppCompatActivity {
                 .addOnSuccessListener(documentSnapshot -> {
                     Crystal crystal = documentSnapshot.toObject(Crystal.class);
                     if (crystal != null) {
-                        TextView nameText = findViewById(R.id.crystalInfo);
+                        TextView nameText = findViewById(R.id.crystalName);
                         nameText.setText(crystal.getName());
 
-                        TextView descriptionText = findViewById(R.id.categoryTitle);
+                        TextView descriptionText = findViewById(R.id.crystalDescription);
                         descriptionText.setText(crystal.getDescription());
+
+                        TextView priceText = findViewById(R.id.crystalPrice);
+                        priceText.setText(String.format("%.2f $ / kg", crystal.getPrice()));
+
+
                     }
                 });
     }
