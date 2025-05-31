@@ -30,7 +30,7 @@
 
         android:scrollbars="horizontal" />
 
-    <!-- Add this right below your RecyclerView -->
+
     <LinearLayout
         android:id="@+id/dotsLayout"
         android:layout_width="match_parent"
@@ -44,7 +44,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.4"
         android:orientation="vertical"
-        android:background="#F6F5F5"
+        android:background="@drawable/curved_detail_view"
         android:padding="16dp">
 
         <TextView
@@ -92,7 +92,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.4"
         android:orientation="horizontal"
-        android:background="#F6F5F5"
+        android:background="#F0EFEF"
         android:padding="16dp"
         android:gravity="center">
 
@@ -102,7 +102,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginEnd="16dp"
-            android:background="#FFFFFF"
+            android:background="@drawable/rounded_border"
             android:src="@drawable/favourite_icon"
             android:contentDescription="add_to_wishlist"
             android:padding="4dp" />
@@ -116,7 +116,7 @@
             android:padding="8dp"
             android:clickable="true"
             android:focusable="true"
-            android:background="#CEC2FF"
+            android:background="@drawable/rounded_cart"
             android:textColor = "#6C0EE4"
             android:textSize = "32sp"
             android:gravity="center">
