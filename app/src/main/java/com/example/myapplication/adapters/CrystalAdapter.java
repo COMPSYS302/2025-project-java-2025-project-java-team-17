@@ -20,9 +20,16 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
     private Context context;
     private List<Crystal> crystalList;
 
-    public CrystalAdapter(Context context, List<Crystal> crystalList) {
+    public interface onClickListener {
+        void onCrystalClick(Crystal crystal);
+    }
+
+    private onClickListener listener;
+
+    public CrystalAdapter(Context context, List<Crystal> crystalList, onClickListener listener) {
         this.context = context;
         this.crystalList = crystalList;
+        this.listener = listener;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -55,6 +62,12 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
                 .placeholder(R.drawable.crystal)
                 .error(R.drawable.crystal)       // Optional: show something if loading fails
                 .into(holder.crystalImage);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null){
+                listener.onCrystalClick(crystal);
+            }
+        });
     }
 
     @Override

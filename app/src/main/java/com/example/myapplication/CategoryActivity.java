@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -39,7 +40,13 @@ public class CategoryActivity extends AppCompatActivity {
         List<Crystal> crystalList = new ArrayList<>();
 
         RecyclerView crystalGrid = findViewById(R.id.crystalGrid);
-        CrystalAdapter adapter = new CrystalAdapter(this, crystalList);
+        CrystalAdapter adapter = new CrystalAdapter(this, crystalList, crystal ->{
+            Log.d("CategoryActivity", "Launching DetailActivity for crystal: " + crystal.getId());
+            Intent intent = new Intent(CategoryActivity.this, DetailActivity.class);
+            intent.putExtra("crystalId",crystal.getId());
+            startActivity(intent);
+        });
+
         crystalGrid.setLayoutManager(new GridLayoutManager(this, 2));
         crystalGrid.setAdapter(adapter);
 
