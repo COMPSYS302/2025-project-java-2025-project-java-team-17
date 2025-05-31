@@ -2,10 +2,14 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -52,9 +56,12 @@ public class DetailActivity extends AppCompatActivity {
                     if (crystal != null) {
 
                         List<String> imageUrls = crystal.getImageUrls();
-                        CrystalImageAdapter imageAdapter = new CrystalImageAdapter(this, imageUrls);
-                        crystalImages.setAdapter(imageAdapter);
-
+                        // In your onSuccessListener after setting the adapter:
+                        if (imageUrls != null && !imageUrls.isEmpty()) {
+                            CrystalImageAdapter imageAdapter = new CrystalImageAdapter(this, imageUrls);
+                            crystalImages.setAdapter(imageAdapter);
+                            setupDotsIndicator(imageUrls.size(), crystalImages);
+                        }
 
                         TextView nameText = findViewById(R.id.crystalName);
                         nameText.setText(crystal.getName());
@@ -72,5 +79,38 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    private void setupDotsIndicator(int count, RecyclerView recyclerView) {
+        LinearLayout dotsLayout = findViewById(R.id.dotsLayout);
+        dotsLayout.removeAllViews();
+
+        ImageView[] dots = new ImageView[count];
+        for (int i = 0; i < count; i++) {
+            dots[i] = new ImageView(this);
+            dots[i].setImageDrawable(ContextCompat.getDrawable(this,
+                    i == 0 ? R.drawable.dots_active : R.drawable.dots_inactive));
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            params.setMargins(8, 0, 8, 0);
+            dotsLayout.addView(dots[i], params);
+        }
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+                for (int i = 0; i < dots.length; i++) {
+                    dots[i].setImageDrawable(ContextCompat.getDrawable(DetailActivity.this,
+                            i == firstVisibleItemPosition ? R.drawable.dots_active : R.drawable.dots_inactive));
+                }
+            }
+        });
     }
 }

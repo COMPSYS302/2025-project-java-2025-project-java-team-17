@@ -30,6 +30,15 @@
 
         android:scrollbars="horizontal" />
 
+    <!-- Add this right below your RecyclerView -->
+    <LinearLayout
+        android:id="@+id/dotsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="8dp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -69,7 +78,6 @@
             android:text = "@string/crystal_location"/>
 
 
-
         <TextView
             android:id="@+id/crystalDescription"
             android:layout_width="match_parent"
@@ -77,10 +85,6 @@
             android:textSize="18sp"
             android:textColor="#666666"
             android:layout_marginTop="8dp"/>
-
-
-
-
     </LinearLayout>
 
     <LinearLayout
@@ -120,7 +124,7 @@
             <ImageView
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@drawable/favourite_icon"
+                android:src="@drawable/ic_cart"
                 android:contentDescription="add_to_cart" />
 
 
@@ -134,9 +138,6 @@
         </LinearLayout>
 
     </LinearLayout>
-
-
-
 
 
 
