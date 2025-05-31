@@ -20,7 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryActivity extends AppCompatActivity {
+public class CategoryActivity extends BaseActivity {
 
     private CrystalAdapter adapter;  // ✅ Declare adapter here
     private final List<Crystal> crystalList = new ArrayList<>();  // Moved outside to share across methods
@@ -28,8 +28,9 @@ public class CategoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category);
 
+        setContentView(R.layout.activity_category);
+        setupBottomNavigation(R.id.nav_home);
         String categoryName = getIntent().getStringExtra("categoryName");
 
         Toolbar toolbar = findViewById(R.id.toolbar);

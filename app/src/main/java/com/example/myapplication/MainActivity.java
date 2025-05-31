@@ -21,7 +21,7 @@ import com.example.myapplication.utils.CrystalSeeder;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     setupLoginButton();
     setupRegisterButton();
-
+    setupBottomNavigation(R.id.nav_home);
 
 
     CrystalSeeder.seedCrystalsToFirestore();
