@@ -2,6 +2,7 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,6 +23,10 @@ import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
 
+    private ImageButton wishlistButton;
+    private boolean isFavorite = false;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -34,6 +39,12 @@ public class DetailActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
         toolbar.setNavigationOnClickListener(v -> finish());
+
+        wishlistButton = findViewById(R.id.wishlistButton);
+        wishlistButton.setOnClickListener(v -> {
+            isFavorite = !isFavorite;
+            updateWishlistButton();
+        });
 
         // Initialize the RecyclerView for images
         RecyclerView crystalImages = findViewById(R.id.crystalImages);
@@ -79,6 +90,16 @@ public class DetailActivity extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+
+    private void updateWishlistButton() {
+        if (isFavorite) {
+            wishlistButton.setImageResource(R.drawable.filled_favourite_icon);
+
+        } else {
+            wishlistButton.setImageResource(R.drawable.favourite_icon);
+
+        }
     }
 
     private void setupDotsIndicator(int count, RecyclerView recyclerView) {
