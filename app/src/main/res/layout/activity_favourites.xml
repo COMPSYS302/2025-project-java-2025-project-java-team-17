@@ -4,13 +4,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:menu="@menu/top_app_bar_menu"
+        app:navigationIcon="@drawable/back_button">
 
+        <TextView
+            android:id="@+id/categoryTitle"
+            android:text="Favourites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp" />
+
+    </androidx.appcompat.widget.Toolbar>
     <!-- Favourites RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favouritesRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottomNavigationView"
+        android:layout_below="@id/toolbar"
         android:clipToPadding="false"
         android:paddingBottom="80dp" />
 
