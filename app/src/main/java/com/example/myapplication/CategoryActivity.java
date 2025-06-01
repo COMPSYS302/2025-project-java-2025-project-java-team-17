@@ -54,18 +54,18 @@ public class CategoryActivity extends BaseActivity {
                         List<String> favourites = (List<String>) documentSnapshot.get("favourites");
                         if (favourites == null) favourites = new ArrayList<>();
 
-                        adapter = new CrystalAdapter(this, crystalList, favourites);
+                        adapter = new CrystalAdapter(this, crystalList, favourites, false);
                         crystalGrid.setAdapter(adapter);
 
                         fetchCrystalsByCategory(db, categoryName);  // 🔄 Moved into a method
                     })
                     .addOnFailureListener(e -> {
-                        adapter = new CrystalAdapter(this, crystalList, new ArrayList<>());
+                        adapter = new CrystalAdapter(this, crystalList, new ArrayList<>(),false);
                         crystalGrid.setAdapter(adapter);
                         fetchCrystalsByCategory(db, categoryName);
                     });
         } else {
-            adapter = new CrystalAdapter(this, crystalList, new ArrayList<>());
+            adapter = new CrystalAdapter(this, crystalList, new ArrayList<>(), false);
             crystalGrid.setAdapter(adapter);
             fetchCrystalsByCategory(db, categoryName);
         }

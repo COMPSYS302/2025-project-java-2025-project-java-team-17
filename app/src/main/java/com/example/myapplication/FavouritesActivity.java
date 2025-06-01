@@ -30,8 +30,8 @@ public class FavouritesActivity extends BaseActivity {
         setupBottomNavigation(R.id.nav_profile); // Highlights the Profile icon
 
         recyclerView = findViewById(R.id.favouritesRecycler);
-        adapter = new CrystalAdapter(this, favouriteCrystals, favouriteIds);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        adapter = new CrystalAdapter(this, favouriteCrystals, favouriteIds, true);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         recyclerView.setAdapter(adapter);
 
         loadFavouritesFromFirestore();

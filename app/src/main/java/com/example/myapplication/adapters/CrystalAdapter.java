@@ -28,10 +28,13 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
     private List<Crystal> crystalList;
     private List<String> userFavourites;
 
-    public CrystalAdapter(Context context, List<Crystal> crystalList, List<String> userFavourites) {
+    private boolean isFavouritesView;
+
+    public CrystalAdapter(Context context, List<Crystal> crystalList, List<String> userFavourites, boolean isFavouritesView) {
         this.context = context;
         this.crystalList = crystalList;
         this.userFavourites = userFavourites;
+        this.isFavouritesView = isFavouritesView;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -53,53 +56,68 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.crystal_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(
+                isFavouritesView ? R.layout.item_favourite_crystal : R.layout.crystal_item,
+                parent,
+                false
+        );
         return new ViewHolder(view);
     }
-
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Crystal crystal = crystalList.get(position);
-        holder.crystalName.setText(crystal.getName());
-        holder.crystalPrice.setText(crystal.getPrice() + " $/kg");
 
+        holder.crystalName.setText(crystal.getName());
+        holder.crystalPrice.setText("NZD " + (int) crystal.getPrice());
         Glide.with(context)
                 .load(crystal.getImageUrls().get(0))
                 .placeholder(R.drawable.crystal)
-                .error(R.drawable.crystal)
                 .into(holder.crystalImage);
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        // Set initial icon state
-        boolean isFavourited = userFavourites != null && userFavourites.contains(crystal.getId());
-        holder.wishlistIcon.setImageResource(
-                isFavourited ? R.drawable.favourite_filled : R.drawable.favourite_icon
-        );
-
-        holder.wishlistIcon.setOnClickListener(v -> {
-            if (currentUser != null) {
-                String userId = currentUser.getUid();
-                boolean isNowFavourited = userFavourites.contains(crystal.getId());
-
-                if (isNowFavourited) {
+        if (isFavouritesView) {
+            holder.wishlistIcon.setImageResource(R.drawable.close_button);
+            holder.wishlistIcon.setOnClickListener(v -> {
+                if (currentUser != null) {
+                    String userId = currentUser.getUid();
                     removeFromFavourites(userId, crystal.getId());
                     userFavourites.remove(crystal.getId());
-                    holder.wishlistIcon.setImageResource(R.drawable.favourite_icon);
+                    crystalList.remove(position);
+                    notifyItemRemoved(position);
                     Toast.makeText(context, "Removed from favourites", Toast.LENGTH_SHORT).show();
-                } else {
-                    addToFavourites(userId, crystal.getId());
-                    userFavourites.add(crystal.getId());
-                    holder.wishlistIcon.setImageResource(R.drawable.favourite_filled);
-                    Toast.makeText(context, "Added to favourites", Toast.LENGTH_SHORT).show();
                 }
+            });
+        } else {
+            boolean isFavourited = userFavourites != null && userFavourites.contains(crystal.getId());
+            holder.wishlistIcon.setImageResource(
+                    isFavourited ? R.drawable.favourite_filled : R.drawable.favourite_icon
+            );
 
-                notifyItemChanged(holder.getAdapterPosition());
-            } else {
-                Toast.makeText(context, "Please log in to use favourites", Toast.LENGTH_SHORT).show();
-            }
-        });
+            holder.wishlistIcon.setOnClickListener(v -> {
+                if (currentUser != null) {
+                    String userId = currentUser.getUid();
+                    boolean isNowFavourited = userFavourites.contains(crystal.getId());
+
+                    if (isNowFavourited) {
+                        removeFromFavourites(userId, crystal.getId());
+                        userFavourites.remove(crystal.getId());
+                        holder.wishlistIcon.setImageResource(R.drawable.favourite_icon);
+                        Toast.makeText(context, "Removed from favourites", Toast.LENGTH_SHORT).show();
+                    } else {
+                        addToFavourites(userId, crystal.getId());
+                        userFavourites.add(crystal.getId());
+                        holder.wishlistIcon.setImageResource(R.drawable.favourite_filled);
+                        Toast.makeText(context, "Added to favourites", Toast.LENGTH_SHORT).show();
+                    }
+
+                    notifyItemChanged(holder.getAdapterPosition());
+                } else {
+                    Toast.makeText(context, "Please log in to use favourites", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
 
