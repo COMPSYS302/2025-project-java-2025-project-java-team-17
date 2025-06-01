@@ -30,13 +30,7 @@ public class CrystalSeeder {
                         10,
                         0
                 ),
-                new Crystal("crystal002", "Citrine", "Brings joy and positivity", "Success",
-                        Arrays.asList("joy", "wealth", "yellow"),
-                        Arrays.asList(
-                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FCitrine%2Fcitrine_1.png?alt=media&token=199d8baf-78ef-4008-8521-0f1fbb079f62",
-                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FCitrine%2Fcitrine_3.png?alt=media&token=b76423e1-3d87-4d67-a161-35737f271b58",
-                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FCitrine%2Fcitrine_2.png?alt=media&token=2b338b45-f84c-4c1d-bcf1-ef2cd27d56ee"),
-                        3.0, 8, 0),
+
                 new Crystal("crystal003", "Lepidolite", "Contains lithium; helps with emotional balance and anxiety", "Calm & Stress Relief",
                         Arrays.asList("calm", "anxiety", "lithium"),
                         Arrays.asList(
@@ -382,7 +376,7 @@ public class CrystalSeeder {
                         "Citrine",
                         "Citrine, often known as the “merchant’s stone,” is a golden-yellow crystal that radiates joy, optimism, and prosperity. Unlike most crystals, it does not absorb negative energy but instead transforms it into positive vibrations. Associated with the solar plexus chakra, Citrine enhances confidence, personal power, and manifestation. It is ideal for anyone aiming to attract financial success, career breakthroughs, or greater self-worth. Carrying Citrine is like carrying a beam of sunshine. It uplifts your spirit, clears blockages, and inspires you to envision and create your ideal future.",
                         "Success",
-                        Arrays.asList("joy", "confidence", "orange"),
+                        Arrays.asList("joy", "confidence", "gold-yellow"),
                         Arrays.asList(
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FCitrine%2Fcitrine_1.png?alt=media&token=199d8baf-78ef-4008-8521-0f1fbb079f62",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FCitrine%2Fcitrine_2.png?alt=media&token=2b338b45-f84c-4c1d-bcf1-ef2cd27d56ee",
