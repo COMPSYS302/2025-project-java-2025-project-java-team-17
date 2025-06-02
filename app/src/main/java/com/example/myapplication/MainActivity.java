@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,21 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.adapters.CategoryAdapter;
 import com.example.myapplication.models.Category;
 import com.example.myapplication.utils.CrystalSeeder;
-import java.util.Arrays;
-import android.util.Log;
-import java.util.List;
-import android.view.View;
-import com.google.android.gms.tasks.Task;
-import com.example.myapplication.R;
-import com.example.myapplication.LoginActivity;
-import com.example.myapplication.RegistrationActivity;
-import com.example.myapplication.CategoryActivity;
-import com.example.myapplication.MainActivity;
-
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,9 +40,6 @@ public class MainActivity extends AppCompatActivity {
           v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
           return insets;
         });
-
-    setupLoginButton();
-    setupRegisterButton();
 
     CrystalSeeder.seedCrystalsToFirestore();
 
@@ -93,43 +81,21 @@ public class MainActivity extends AppCompatActivity {
 
   private void updateUI(FirebaseUser user) {
     Log.d("MainActivity", "updateUI() called with user: " + user);
-    Button loginButton = findViewById(R.id.loginButton);
-    Button registerButton = findViewById(R.id.registerButton);
+
 
     if (user != null) {
-        Log.d("MainActivity", "User is not null");
-db.collection("users").document(user.getUid()).get().addOnSuccessListener(documentSnapshot -> {
-    if (documentSnapshot.exists()) {
-        String username = documentSnapshot.getString("username");
-        Log.d("MainActivity", "Username: " + username);
+      Log.d("MainActivity", "User is not null");
+      db.collection("users")
+          .document(user.getUid())
+          .get()
+          .addOnSuccessListener(
+              documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                  String username = documentSnapshot.getString("username");
+                  Log.d("MainActivity", "Username: " + username);
+                }
+              });
+      
     }
-});
-      loginButton.setVisibility(View.GONE);
-      registerButton.setVisibility(View.GONE);
-    } else {
-      Log.d("MainActivity", "User is null");
-      loginButton.setVisibility(View.VISIBLE);
-      registerButton.setVisibility(View.VISIBLE);
-    }
-  }
-
-  private void setupLoginButton() {
-    Button loginButton = findViewById(R.id.loginButton);
-    loginButton.setOnClickListener(v -> navigateToLogin());
-  }
-
-  private void navigateToLogin() {
-    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-    startActivity(intent);
-  }
-
-  private void setupRegisterButton() {
-    Button registerButton = findViewById(R.id.registerButton);
-    registerButton.setOnClickListener(v -> navigateToRegister());
-  }
-
-  private void navigateToRegister() {
-    Intent intent = new Intent(MainActivity.this, RegistrationActivity.class);
-    startActivity(intent);
   }
 }

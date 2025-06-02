@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     btnLogin.setOnClickListener(
         v -> {
           String email = etLoginEmail.getText().toString().trim();
-          String password = etLoginEmail.getText().toString().trim();
+          String password = etLoginPassword.getText().toString().trim();
 
           if (email.isEmpty()) {
             etLoginEmail.setError("Email is Required");
