@@ -20,14 +20,17 @@ public class CrystalImageAdapter extends RecyclerView.Adapter<CrystalImageAdapte
     private onClickListener listener;
     private boolean isClickable;
 
+
+
     public interface onClickListener {
-        void onItemClick(int position);
+        void onClick(int position);
     }
 
-    public CrystalImageAdapter(Context context, List<String> imageUrls, boolean isClickable) {
+    public CrystalImageAdapter(Context context, List<String> imageUrls, boolean isClickable, onClickListener listener) {
         this.context = context;
         this.imageUrls = imageUrls;
         this.isClickable = isClickable;
+        this.listener = listener;
     }
 
 
@@ -47,22 +50,19 @@ public class CrystalImageAdapter extends RecyclerView.Adapter<CrystalImageAdapte
         return new ViewHolder(view);
     }
 
-    public void setOnClickListener(onClickListener listener) {
-        this.listener = listener;
-    }
+
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Glide.with(context)
                 .load(imageUrls.get(position))
                 .placeholder(R.drawable.crystal)
-                .error(R.drawable.crystal)
                 .into(holder.imageView);
 
         if(isClickable) {
             holder.itemView.setOnClickListener(v -> {
                 if (listener != null) {
-                    listener.onItemClick(position);
+                    listener.onClick(position);
                 }
             });
 

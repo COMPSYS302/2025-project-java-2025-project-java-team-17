@@ -110,7 +110,21 @@ public class MainActivity extends BaseActivity {
               }
 
               if (topImages != null && !topImages.isEmpty()) {
-                  CrystalImageAdapter imageAdapter = getCrystalImageAdapter();
+
+                  CrystalImageAdapter imageAdapter = new CrystalImageAdapter(
+                          this,
+                          topImages,
+                          true,
+                          position -> {
+                              if (position < topCrystals.length) {
+                                  Crystal crystal = topCrystals[position];
+                                  Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                                  intent.putExtra("crystalId", crystal.getId());
+                                  startActivity(intent);
+                              }
+                          }
+                  );
+
                   crystalImages.setAdapter(imageAdapter);
                   setupDotsIndicator(topImages.size(), crystalImages);
               }
@@ -145,19 +159,6 @@ public class MainActivity extends BaseActivity {
     recyclerView.setAdapter(adapter);
   }
 
-  @NonNull
-  private CrystalImageAdapter getCrystalImageAdapter() {
-      CrystalImageAdapter imageAdapter = new CrystalImageAdapter(this, topImages, true);
-        imageAdapter.setOnClickListener(position -> {
-            if (position < topCrystals.length) {
-                Crystal crystal = topCrystals[position];
-                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-                intent.putExtra("crystalId", crystal.getId());
-                startActivity(intent);
-            }
-        });
-        return imageAdapter;
-    }
 
     @Override
   protected void onStart() {
