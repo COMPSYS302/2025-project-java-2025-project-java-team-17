@@ -4,6 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import androidx.appcompat.widget.SearchView;
+
+
+
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -69,6 +74,28 @@ public class MainActivity extends BaseActivity {
             });
 
     recyclerView.setAdapter(adapter);
+
+      SearchView searchView = findViewById(R.id.searchView);
+
+      searchView.setQueryHint("Search crystals...");
+      searchView.setIconifiedByDefault(false); // Expand search by default (optional)
+
+      searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+          @Override
+          public boolean onQueryTextSubmit(String query) {
+              if (!query.trim().isEmpty()) {
+                  Intent intent = new Intent(MainActivity.this, SearchResultsActivity.class);
+                  intent.putExtra("query", query.trim());
+                  startActivity(intent);
+              }
+              return true;
+          }
+
+          @Override
+          public boolean onQueryTextChange(String newText) {
+              return false; // no real-time search in MainActivity, leave it for SearchResultsActivity
+          }
+      });
   }
 
   @Override
