@@ -24,13 +24,13 @@
             android:layout_height="wrap_content"
             android:paddingBottom="32dp">
 
-            <SearchView
+            <androidx.appcompat.widget.SearchView
                 android:id="@+id/searchView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:queryHint="Search Products"
-                android:iconifiedByDefault="false"
+                android:queryHint="Search..."
                 android:background="@drawable/rounded_border"
+                app:iconifiedByDefault="false"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
