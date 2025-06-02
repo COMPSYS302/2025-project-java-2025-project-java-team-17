@@ -53,7 +53,7 @@ public class CategoryActivity extends BaseActivity {
         noResultsMessage = findViewById(R.id.noResultsMessage);
 
         SearchView searchView = findViewById(R.id.searchView);
-        searchView.setQueryHint("Search for crystals by name or tag");
+        searchView.setQueryHint("Search for crystals...");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) { return false; }
