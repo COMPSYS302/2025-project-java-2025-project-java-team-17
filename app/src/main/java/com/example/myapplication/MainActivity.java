@@ -43,6 +43,13 @@ public class MainActivity extends BaseActivity {
   private Crystal[] topCrystals;
   private List<String> topImages;
 
+  private TextView crystalTitleBar;
+  private TextView crystalPriceBar;
+
+  private String[] crystalTitles = new String[3];
+  private double[] crystalPrices = new double[3];
+
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +70,10 @@ public class MainActivity extends BaseActivity {
     CrystalSeeder.seedCrystalsToFirestore();
 
     RecyclerView crystalImages = findViewById(R.id.crystalImages);
+
+    crystalTitleBar = findViewById(R.id.crystalTitleBar);
+    crystalPriceBar = findViewById(R.id.crystalPriceBar);
+
 
     crystalImages.setLayoutManager(new LinearLayoutManager(this,
             LinearLayoutManager.HORIZONTAL, false));
@@ -94,12 +105,14 @@ public class MainActivity extends BaseActivity {
                 Crystal crystal = pq.poll();
                 topCrystals[i] = crystal;
                 topImages.add(0,crystal.getImageUrls().get(0));
+                crystalTitles[i] = crystal.getName();
+                crystalPrices[i] = crystal.getPrice();
               }
 
               if (topImages != null && !topImages.isEmpty()) {
                   CrystalImageAdapter imageAdapter = getCrystalImageAdapter();
                   crystalImages.setAdapter(imageAdapter);
-                setupDotsIndicator(topImages.size(), crystalImages);
+                  setupDotsIndicator(topImages.size(), crystalImages);
               }
             }).addOnFailureListener(e -> {
                 Log.e("MainActivity", "Error loading crystals", e);
@@ -132,9 +145,9 @@ public class MainActivity extends BaseActivity {
     recyclerView.setAdapter(adapter);
   }
 
-    @NonNull
-    private CrystalImageAdapter getCrystalImageAdapter() {
-        CrystalImageAdapter imageAdapter = new CrystalImageAdapter(this, topImages, true);
+  @NonNull
+  private CrystalImageAdapter getCrystalImageAdapter() {
+      CrystalImageAdapter imageAdapter = new CrystalImageAdapter(this, topImages, true);
         imageAdapter.setOnClickListener(position -> {
             if (position < topCrystals.length) {
                 Crystal crystal = topCrystals[position];
@@ -180,12 +193,23 @@ public class MainActivity extends BaseActivity {
         LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
 
+          if (firstVisibleItemPosition >= 0 && firstVisibleItemPosition < crystalTitles.length) {
+              crystalTitleBar.setText(crystalTitles[firstVisibleItemPosition]);
+              crystalPriceBar.setText(String.format("%.2f /kg",crystalPrices[firstVisibleItemPosition]));
+          }
+
         for (int i = 0; i < dots.length; i++) {
           dots[i].setImageDrawable(ContextCompat.getDrawable(MainActivity.this,
                   i == firstVisibleItemPosition ? R.drawable.dots_active : R.drawable.dots_inactive));
         }
       }
     });
+
+    if (crystalTitles.length > 0) {
+        crystalTitleBar.setText(crystalTitles[0]);
+        crystalPriceBar.setText(String.format("%.2f /kg",crystalPrices[0]));
+
+    }
   }
 
   private void updateUI(FirebaseUser user) {
