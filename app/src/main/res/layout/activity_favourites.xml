@@ -38,9 +38,8 @@
         android:textSize="16sp"
         android:textColor="@android:color/darker_gray"
         android:visibility="gone"
-        android:layout_gravity="center"
-        android:layout_marginTop="24dp"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:layout_centerInParent="true" />
 
     <!-- Bottom Navigation View -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
