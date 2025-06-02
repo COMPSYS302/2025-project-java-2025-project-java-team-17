@@ -30,11 +30,19 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
 
     private boolean isFavouritesView;
 
-    public CrystalAdapter(Context context, List<Crystal> crystalList, List<String> userFavourites, boolean isFavouritesView) {
+
+    private onClickListener listener;
+
+    public interface onClickListener {
+        void onCrystalClick(Crystal crystal);
+    }
+
+    public CrystalAdapter(Context context, List<Crystal> crystalList, List<String> userFavourites, boolean isFavouritesView, onClickListener listener) {
         this.context = context;
         this.crystalList = crystalList;
         this.userFavourites = userFavourites;
         this.isFavouritesView = isFavouritesView;
+        this.listener = listener;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -92,7 +100,7 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
         } else {
             boolean isFavourited = userFavourites != null && userFavourites.contains(crystal.getId());
             holder.wishlistIcon.setImageResource(
-                    isFavourited ? R.drawable.favourite_filled : R.drawable.favourite_icon
+                    isFavourited ? R.drawable.filled_favourite_icon : R.drawable.favourite_icon
             );
 
             holder.wishlistIcon.setOnClickListener(v -> {
@@ -108,7 +116,7 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
                     } else {
                         addToFavourites(userId, crystal.getId());
                         userFavourites.add(crystal.getId());
-                        holder.wishlistIcon.setImageResource(R.drawable.favourite_filled);
+                        holder.wishlistIcon.setImageResource(R.drawable.filled_favourite_icon);
                         Toast.makeText(context, "Added to favourites", Toast.LENGTH_SHORT).show();
                     }
 
@@ -118,6 +126,11 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
                 }
             });
         }
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onCrystalClick(crystal);
+            }
+        });
     }
 
 

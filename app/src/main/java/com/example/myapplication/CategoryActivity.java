@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -22,7 +23,7 @@ import java.util.List;
 
 public class CategoryActivity extends BaseActivity {
 
-    private CrystalAdapter adapter;  // ✅ Declare adapter here
+    private CrystalAdapter adapter;
     private final List<Crystal> crystalList = new ArrayList<>();  // Moved outside to share across methods
 
     @Override
@@ -54,18 +55,30 @@ public class CategoryActivity extends BaseActivity {
                         List<String> favourites = (List<String>) documentSnapshot.get("favourites");
                         if (favourites == null) favourites = new ArrayList<>();
 
-                        adapter = new CrystalAdapter(this, crystalList, favourites, false);
+                        adapter = new CrystalAdapter(this, crystalList, favourites, false,  crystal -> {
+                            Intent intent = new Intent(this, DetailActivity.class);
+                            intent.putExtra("crystalId", crystal.getId());
+                            startActivity(intent);
+                        });
                         crystalGrid.setAdapter(adapter);
 
-                        fetchCrystalsByCategory(db, categoryName);  // 🔄 Moved into a method
+                        fetchCrystalsByCategory(db, categoryName);
                     })
                     .addOnFailureListener(e -> {
-                        adapter = new CrystalAdapter(this, crystalList, new ArrayList<>(),false);
+                        adapter = new CrystalAdapter(this, crystalList, new ArrayList<>(),false,  crystal -> {
+                            Intent intent = new Intent(this, DetailActivity.class);
+                            intent.putExtra("crystalId", crystal.getId());
+                            startActivity(intent);
+                        });
                         crystalGrid.setAdapter(adapter);
                         fetchCrystalsByCategory(db, categoryName);
                     });
         } else {
-            adapter = new CrystalAdapter(this, crystalList, new ArrayList<>(), false);
+            adapter = new CrystalAdapter(this, crystalList, new ArrayList<>(), false,  crystal -> {
+                Intent intent = new Intent(this, DetailActivity.class);
+                intent.putExtra("crystalId", crystal.getId());
+                startActivity(intent);
+            });
             crystalGrid.setAdapter(adapter);
             fetchCrystalsByCategory(db, categoryName);
         }
@@ -80,7 +93,7 @@ public class CategoryActivity extends BaseActivity {
                         Crystal crystal = doc.toObject(Crystal.class);
                         crystalList.add(crystal);
                     }
-                    adapter.notifyDataSetChanged();  // ✅ Now accessible
+                    adapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e ->
                         Log.e("Firestore", "Error fetching crystals", e)

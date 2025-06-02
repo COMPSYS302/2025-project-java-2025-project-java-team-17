@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.os.Bundle;
 import android.util.Log;
+import androidx.appcompat.widget.Toolbar;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class FavouritesActivity extends BaseActivity {
 
@@ -30,11 +32,27 @@ public class FavouritesActivity extends BaseActivity {
         setupBottomNavigation(R.id.nav_profile); // Highlights the Profile icon
 
         recyclerView = findViewById(R.id.favouritesRecycler);
-        adapter = new CrystalAdapter(this, favouriteCrystals, favouriteIds, true);
+        adapter = new CrystalAdapter(this, favouriteCrystals, favouriteIds, true, null);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         recyclerView.setAdapter(adapter);
 
         loadFavouritesFromFirestore();
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);  // <-- this sets the toolbar as the app bar
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true); // show back button
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+        toolbar.setNavigationOnClickListener(v -> {
+            finish(); // go back to previous screen (e.g., Profile)
+        });
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Favourites");
+
+
+
     }
 
     private void loadFavouritesFromFirestore() {
