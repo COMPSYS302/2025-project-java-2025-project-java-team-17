@@ -106,7 +106,7 @@ public class DetailActivity extends BaseActivity {
                         List<String> imageUrls = crystal.getImageUrls();
                         // In your onSuccessListener after setting the adapter:
                         if (imageUrls != null && !imageUrls.isEmpty()) {
-                            CrystalImageAdapter imageAdapter = new CrystalImageAdapter(this, imageUrls);
+                            CrystalImageAdapter imageAdapter = new CrystalImageAdapter(this, imageUrls, false,null);
                             crystalImages.setAdapter(imageAdapter);
                             setupDotsIndicator(imageUrls.size(), crystalImages);
                         }
