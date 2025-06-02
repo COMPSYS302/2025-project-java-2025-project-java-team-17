@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -15,13 +17,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.adapters.CategoryAdapter;
+import com.example.myapplication.adapters.CrystalImageAdapter;
 import com.example.myapplication.models.Category;
+import com.example.myapplication.models.Crystal;
 import com.example.myapplication.utils.CrystalSeeder;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.PriorityQueue;
 
 public class MainActivity extends AppCompatActivity {
+
+  PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[0], b[0]));
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +50,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     CrystalSeeder.seedCrystalsToFirestore();
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+
+    db.collection("crystals")
+            .get()
+            .addOnSuccessListener(queryDocumentSnapshots -> {
+
+
+            });
 
     //  Define category list
     List<Category> categories = Arrays.asList(
