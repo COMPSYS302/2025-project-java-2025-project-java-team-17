@@ -33,13 +33,20 @@
         </activity>
 
         <activity
+            android:name=".AuthActivity"
+            android:exported="false" >
+        </activity>
+
+        <activity
             android:name=".RegistrationActivity"
             android:exported="false">
     
         </activity>
         <activity android:name=".CategoryActivity" />
-        <activity android:name=".DetailActivity" />
-
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".FavouritesActivity"/>
+        <activity android:name=".CartActivity" />
+        <activity android:name=".DetailActivity"/>
     </application>
 
 </manifest>

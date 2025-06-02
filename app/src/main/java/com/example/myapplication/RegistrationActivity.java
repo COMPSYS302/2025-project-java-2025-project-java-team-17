@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
 
 public class RegistrationActivity extends AppCompatActivity {
   private FirebaseAuth mAuth;
@@ -149,6 +150,7 @@ public class RegistrationActivity extends AppCompatActivity {
     user.put("username", username);
     user.put("email", email);
     user.put("createdAt", System.currentTimeMillis());
+    user.put("favourites", new ArrayList<String>());
 
     Log.d(
         "RegistrationActivity",

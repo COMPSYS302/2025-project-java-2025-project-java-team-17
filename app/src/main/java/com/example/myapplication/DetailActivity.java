@@ -6,6 +6,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,12 +17,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.adapters.CrystalImageAdapter;
 import com.example.myapplication.models.Crystal;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+
 import java.util.List;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends BaseActivity {
 
     private ImageButton wishlistButton;
     private boolean isFavorite = false;
@@ -31,6 +36,7 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        setupBottomNavigation(R.id.nav_home);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -41,9 +47,26 @@ public class DetailActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(v -> finish());
 
         wishlistButton = findViewById(R.id.wishlistButton);
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
         wishlistButton.setOnClickListener(v -> {
-            isFavorite = !isFavorite;
-            updateWishlistButton();
+            if (currentUser != null) {
+                String userId = currentUser.getUid();
+                String crystalId = getIntent().getStringExtra("crystalId");
+
+                isFavorite = !isFavorite;
+                updateWishlistButton();
+
+                DocumentReference userRef = db.collection("users").document(userId);
+                if (isFavorite) {
+                    userRef.update("favourites", FieldValue.arrayUnion(crystalId));
+                } else {
+                    userRef.update("favourites", FieldValue.arrayRemove(crystalId));
+                }
+            } else {
+                Toast.makeText(this, "Please log in to use favourites", Toast.LENGTH_SHORT).show();
+            }
         });
 
         // Initialize the RecyclerView for images
@@ -56,9 +79,23 @@ public class DetailActivity extends AppCompatActivity {
             finish();
             return;
         }
+        // Fetch current user's favourite list and update the heart icon
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DocumentReference userRef = db.collection("users").document(userId);
+            userRef.get().addOnSuccessListener(snapshot -> {
+                List<String> favourites = (List<String>) snapshot.get("favourites");
+                if (favourites != null && favourites.contains(crystalId)) {
+                    isFavorite = true;
+                    updateWishlistButton(); // Sets to filled icon
+                }
+            }).addOnFailureListener(e -> {
+                Toast.makeText(this, "Failed to load favourites", Toast.LENGTH_SHORT).show();
+            });
+        }
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("crystals").document(crystalId).update("views", FieldValue.increment(1));
+
+        db.collection("crystals").document(crystalId).update("views", FieldValue.increment(1));
                 db.collection("crystals")
                 .document(crystalId)
                 .get()
