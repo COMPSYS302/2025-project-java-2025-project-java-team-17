@@ -3,6 +3,8 @@ package com.example.myapplication;
 import android.os.Bundle;
 import android.util.Log;
 import androidx.appcompat.widget.Toolbar;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +27,8 @@ public class FavouritesActivity extends BaseActivity {
     private List<Crystal> favouriteCrystals = new ArrayList<>();
     private List<String> favouriteIds = new ArrayList<>();
 
+    private TextView emptyMessage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +41,8 @@ public class FavouritesActivity extends BaseActivity {
         recyclerView.setAdapter(adapter);
 
         loadFavouritesFromFirestore();
+        emptyMessage = findViewById(R.id.emptyMessage);
+        emptyMessage.setVisibility(View.GONE);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);  // <-- this sets the toolbar as the app bar
@@ -65,7 +71,7 @@ public class FavouritesActivity extends BaseActivity {
         db.collection("users").document(userId).get()
                 .addOnSuccessListener(document -> {
                     List<String> ids = (List<String>) document.get("favourites");
-                    if (ids != null) {
+                    if (ids != null && !ids.isEmpty()) {
                         favouriteIds.addAll(ids);
 
                         // Now fetch crystal details
@@ -80,8 +86,18 @@ public class FavouritesActivity extends BaseActivity {
                                         }
                                     }
                                     adapter.notifyDataSetChanged();
+                                    if (favouriteCrystals.isEmpty()) {
+                                        emptyMessage.setVisibility(View.VISIBLE);
+                                        recyclerView.setVisibility(View.GONE);
+                                    } else {
+                                        emptyMessage.setVisibility(View.GONE);
+                                        recyclerView.setVisibility(View.VISIBLE);
+                                    }
                                 })
                                 .addOnFailureListener(e -> Log.e("FavouritesActivity", "Failed to load crystals", e));
+                    } else{
+                        emptyMessage.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
                     }
                 })
                 .addOnFailureListener(e -> Log.e("FavouritesActivity", "Failed to load favourites", e));
