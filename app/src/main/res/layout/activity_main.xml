@@ -28,7 +28,7 @@
                 android:id="@+id/searchView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:queryHint="Search Product Name"
+                android:queryHint="Search Products"
                 android:iconifiedByDefault="false"
                 android:background="@drawable/rounded_border"
                 app:layout_constraintTop_toTopOf="parent"
