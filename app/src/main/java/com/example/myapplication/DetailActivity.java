@@ -2,6 +2,8 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,6 +33,12 @@ public class DetailActivity extends AppCompatActivity {
   private FirebaseAuth mAuth;
   private FirebaseUser currentUser;
   private FirebaseFirestore db;
+  private TextView tvCartButtonText;
+  private LinearLayout quantityControlLayout;
+  private TextView goToCartButton;
+  private Button decreaseQuantityButton;
+  private Button increaseQuantityButton;
+  private TextView tvQuantityTextView;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +50,14 @@ public class DetailActivity extends AppCompatActivity {
     db = FirebaseFirestore.getInstance();
 
     Toolbar toolbar = findViewById(R.id.toolbar);
+    tvCartButtonText = findViewById(R.id.cartButtonText);
+    quantityControlLayout = findViewById(R.id.quantityControlLayout);
+    goToCartButton = findViewById(R.id.goToCartButton);
+    wishlistButton = findViewById(R.id.wishlistButton);
+    tvQuantityTextView = findViewById(R.id.quantityTextView);
+
+    decreaseQuantityButton = findViewById(R.id.decreaseQuantityButton);
+    increaseQuantityButton = findViewById(R.id.increaseQuantityButton);
 
     setSupportActionBar(toolbar);
     if (getSupportActionBar() != null) {
@@ -50,11 +66,16 @@ public class DetailActivity extends AppCompatActivity {
     }
     toolbar.setNavigationOnClickListener(v -> finish());
 
-    wishlistButton = findViewById(R.id.wishlistButton);
     wishlistButton.setOnClickListener(
         v -> {
           isFavorite = !isFavorite;
           updateWishlistButton();
+        });
+
+    goToCartButton.setOnClickListener(
+        v -> {
+          // Intent intent = new Intent(DetailActivity.this, CartActivity.class);
+          // startActivity(intent);
         });
 
     // Initialize the RecyclerView for images
@@ -97,11 +118,22 @@ public class DetailActivity extends AppCompatActivity {
             });
 
     cartButton = findViewById(R.id.cartButton);
+    checkCartStatus(crystalId);
     cartButton.setOnClickListener(
         v -> {
           if (currentUser != null) {
             addToCart(crystalId);
           }
+        });
+
+    decreaseQuantityButton.setOnClickListener(
+        v -> {
+          updateQuantityInCart(crystalId, -1);
+        });
+
+    increaseQuantityButton.setOnClickListener(
+        v -> {
+          updateQuantityInCart(crystalId, 1);
         });
   }
 
@@ -109,6 +141,78 @@ public class DetailActivity extends AppCompatActivity {
   public boolean onSupportNavigateUp() {
     onBackPressed();
     return true;
+  }
+
+  private void updateQuantityInCart(String crystalId, int change) {
+    if (currentUser == null) return;
+
+    String userId = currentUser.getUid();
+
+    db.collection("users")
+        .document(userId)
+        .collection("cart")
+        .document(crystalId)
+        .get()
+        .addOnSuccessListener(
+            documentSnapshot -> {
+              if (documentSnapshot.exists()) {
+                Long quantityLong = documentSnapshot.getLong("quantity");
+                int quantity = quantityLong != null ? quantityLong.intValue() : 0;
+                int newQuantity = quantity + change;
+
+                if (newQuantity <= 0) {
+                  db.collection("users")
+                      .document(userId)
+                      .collection("cart")
+                      .document(crystalId)
+                      .delete()
+                      .addOnSuccessListener(
+                          aVoid -> {
+                            updateCartButtonUI(0);
+                            Snackbar.make(
+                                    cartButton, "Item removed from card", Snackbar.LENGTH_SHORT)
+                                .show();
+                          });
+                } else {
+                  Map<String, Object> updates = new HashMap<>();
+                  updates.put("quantity", newQuantity);
+                  updateCartButtonUI(newQuantity);
+
+                  db.collection("users")
+                      .document(userId)
+                      .collection("cart")
+                      .document(crystalId)
+                      .update(updates);
+                }
+              }
+            });
+  }
+
+  private void checkCartStatus(String crystalId) {
+    if (currentUser == null) return;
+
+    String userId = currentUser.getUid();
+
+    db.collection("users")
+        .document(userId)
+        .collection("cart")
+        .document(crystalId)
+        .get()
+        .addOnSuccessListener(
+            documentSnapshot -> {
+              if (documentSnapshot.exists()) {
+                Long quantityLong = documentSnapshot.getLong("quantity");
+                int quantity = quantityLong != null ? quantityLong.intValue() : 0;
+
+                updateCartButtonUI(quantity);
+              } else {
+                updateCartButtonUI(0);
+              }
+            })
+        .addOnFailureListener(
+            e -> {
+              updateCartButtonUI(0);
+            });
   }
 
   private void updateWishlistButton() {
@@ -144,6 +248,21 @@ public class DetailActivity extends AppCompatActivity {
                   .setAction("RETRY", v -> addToCart(crystalId))
                   .show();
             });
+
+    checkCartStatus(crystalId);
+  }
+
+  private void updateCartButtonUI(int quantity) {
+
+    if (quantity == 0) {
+      cartButton.setVisibility(View.VISIBLE);
+      quantityControlLayout.setVisibility(View.GONE);
+
+    } else {
+      cartButton.setVisibility(View.GONE);
+      quantityControlLayout.setVisibility(View.VISIBLE);
+      tvQuantityTextView.setText(Integer.toString(quantity));
+    }
   }
 
   private void setupDotsIndicator(int count, RecyclerView recyclerView) {
