@@ -4,10 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -20,7 +24,10 @@ import com.example.myapplication.models.Crystal;
 import com.example.myapplication.utils.CrystalSeeder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -31,7 +38,11 @@ public class MainActivity extends BaseActivity {
   private FirebaseUser currentUser;
   private FirebaseFirestore db;
 
-  private PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> Integer.compare(a[0], b[0]));
+  private PriorityQueue<Crystal> pq;
+
+  private Crystal[] topCrystals;
+  private List<String> topImages;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -51,15 +62,49 @@ public class MainActivity extends BaseActivity {
 
     CrystalSeeder.seedCrystalsToFirestore();
 
+    RecyclerView crystalImages = findViewById(R.id.crystalImages);
 
+    crystalImages.setLayoutManager(new LinearLayoutManager(this,
+            LinearLayoutManager.HORIZONTAL, false));
 
+    pq = new PriorityQueue<>(
+            (a, b) -> Integer.compare(b.getViews(), a.getViews())
+          );
 
     db.collection("crystals")
             .get()
             .addOnSuccessListener(queryDocumentSnapshots -> {
+              for (DocumentSnapshot doc : queryDocumentSnapshots.getDocuments()) {
+                Crystal crystal = doc.toObject(Crystal.class);
+                if(pq.size() < 3){
+                  pq.add(crystal);
+                }else{
+                  int lowest = pq.peek().getViews();
+                  if(crystal.getViews() > lowest){
+                    pq.poll();
+                    pq.add(crystal);
+                  }
 
+                }
+              }
 
+              topCrystals = new Crystal[3];
+              topImages = new ArrayList<>();
+              for(int i=2;i>=0;i--){
+                Crystal crystal = pq.poll();
+                topCrystals[i] = crystal;
+                topImages.add(crystal.getImageUrls().get(0));
+              }
+
+              if (topImages != null && !topImages.isEmpty()) {
+                CrystalImageAdapter imageAdapter = new CrystalImageAdapter(this, topImages);
+                crystalImages.setAdapter(imageAdapter);
+                setupDotsIndicator(topImages.size(), crystalImages);
+              }
             });
+
+
+
 
     //  Define category list
     List<Category> categories =
@@ -95,6 +140,39 @@ public class MainActivity extends BaseActivity {
 
     currentUser = mAuth.getCurrentUser();
     updateUI(currentUser);
+  }
+
+  private void setupDotsIndicator(int count, RecyclerView recyclerView) {
+    LinearLayout dotsLayout = findViewById(R.id.dotsLayout);
+    dotsLayout.removeAllViews();
+
+    ImageView[] dots = new ImageView[count];
+    for (int i = 0; i < count; i++) {
+      dots[i] = new ImageView(this);
+      dots[i].setImageDrawable(ContextCompat.getDrawable(this,
+              i == 0 ? R.drawable.dots_active : R.drawable.dots_inactive));
+
+      LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+              LinearLayout.LayoutParams.WRAP_CONTENT,
+              LinearLayout.LayoutParams.WRAP_CONTENT
+      );
+      params.setMargins(8, 0, 8, 0);
+      dotsLayout.addView(dots[i], params);
+    }
+
+    recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+      @Override
+      public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+        super.onScrolled(recyclerView, dx, dy);
+        LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+        for (int i = 0; i < dots.length; i++) {
+          dots[i].setImageDrawable(ContextCompat.getDrawable(MainActivity.this,
+                  i == firstVisibleItemPosition ? R.drawable.dots_active : R.drawable.dots_inactive));
+        }
+      }
+    });
   }
 
   private void updateUI(FirebaseUser user) {

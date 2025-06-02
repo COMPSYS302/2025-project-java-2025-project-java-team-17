@@ -48,6 +48,17 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:scrollbars="horizontal" />
 
+            <LinearLayout
+                android:id="@+id/dotsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/crystalImages"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:padding="8dp"/>
+
             <TextView
                 android:id="@+id/categoriesHeading"
                 android:layout_width="wrap_content"
