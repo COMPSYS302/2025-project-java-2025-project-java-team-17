@@ -20,7 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
   private FirebaseAuth mAuth;
   private FirebaseUser currentUser;
@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
           v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
           return insets;
         });
+    setupBottomNavigation(R.id.nav_home);
 
     CrystalSeeder.seedCrystalsToFirestore();
 
