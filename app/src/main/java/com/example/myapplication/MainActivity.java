@@ -68,7 +68,7 @@ public class MainActivity extends BaseActivity {
             LinearLayoutManager.HORIZONTAL, false));
 
     pq = new PriorityQueue<>(
-            (a, b) -> Integer.compare(b.getViews(), a.getViews())
+            (a, b) -> Integer.compare(a.getViews(), b.getViews())
           );
 
     db.collection("crystals")
@@ -93,18 +93,17 @@ public class MainActivity extends BaseActivity {
               for(int i=2;i>=0;i--){
                 Crystal crystal = pq.poll();
                 topCrystals[i] = crystal;
-                topImages.add(crystal.getImageUrls().get(0));
+                topImages.add(0,crystal.getImageUrls().get(0));
               }
 
               if (topImages != null && !topImages.isEmpty()) {
-                CrystalImageAdapter imageAdapter = new CrystalImageAdapter(this, topImages);
-                crystalImages.setAdapter(imageAdapter);
+                  CrystalImageAdapter imageAdapter = getCrystalImageAdapter();
+                  crystalImages.setAdapter(imageAdapter);
                 setupDotsIndicator(topImages.size(), crystalImages);
               }
+            }).addOnFailureListener(e -> {
+                Log.e("MainActivity", "Error loading crystals", e);
             });
-
-
-
 
     //  Define category list
     List<Category> categories =
@@ -133,7 +132,21 @@ public class MainActivity extends BaseActivity {
     recyclerView.setAdapter(adapter);
   }
 
-  @Override
+    @NonNull
+    private CrystalImageAdapter getCrystalImageAdapter() {
+        CrystalImageAdapter imageAdapter = new CrystalImageAdapter(this, topImages, true);
+        imageAdapter.setOnClickListener(position -> {
+            if (position < topCrystals.length) {
+                Crystal crystal = topCrystals[position];
+                Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+                intent.putExtra("crystalId", crystal.getId());
+                startActivity(intent);
+            }
+        });
+        return imageAdapter;
+    }
+
+    @Override
   protected void onStart() {
     Log.d("MainActivity", "onStart() called");
     super.onStart();
