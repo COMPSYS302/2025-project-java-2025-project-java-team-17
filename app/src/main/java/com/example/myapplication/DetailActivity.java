@@ -10,14 +10,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.myapplication.adapters.CrystalImageAdapter;
 import com.example.myapplication.models.Crystal;
 import com.google.android.material.snackbar.Snackbar;
@@ -26,7 +23,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -118,20 +114,27 @@ public class DetailActivity extends BaseActivity {
         });
 
         db.collection("crystals").document(crystalId).update("views", FieldValue.increment(1));
-        db.collection("crystals").document(crystalId).get().addOnSuccessListener(documentSnapshot -> {
-            Crystal crystal = documentSnapshot.toObject(Crystal.class);
-            if (crystal != null) {
+    db.collection("crystals")
+        .document(crystalId)
+        .get()
+        .addOnSuccessListener(
+            documentSnapshot -> {
+              Crystal crystal = documentSnapshot.toObject(Crystal.class);
+              if (crystal != null) {
                 List<String> imageUrls = crystal.getImageUrls();
                 if (imageUrls != null && !imageUrls.isEmpty()) {
-                    CrystalImageAdapter imageAdapter = new CrystalImageAdapter(this, imageUrls, false, null);
-                    crystalImages.setAdapter(imageAdapter);
-                    setupDotsIndicator(imageUrls.size(), crystalImages);
+                  CrystalImageAdapter imageAdapter =
+                      new CrystalImageAdapter(this, imageUrls, false, null);
+                  crystalImages.setAdapter(imageAdapter);
+                  setupDotsIndicator(imageUrls.size(), crystalImages);
                 }
                 ((TextView) findViewById(R.id.crystalName)).setText(crystal.getName());
-                ((TextView) findViewById(R.id.crystalDescription)).setText(crystal.getDescription());
-                ((TextView) findViewById(R.id.crystalPrice)).setText(String.format("%.2f $ / kg", crystal.getPrice()));
-            }
-        });
+                ((TextView) findViewById(R.id.crystalDescription))
+                    .setText(crystal.getDescription());
+                ((TextView) findViewById(R.id.crystalPrice))
+                    .setText(String.format("%.2f $ / kg", crystal.getPrice()));
+              }
+            });
 
         cartButton = findViewById(R.id.cartButton);
         checkCartStatus(crystalId);
@@ -144,6 +147,23 @@ public class DetailActivity extends BaseActivity {
         decreaseQuantityButton.setOnClickListener(v -> updateQuantityInCart(crystalId, -1));
         increaseQuantityButton.setOnClickListener(v -> updateQuantityInCart(crystalId, 1));
     }
+
+  @Override
+  protected void onResume() {
+    
+    super.onResume();
+
+    currentUser = mAuth.getCurrentUser();
+
+    String crystalId = getIntent().getStringExtra("crystalId");
+
+    if (crystalId != null && currentUser != null) {
+        checkCartStatus(crystalId);
+    }
+
+   
+    }
+  
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -163,12 +183,18 @@ public class DetailActivity extends BaseActivity {
         cartItem.put("crystalId", crystalId);
         cartItem.put("quantity", 1);
 
-        db.collection("users").document(userId).collection("cart").document(crystalId)
-                .set(cartItem)
-                .addOnSuccessListener(aVoid -> Snackbar.make(cartButton, "Item added to cart", Snackbar.LENGTH_SHORT).show())
-                .addOnFailureListener(aVoid ->
-                        Snackbar.make(cartButton, "Failed to add item to cart", Snackbar.LENGTH_LONG)
-                                .setAction("RETRY", v -> addToCart(crystalId)).show());
+    db.collection("users")
+        .document(userId)
+        .collection("cart")
+        .document(crystalId)
+        .set(cartItem)
+        .addOnSuccessListener(
+            aVoid -> Snackbar.make(cartButton, "Item added to cart", Snackbar.LENGTH_SHORT).show())
+        .addOnFailureListener(
+            aVoid ->
+                Snackbar.make(cartButton, "Failed to add item to cart", Snackbar.LENGTH_LONG)
+                    .setAction("RETRY", v -> addToCart(crystalId))
+                    .show());
 
         checkCartStatus(crystalId);
     }
@@ -177,27 +203,37 @@ public class DetailActivity extends BaseActivity {
         if (currentUser == null) return;
 
         String userId = currentUser.getUid();
-        db.collection("users").document(userId).collection("cart").document(crystalId)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        Long quantityLong = documentSnapshot.getLong("quantity");
-                        int quantity = quantityLong != null ? quantityLong.intValue() : 0;
-                        int newQuantity = quantity + change;
+    db.collection("users")
+        .document(userId)
+        .collection("cart")
+        .document(crystalId)
+        .get()
+        .addOnSuccessListener(
+            documentSnapshot -> {
+              if (documentSnapshot.exists()) {
+                Long quantityLong = documentSnapshot.getLong("quantity");
+                int quantity = quantityLong != null ? quantityLong.intValue() : 0;
+                int newQuantity = quantity + change;
 
-                        if (newQuantity <= 0) {
-                            db.collection("users").document(userId).collection("cart").document(crystalId)
-                                    .delete()
-                                    .addOnSuccessListener(aVoid -> updateCartButtonUI(0));
-                        } else {
-                            Map<String, Object> updates = new HashMap<>();
-                            updates.put("quantity", newQuantity);
-                            db.collection("users").document(userId).collection("cart").document(crystalId)
-                                    .update(updates);
-                            updateCartButtonUI(newQuantity);
-                        }
-                    }
-                });
+                if (newQuantity <= 0) {
+                  db.collection("users")
+                      .document(userId)
+                      .collection("cart")
+                      .document(crystalId)
+                      .delete()
+                      .addOnSuccessListener(aVoid -> updateCartButtonUI(0));
+                } else {
+                  Map<String, Object> updates = new HashMap<>();
+                  updates.put("quantity", newQuantity);
+                  db.collection("users")
+                      .document(userId)
+                      .collection("cart")
+                      .document(crystalId)
+                      .update(updates);
+                  updateCartButtonUI(newQuantity);
+                }
+              }
+            });
     }
 
     private void checkCartStatus(String crystalId) {
