@@ -1,24 +1,30 @@
 package com.example.myapplication.utils;
 
+
 import android.util.Log;
+
 
 import com.example.myapplication.models.Crystal;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+
 import java.util.Arrays;
 import java.util.List;
 
+
 public class CrystalSeeder {
+
 
     private static final FirebaseFirestore db = FirebaseFirestore.getInstance();
     public static void seedCrystalsToFirestore() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+
         List<Crystal> crystals = Arrays.asList(
                 new Crystal(
                         "crystal001",
                         "Amethyst",
-                        "Promotes peace and protection",
+                        "Amethyst is a soothing stone known for its calming and spiritually protective energy. Its stunning violet hue has long been associated with clarity, inner peace, and wisdom. Often used in meditation, Amethyst helps quiet the mind, reduce stress, and enhance intuition. Many believe it acts as a natural tranquilizer, easing emotional turmoil and promoting balance. Amethyst is also thought to support restful sleep and guard against negative influences, making it a powerful ally for emotional and spiritual well-being. Whether carried in a pocket or placed in a sacred space, this crystal encourages a sense of serenity and mindful presence in daily life.",
                         "Calm & Stress Relief",
                         Arrays.asList("peace", "protection", "purple"),
                         Arrays.asList(
@@ -26,12 +32,13 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FCalm%20%26%20Stress%20Relief%2FAmethyst%2Famethyst_1.png?alt=media&token=b1b4187c-1630-4d71-bb41-4b5df17e0829",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FCalm%20%26%20Stress%20Relief%2FAmethyst%2Famethyst_2.png?alt=media&token=06f024b7-12a7-469c-80d7-8a793eb48ab2"
                         ),
-                        2.5,
+                        52.99,
                         10,
                         0
                 ),
 
-                new Crystal("crystal003", "Lepidolite", "Contains lithium; helps with emotional balance and anxiety", "Calm & Stress Relief",
+
+                new Crystal("crystal003", "Lepidolite", "Lepidolite is a gentle stone of emotional healing and balance, often recognized by its soft lilac or lavender shimmer. Rich in lithium, it is known to promote calmness during times of stress, anxiety, or emotional overwhelm. Many turn to Lepidolite for its comforting presence, especially when navigating change or letting go of past patterns. This stone encourages inner peace, emotional stability, and a greater sense of acceptance. It also supports restful sleep and clarity of thought, helping to ease mental chatter and align the heart with the mind. Lepidolite is a beautiful companion for those seeking tranquility and gentle transformation.", "Calm & Stress Relief",
                         Arrays.asList("calm", "anxiety", "lithium"),
                         Arrays.asList(
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FCalm%20%26%20Stress%20Relief%2FLepidolite%2Flepidolite_1.png?alt=media&token=6370fc8d-d5dd-44ba-b9e4-d9dc3512a696",
@@ -39,11 +46,13 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FCalm%20%26%20Stress%20Relief%2FLepidolite%2Flepidolite_3.png?alt=media&token=8c3cae53-f059-4016-aec3-b242353c43ff"),
 
 
-                        2.5, 10, 0),
+
+
+                        15, 10, 0),
                 new Crystal(
                         "crystal004",
                         "Blue Lace Agate",
-                        "Promotes tranquility and gentle communication",
+                        "Blue Lace Agate is a soft and nurturing stone, treasured for its light blue bands that resemble delicate waves or lacy clouds. It is known for its gentle energy that brings peace, clarity, and ease in communication. Often called the stone of expression, Blue Lace Agate helps soothe anxiety, calm overthinking, and encourage confident yet thoughtful speech. It is especially supportive during emotionally charged conversations, allowing truth to be spoken with grace. This crystal is also believed to ease throat-related issues and promote emotional healing through honest self-expression. Blue Lace Agate is ideal for anyone seeking calm, understanding, and heartfelt connection.",
                         "Calm & Stress Relief",
                         Arrays.asList("calm", "communication", "blue"),
                         Arrays.asList(
@@ -51,14 +60,14 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FCalm%20%26%20Stress%20Relief%2FBluelace%2Fbluelace_2.png?alt=media&token=6d9039a7-4506-4767-9999-dbaa7810cfc8",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FCalm%20%26%20Stress%20Relief%2FBluelace%2Fbluelace_1.png?alt=media&token=850b32c7-0679-49b0-956d-5c34d5b7aa4a"
                         ),
-                        2.8,
+                        42.99,
                         9,
                         0
                 ),
                 new Crystal(
                         "crystal011",
                         "Angelite",
-                        "Calms fear and enhances serenity and compassion",
+                        "Angelite is a serene stone known for its connection to higher realms, spiritual guidance, and inner peace. Its soft blue color evokes a sense of calm and quiet strength, making it a popular choice for those seeking comfort and emotional support. Angelite is often used to enhance communication, not just with others, but with one's own inner voice and intuition. It is believed to open the heart and throat chakras, encouraging compassion, clarity, and gentle honesty. Many turn to Angelite during times of grief or stress, as it offers a peaceful energy that promotes acceptance and emotional healing. This stone is a reminder that you are never alone, and that support—both spiritual and personal—is always within reach.",
                         "Calm & Stress Relief",
                         Arrays.asList("peace", "compassion", "light blue"),
                         Arrays.asList(
@@ -66,31 +75,33 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FCalm%20%26%20Stress%20Relief%2FAngelite%2FAngelite_1.png?alt=media&token=7fb85d82-abbd-4e3b-ac72-239e70dc127c",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FCalm%20%26%20Stress%20Relief%2FAngelite%2FAngelite_3.png?alt=media&token=2f790d69-7442-41d7-8662-360fc1ce7e04"
 
+
                         ),
-                        2.5,
+                        6.99,
                         10,
                         0
                 ),
                 new Crystal(
                         "crystal012",
                         "Celestite",
-                        "Brings mental clarity and divine peace",
+                        "Celestite is a crystal of peace, purity, and divine connection, known for its delicate sky-blue hue and calming presence. Often associated with celestial realms and angelic guidance, Celestite is used to quiet the mind, ease anxiety, and support spiritual growth. Its gentle energy is ideal for meditation, helping to clear mental clutter and open pathways to higher wisdom and inner stillness. Celestite is also thought to enhance dreams, deepen intuition, and encourage clear, compassionate communication. Placing it in a space can bring a sense of tranquility and lightness, making it a beautiful companion for those seeking clarity, serenity, and connection to something greater.",
                         "Calm & Stress Relief",
                         Arrays.asList("calm", "clarity", "sky blue"),
                         Arrays.asList(
-                              "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FCalm%20%26%20Stress%20Relief%2FCelestite%2Fcelestite_3.png?alt=media&token=9f666f2b-0916-4903-ade8-1e9ee0d9645c",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FCalm%20%26%20Stress%20Relief%2FCelestite%2Fcelestite_3.png?alt=media&token=9f666f2b-0916-4903-ade8-1e9ee0d9645c",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FCalm%20%26%20Stress%20Relief%2FCelestite%2Fcelestite_1.png?alt=media&token=98c8f0b1-c305-4043-b506-5a81c3165e8d",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FCalm%20%26%20Stress%20Relief%2FCelestite%2Fcelestite_2.png?alt=media&token=3557050a-040f-4306-9930-24225cf0efa3"
 
+
                         ),
-                        2.5,
+                        57.00,
                         10,
                         0
                 ),
                 new Crystal(
                         "crystal013",
                         "Chrysocolla",
-                        "Encourages emotional healing and soothes anxiety",
+                        "Chrysocolla is a vibrant stone of communication, emotional healing, and feminine energy, recognized by its rich blend of turquoise, teal, and earthy greens. It is often used to support calm and heartfelt expression, making it an excellent companion for those navigating emotional challenges or seeking to speak their truth with compassion. Chrysocolla gently encourages inner strength, self-awareness, and forgiveness, helping to release negative patterns and restore emotional balance. It is also associated with creativity and intuitive wisdom, offering a grounded yet spiritually uplifting energy. Whether carried or placed in your space, Chrysocolla nurtures a sense of peace, renewal, and empowerment from within.",
                         "Calm & Stress Relief",
                         Arrays.asList("soothing", "expression", "blue-green"),
                         Arrays.asList(
@@ -98,14 +109,14 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FCalm%20%26%20Stress%20Relief%2FChrysocolla%2Fchrysocolla_2.png?alt=media&token=4f951045-5700-44d0-a296-cf43bf2bd658",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FCalm%20%26%20Stress%20Relief%2FChrysocolla%2Fchrysocolla_3.png?alt=media&token=f2adbcc0-c88b-45b4-8714-938e75870226"
                         ),
-                        2.5,
+                        25.99,
                         10,
                         0
                 ),
                 new Crystal(
                         "crystal014",
                         "Fluorite",
-                        "Reduces mental fog and helps with emotional balance",
+                        "Fluorite is a highly protective and mentally stimulating crystal, known for its rainbow hues and natural geometric formations. It is often called the “genius stone” due to its ability to enhance focus, clarity, and decision-making. Fluorite helps clear mental fog, reduce distractions, and bring order to chaotic thoughts, making it ideal for studying, working, or problem-solving. Emotionally, it brings stability and helps to cleanse negative energy from both the environment and the mind. Fluorite is also believed to support spiritual alignment by connecting the mind with higher awareness. Whether used in meditation or kept nearby during daily tasks, Fluorite offers a balanced and clear energy that inspires thoughtful action and emotional calm.",
                         "Calm & Stress Relief",
                         Arrays.asList("clarity", "focus", "multicolor"),
                         Arrays.asList(
@@ -113,14 +124,14 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FCalm%20%26%20Stress%20Relief%2FFluorite%2Ffluorite_3.png?alt=media&token=393153a8-25aa-4f05-bb02-c7af23593dd8",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FCalm%20%26%20Stress%20Relief%2FFluorite%2Ffluorite_2.png?alt=media&token=9b6f5386-4a7d-451c-8444-85938f40e9bf"
                         ),
-                        2.5,
+                        23.99,
                         10,
                         0
                 ),
                 new Crystal(
                         "crystal015",
                         "Moonstone",
-                        "Balances emotions and calms emotional reactivity",
+                        "Moonstone is a mystical and nurturing crystal often associated with intuition, feminine energy, and emotional balance. With its soft, pearly glow and flashes of iridescence, Moonstone has long been revered as a symbol of new beginnings and inner growth. It gently encourages self-reflection, helping to calm emotional turbulence and align the heart with intuition. Moonstone is also known to enhance creativity, promote patience, and support cycles of change, making it especially powerful during times of transition. Often used in meditation or worn as a talisman, Moonstone offers a soothing energy that reconnects you with your inner rhythms and the natural flow of life.",
                         "Calm & Stress Relief",
                         Arrays.asList("balance", "intuition", "white"),
                         Arrays.asList(
@@ -128,14 +139,14 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FCalm%20%26%20Stress%20Relief%2FMoonstone%2Fmoonstone_1.png?alt=media&token=890f3c04-ca4d-425b-96da-444aeed866b7",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FCalm%20%26%20Stress%20Relief%2FMoonstone%2Fmoonstone_3.png?alt=media&token=dea2e37a-51b8-4ea0-b588-bca71a673a38"
                         ),
-                        2.5,
+                        22.99,
                         10,
                         0
                 ),
                 new Crystal(
                         "crystal016",
                         "Selenite",
-                        "Cleanses energy and brings deep peace",
+                        "Selenite is a radiant crystal known for its pure, high-vibrational energy and its ability to cleanse and recharge both spaces and other stones. With its luminous, satin-like surface, Selenite brings clarity, peace, and spiritual connection. It is often used to clear mental clutter, align the chakras, and create a protective energy field around the body or home. Selenite does not absorb negativity but instead promotes a constant flow of positive energy. Many turn to it during meditation to deepen insight and connect with higher realms. Whether placed on an altar, near a doorway, or held in quiet reflection, Selenite offers a calming presence that encourages stillness, awareness, and spiritual renewal.",
                         "Calm & Stress Relief",
                         Arrays.asList("cleansing", "peace", "white"),
                         Arrays.asList(
@@ -143,14 +154,14 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FCalm%20%26%20Stress%20Relief%2FSelenite%2Fselenite_2.png?alt=media&token=2236e29b-67c2-4a41-903b-c96de0d046f7",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FCalm%20%26%20Stress%20Relief%2FSelenite%2Fselenite_3.png?alt=media&token=cfdcdde9-e975-49e9-887f-c67130b5daf7"
                         ),
-                        2.5,
+                        5.99,
                         10,
                         0
                 ),
                 new Crystal(
                         "crystal017",
                         "Smoky Quartz",
-                        "Grounds stress and neutralizes negative energy",
+                        "Smoky Quartz is a grounding and protective crystal, known for its translucent brown and grey tones that resemble soft, earthy smoke. It is valued for its ability to absorb and transmute negative energy, offering a sense of stability and emotional resilience during stressful times. Often used for grounding practices, Smoky Quartz helps anchor scattered energy, clear mental clutter, and promote a calm, centered mindset. It supports practical thinking and emotional clarity, making it a powerful tool for decision-making and releasing what no longer serves you. Whether kept close during meditation or carried throughout the day, Smoky Quartz fosters inner strength, balance, and a deep connection to the earth.",
                         "Calm & Stress Relief",
                         Arrays.asList("grounding", "balance", "brown"),
                         Arrays.asList(
@@ -158,47 +169,50 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FCalm%20%26%20Stress%20Relief%2FSmoky%20Quartz%2FSmokyQuartz_1.png?alt=media&token=400fd344-74de-4222-b89a-24adef14c8df",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FCalm%20%26%20Stress%20Relief%2FSmoky%20Quartz%2FSmokyQuartz_3.png?alt=media&token=b44d3089-67c8-419c-8155-186a0ac91437"
                         ),
-                        2.5,
+                        45.99,
                         10,
                         0
                 ),
+
 
                 new Crystal(
                         "crystal018",
                         "Azurite",
-                        "A soothing stone that enhances spiritual awareness and promotes inner peace.",
+                        "Azurite is a deep blue crystal celebrated for its powerful energy that stimulates the mind and enhances intuition. With its rich, vibrant hues, Azurite is often called the stone of insight, helping to clear mental fog and open pathways to higher consciousness. It encourages creative thinking, sharpens focus, and supports spiritual growth by connecting you with your inner wisdom. Emotionally, Azurite aids in releasing stress and anxiety, fostering calmness and clarity. Whether used during meditation or kept nearby during creative work, Azurite inspires profound awareness and a deeper understanding of the world around you.",
                         "Meditation",
                         Arrays.asList("clarity", "intuition", "blue"),
                         Arrays.asList(
-                               "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FAzurite%2Fazurite_1.png?alt=media&token=d803411d-8fa6-4719-a77b-dbe16d429b70",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FAzurite%2Fazurite_1.png?alt=media&token=d803411d-8fa6-4719-a77b-dbe16d429b70",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FAzurite%2Fazurite_2.png?alt=media&token=dfe2facb-cbf0-44e4-8ba9-a429893b6679",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FAzurite%2Fazurite_3.png?alt=media&token=45463811-7df3-42e5-a375-a3aed16fec2d"
                         ),
-                        2.5,
+                        20.99,
                         10,
                         0
                 ),
+
 
                 new Crystal(
                         "crystal019",
                         "Black Tourmaline",
-                        "A grounding crystal that shields against negative energies and EMFs.",
+                        "Black Tourmaline is a powerful protective stone known for its grounding energy and ability to shield against negative influences. Its deep black color embodies strength and stability, making it a favorite for those seeking balance in chaotic environments. This crystal is believed to absorb and transmute negative energy, electromagnetic pollution, and psychic attacks, creating a secure energetic barrier. Black Tourmaline also supports emotional resilience, helping to dispel fear and anxiety while promoting confidence and calm. Whether worn as jewelry or placed in a living space, Black Tourmaline offers a strong foundation of protection and grounding, empowering you to face challenges with clarity and strength.",
                         "Meditation",
                         Arrays.asList("protection", "grounding", "black"),
                         Arrays.asList(
-                               "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FBlack%20Tourmaline%2FBlackTourmaline_1.png?alt=media&token=972dc212-ddd5-4e5c-8baa-5ec58d7ecff9",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FBlack%20Tourmaline%2FBlackTourmaline_1.png?alt=media&token=972dc212-ddd5-4e5c-8baa-5ec58d7ecff9",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FBlack%20Tourmaline%2FBlackTourmaline_2.png?alt=media&token=584b2ea5-a796-4e7c-b8f0-ddb357392a7a",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FBlack%20Tourmaline%2FBlackTourmaline_3.png?alt=media&token=416956b9-e690-4f3a-a79c-5efc9af0dc61"
                         ),
-                        2.5,
+                        6.99,
                         10,
                         0
                 ),
 
+
                 new Crystal(
                         "crystal020",
                         "Clear Quartz",
-                        "A powerful energy amplifier that brings clarity and balances all chakras.",
+                        "Clear Quartz is a versatile and powerful crystal known as the “master healer.” With its transparent, radiant clarity, it amplifies energy, intentions, and the effects of other stones. Clear Quartz is often used to cleanse the mind, balance emotions, and promote spiritual growth. Its energy is pure and unobstructed, making it ideal for meditation, manifestation, and enhancing focus. Many believe it helps connect with higher consciousness and unlock inner wisdom. Whether used in healing rituals, worn as jewelry, or placed in a space, Clear Quartz acts as a powerful energy conductor that brings clarity, harmony, and vitality.",
                         "Meditation",
                         Arrays.asList("clarity", "energy", "clear"),
                         Arrays.asList(
@@ -206,15 +220,16 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FClear%20Quartz%2FClearQuartz_2.png?alt=media&token=daa1d28d-8940-4ce7-a769-612bb1554e65",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FClear%20Quartz%2FClearQuartz_3.png?alt=media&token=b1f4cf6c-4f85-4138-a9d8-c91e47e64f77"
                         ),
-                        2.5,
+                        7.99,
                         10,
                         0
                 ),
 
+
                 new Crystal(
                         "crystal021",
                         "Danburite",
-                        "Facilitates deep spiritual connection and access to higher consciousness.",
+                        "Danburite is a luminous crystal known for its gentle, uplifting energy and strong connection to the heart and crown chakras. Its clear to pale golden color reflects purity and light, inspiring feelings of peace, love, and spiritual awakening. Danburite is often used to release emotional blockages, foster forgiveness, and encourage a deep sense of compassion for oneself and others. It supports clear communication with higher realms, making it a favored stone for meditation and healing work. Many find Danburite helpful in calming anxiety and bringing clarity to complex situations. Whether carried or placed in a sacred space, Danburite invites a radiant energy that uplifts the spirit and nurtures the soul.",
                         "Meditation",
                         Arrays.asList("purity", "connection", "clear"),
                         Arrays.asList(
@@ -222,31 +237,33 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FDanburite%2FDanburite_2.png?alt=media&token=953af613-5bcb-40cb-a54f-452e8acd7461",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FDanburite%2FDanburite_3.png?alt=media&token=5ed3921a-6de5-4589-84a0-4eca8bbf3d22"
                         ),
-                        2.5,
+                        199.99,
                         10,
                         0
                 ),
+
 
                 new Crystal(
                         "crystal022",
                         "Hematite",
-                        "Strongly grounding, it brings mental organization and focus.",
+                        "Hematite is a grounding and balancing stone known for its metallic sheen and strong connection to the earth. It is prized for its ability to absorb negative energy and promote mental clarity, focus, and stability. Hematite encourages courage, strength, and confidence, helping to overcome challenges and release stress. This crystal is often used to balance the mind and body, align chakras, and enhance willpower. Its protective energy creates a shield against negativity while fostering a calm and centered mindset. Whether worn as jewelry or kept nearby, Hematite serves as a powerful tool for grounding, protection, and personal empowerment.",
                         "Meditation",
                         Arrays.asList("grounding", "protection", "silver"),
                         Arrays.asList(
-                               "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FHematite%2FHematite_1.png?alt=media&token=8d0a3ca1-574e-44ee-8a49-47cdd38463ef",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FHematite%2FHematite_1.png?alt=media&token=8d0a3ca1-574e-44ee-8a49-47cdd38463ef",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FHematite%2FHematite_2.png?alt=media&token=3748ef53-65de-45c6-8a92-a8fb64da3d31",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FHematite%2FHematite_3.png?alt=media&token=583c189a-4385-40d8-90b8-b0beae586d6b"
                         ),
-                        2.5,
+                        9.99,
                         10,
                         0
                 ),
 
+
                 new Crystal(
                         "crystal023",
                         "Kyanite",
-                        "Aligns all chakras instantly and promotes clear communication and energy flow.",
+                        "Kyanite is a stunning blue crystal prized for its calming energy and ability to align all chakras without requiring cleansing. Known for promoting communication, tranquility, and self-expression, Kyanite encourages you to speak your truth with confidence and grace. It supports mental clarity and focus, making it a valuable stone for meditation and intellectual pursuits. Kyanite also helps release blockages and emotional wounds, fostering forgiveness and understanding. Its soothing energy is ideal for reducing stress and anxiety while promoting a balanced, peaceful state of mind. Whether carried or placed in your environment, Kyanite offers gentle yet powerful support for spiritual growth and emotional healing.",
                         "Meditation",
                         Arrays.asList("energy", "alignment", "blue"),
                         Arrays.asList(
@@ -254,15 +271,16 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FKyanite%2FKyanite_2.png?alt=media&token=f0c25f9f-c9c4-42ef-aeb3-df8fd4c4148e",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FKyanite%2FKyanite_3.png?alt=media&token=5229b2b8-72dd-4901-9bf4-1b0a350fb392"
                         ),
-                        2.5,
+                        11.99,
                         10,
                         0
                 ),
 
+
                 new Crystal(
                         "crystal024",
                         "Labradorite",
-                        "Awakens psychic abilities and protects during spiritual work.",
+                        "Labradorite is a mesmerizing crystal known for its captivating play of colors, often called labradorescence. This stone is celebrated for its magical energy that enhances intuition, creativity, and transformation. Labradorite acts as a protective shield, guarding the aura against negativity while encouraging self-discovery and spiritual awakening. It helps to uncover hidden truths, boost confidence, and inspire perseverance during times of change. Labradorite’s shimmering flashes of blue, green, and gold captivate the eye and uplift the spirit, making it a powerful companion for those seeking clarity, protection, and deeper connection to their inner self.",
                         "Meditation",
                         Arrays.asList("protection", "intuition", "chrome"),
                         Arrays.asList(
@@ -270,31 +288,33 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FLabradorite%2FLabradorite_2.png?alt=media&token=656deddf-f8be-4ff2-9d85-659b7a9c10b6",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FLabradorite%2FLabradorite_3.png?alt=media&token=9af82882-8371-4e76-8761-3c0ba267fc65"
                         ),
-                        2.5,
+                        28.99,
                         10,
                         0
                 ),
+
 
                 new Crystal(
                         "crystal025",
                         "Lapis Lazuli",
-                        "Stimulates intuition and truth, supporting deep inner self-discovery.",
+                        "Lapis Lazuli is a deep blue stone prized since ancient times for its rich color and powerful energy. Known as a stone of wisdom, truth, and self-awareness, it encourages honest communication and intellectual growth. Lapis Lazuli stimulates the mind, enhancing clarity, creativity, and insight, while fostering inner peace and harmony. It is often used to open the third eye and throat chakras, supporting intuition and authentic expression. This majestic crystal is also believed to help release stress, promote emotional healing, and deepen spiritual connection. Lapis Lazuli is an excellent companion for those seeking to embrace their truth and expand their consciousness.",
                         "Meditation",
                         Arrays.asList("intuition", "wisdom", "blue"),
                         Arrays.asList(
-                               "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FLapis%20Lazuli%2FLapisLazuli_1.png?alt=media&token=103f5ba4-0c23-496b-8384-081d396ccb4b",
+                                "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FLapis%20Lazuli%2FLapisLazuli_1.png?alt=media&token=103f5ba4-0c23-496b-8384-081d396ccb4b",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FLapis%20Lazuli%2FLapisLazuli_2.png?alt=media&token=2a162bd7-3781-435e-b0c0-4784de31d09d",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FLapis%20Lazuli%2FLapisLazuli_3.png?alt=media&token=3956bcc2-e03e-4af8-9f1d-5d8d3f69e90b"
                         ),
-                        2.5,
+                        13.99,
                         10,
                         0
                 ),
 
+
                 new Crystal(
                         "crystal026",
                         "Rose Quartz",
-                        "The stone of unconditional love, encouraging compassion and emotional healing.",
+                        "Rose Quartz is a gentle and nurturing crystal, known as the stone of unconditional love. Its soft pink hue symbolizes compassion, tenderness, and emotional healing. Rose Quartz promotes self-love, forgiveness, and harmony in relationships, helping to open the heart chakra to love and kindness. It is often used to soothe emotional wounds, reduce stress, and encourage feelings of peace and acceptance. This crystal is ideal for those seeking to attract love or deepen their connection with themselves and others. Whether carried, worn, or placed in your space, Rose Quartz radiates a calming energy that nurtures the soul and fosters emotional balance.",
                         "Meditation",
                         Arrays.asList("love", "healing", "pink"),
                         Arrays.asList(
@@ -302,15 +322,16 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FRose%20Quartz%2FRoseQuartz_2.png?alt=media&token=3b211147-7e25-40a9-bde6-202c1b3090c4",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FRose%20Quartz%2FRoseQuartz_3.png?alt=media&token=008c68bf-0399-4c95-8564-876198523b43"
                         ),
-                        2.5,
+                        10.99,
                         10,
                         0
                 ),
 
+
                 new Crystal(
                         "crystal027",
                         "Tigers Eye",
-                        "Enhances willpower, confidence, and balanced decision-making.",
+                        "Tiger’s Eye is a striking crystal known for its rich golden to brown bands and its powerful grounding energy. Often called the stone of courage and confidence, Tiger’s Eye helps to dispel fear and promote mental clarity. It balances emotional energy, encouraging determination, willpower, and practical decision-making. This stone is prized for its ability to harmonize the mind and body, fostering resilience and focus during challenging situations. Tiger’s Eye also supports creativity and personal empowerment, making it a trusted companion for those pursuing goals and new opportunities. Whether worn or carried, Tiger’s Eye offers strength, protection, and a boost of motivation.",
                         "Meditation",
                         Arrays.asList("protection", "confidence", "brown"),
                         Arrays.asList(
@@ -318,10 +339,11 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FTigers%20Eye%2FTigersEye_2.png?alt=media&token=480b2c15-bdbb-4917-9307-a3d241a30192",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FMeditation%2FTigers%20Eye%2FTigersEye_3.png?alt=media&token=579fa4fe-89d0-427f-bab6-7a8d1f440c29"
                         ),
-                        2.5,
+                        3.99,
                         10,
                         0
                 ),
+
 
                 new Crystal(
                         "crystal030",
@@ -334,10 +356,11 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FAmazonite%2FAmazonite_2.png?alt=media&token=3539c008-5a4e-4a4c-a594-f17c4a38afcf",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FAmazonite%2FAmazonite_3.png?alt=media&token=cd4f413c-2805-400a-ae49-c848a794af8e"
                         ),
-                        2.5,
+                        21.99,
                         10,
                         0
                 ),
+
 
                 new Crystal(
                         "crystal031",
@@ -350,10 +373,11 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FBlack%20Obsidian%2FBlackObsidian_2.png?alt=media&token=1bb86bef-2885-48eb-9c3c-52e777551225",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FBlack%20Obsidian%2FBlackObsidian_3.png?alt=media&token=af41d16c-e065-4d5b-b686-1c59f3c6fcf5"
                         ),
-                        2.5,
+                        14.99,
                         10,
                         0
                 ),
+
 
                 new Crystal(
                         "crystal032",
@@ -366,10 +390,11 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FCarnelian%2FCarnelian_2.png?alt=media&token=30d275ff-766e-4410-8119-d1ea8fd73824",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FCarnelian%2FCarnelian_3.png?alt=media&token=c8f9e018-d437-4416-b963-8cee679b25fc"
                         ),
-                        2.5,
+                        45.99,
                         10,
                         0
                 ),
+
 
                 new Crystal(
                         "crystal033",
@@ -382,10 +407,11 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FCitrine%2Fcitrine_2.png?alt=media&token=2b338b45-f84c-4c1d-bcf1-ef2cd27d56ee",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FCitrine%2Fcitrine_3.png?alt=media&token=b76423e1-3d87-4d67-a161-35737f271b58"
                         ),
-                        2.5,
+                        37.99,
                         10,
                         0
                 ),
+
 
                 new Crystal(
                         "crystal034",
@@ -398,10 +424,11 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FGarnet%2FGarnet_2.png?alt=media&token=de8fd9ed-caf8-4a26-8801-8b846ccba17a",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FGarnet%2FGarnet_3.png?alt=media&token=a842387f-2022-4733-bfdd-1f9ab9ac15f0"
                         ),
-                        2.5,
+                        119.99,
                         10,
                         0
                 ),
+
 
                 new Crystal(
                         "crystal035",
@@ -414,10 +441,11 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FGreen%20Aventurine%2FGreenAventurine_2.png?alt=media&token=e9f4be7d-7b2a-471b-9a4b-f1fdc6a4a7bb",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FGreen%20Aventurine%2FGreenAventurine_3.png?alt=media&token=822bf720-5acc-4de9-8e4d-e5bae5ffa397"
                         ),
-                        2.5,
+                        54.99,
                         10,
                         0
                 ),
+
 
                 new Crystal(
                         "crystal036",
@@ -430,10 +458,11 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FMalachite%2FMalachite_2.png?alt=media&token=1e4c6dce-8678-4a2d-b9a6-e007f90d2be5",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FMalachite%2FMalachite_3.png?alt=media&token=f5f9d87b-878f-448b-9803-bcfe5e161472"
                         ),
-                        2.5,
+                        159.99,
                         10,
                         0
                 ),
+
 
                 new Crystal(
                         "crystal037",
@@ -446,10 +475,11 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FPyrite%2FPyrite_2.png?alt=media&token=f8ee867f-8377-4b2e-bc6d-203147d7490f",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FPyrite%2FPyrite_3.png?alt=media&token=1e3372d6-7ef9-45ec-8649-ed7937c9ef72"
                         ),
-                        2.5,
+                        31.99,
                         10,
                         0
                 ),
+
 
                 new Crystal(
                         "crystal038",
@@ -462,10 +492,11 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FSodalite%2FSodalite_2.png?alt=media&token=abc200f0-0639-4f57-bd89-772456e80263",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FSodalite%2FSodalite_3.png?alt=media&token=d2d597eb-0b31-44e6-91ba-502df068b775"
                         ),
-                        2.5,
+                        31.99,
                         10,
                         0
                 ),
+
 
                 new Crystal(
                         "crystal039",
@@ -478,17 +509,20 @@ public class CrystalSeeder {
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FSunstone%2FSunstone_2.png?alt=media&token=8215e80a-3bf3-44bd-8b5b-9b035d7266e4",
                                 "https://firebasestorage.googleapis.com/v0/b/crysta-d58f8.firebasestorage.app/o/crystals%2FSuccess%2FSunstone%2FSunstone_3.png?alt=media&token=55ce3d50-9b22-43d6-b7c1-fd7cfa7620b0"
                         ),
-                        2.5,
+                        25.99,
                         10,
                         0
                 )
+
 
         );
         for (Crystal crystal : crystals) {
             seedSingleCrystalIfMissing(crystal);
         }
 
+
     }
+
 
     private static void seedSingleCrystalIfMissing(Crystal crystal) {
         db.collection("crystals").document(crystal.getId())
@@ -504,3 +538,4 @@ public class CrystalSeeder {
                 .addOnFailureListener(e -> Log.e("SEEDER", "Error checking crystal: " + crystal.getName(), e));
     }
 }
+
