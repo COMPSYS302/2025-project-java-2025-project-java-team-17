@@ -10,6 +10,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+
+import android.widget.Toast;
+
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,16 +23,26 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.adapters.CrystalImageAdapter;
 import com.example.myapplication.models.Crystal;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+
+
 import java.util.List;
 import java.util.Map;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends BaseActivity {
 
   private ImageButton wishlistButton;
   private LinearLayout cartButton;
@@ -61,6 +76,7 @@ public class DetailActivity extends AppCompatActivity {
     decreaseQuantityButton = findViewById(R.id.decreaseQuantityButton);
     increaseQuantityButton = findViewById(R.id.increaseQuantityButton);
 
+
     setSupportActionBar(toolbar);
     if (getSupportActionBar() != null) {
       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -68,11 +84,13 @@ public class DetailActivity extends AppCompatActivity {
     }
     toolbar.setNavigationOnClickListener(v -> finish());
 
+
     wishlistButton.setOnClickListener(
         v -> {
           isFavorite = !isFavorite;
           updateWishlistButton();
         });
+
 
     goToCartButton.setOnClickListener(
         v -> {
@@ -90,6 +108,83 @@ public class DetailActivity extends AppCompatActivity {
     if (crystalId == null) {
       finish();
       return;
+
+        wishlistButton = findViewById(R.id.wishlistButton);
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        wishlistButton.setOnClickListener(v -> {
+            if (currentUser != null) {
+                String userId = currentUser.getUid();
+                String crystalId = getIntent().getStringExtra("crystalId");
+
+                isFavorite = !isFavorite;
+                updateWishlistButton();
+
+                DocumentReference userRef = db.collection("users").document(userId);
+                if (isFavorite) {
+                    userRef.update("favourites", FieldValue.arrayUnion(crystalId));
+                } else {
+                    userRef.update("favourites", FieldValue.arrayRemove(crystalId));
+                }
+            } else {
+                Toast.makeText(this, "Please log in to use favourites", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Initialize the RecyclerView for images
+        RecyclerView crystalImages = findViewById(R.id.crystalImages);
+        crystalImages.setLayoutManager(new LinearLayoutManager(this,
+                LinearLayoutManager.HORIZONTAL, false));
+
+        String crystalId = getIntent().getStringExtra("crystalId");
+        if (crystalId == null) {
+            finish();
+            return;
+        }
+        // Fetch current user's favourite list and update the heart icon
+        if (currentUser != null) {
+            String userId = currentUser.getUid();
+            DocumentReference userRef = db.collection("users").document(userId);
+            userRef.get().addOnSuccessListener(snapshot -> {
+                List<String> favourites = (List<String>) snapshot.get("favourites");
+                if (favourites != null && favourites.contains(crystalId)) {
+                    isFavorite = true;
+                    updateWishlistButton(); // Sets to filled icon
+                }
+            }).addOnFailureListener(e -> {
+                Toast.makeText(this, "Failed to load favourites", Toast.LENGTH_SHORT).show();
+            });
+        }
+
+
+        db.collection("crystals").document(crystalId).update("views", FieldValue.increment(1));
+                db.collection("crystals")
+                .document(crystalId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    Crystal crystal = documentSnapshot.toObject(Crystal.class);
+                    if (crystal != null) {
+
+                        List<String> imageUrls = crystal.getImageUrls();
+                        // In your onSuccessListener after setting the adapter:
+                        if (imageUrls != null && !imageUrls.isEmpty()) {
+                            CrystalImageAdapter imageAdapter = new CrystalImageAdapter(this, imageUrls, false,null);
+                            crystalImages.setAdapter(imageAdapter);
+                            setupDotsIndicator(imageUrls.size(), crystalImages);
+                        }
+
+                        TextView nameText = findViewById(R.id.crystalName);
+                        nameText.setText(crystal.getName());
+
+                        TextView descriptionText = findViewById(R.id.crystalDescription);
+                        descriptionText.setText(crystal.getDescription());
+
+                        TextView priceText = findViewById(R.id.crystalPrice);
+                        priceText.setText(String.format("%.2f $ / kg", crystal.getPrice()));
+                    }
+                });
+
     }
 
     db.collection("crystals").document(crystalId).update("views", FieldValue.increment(1));
