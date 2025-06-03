@@ -29,7 +29,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.2" />
-    
+
             <LinearLayout
                 android:id="@+id/etLoginEmailContainer"
                 android:layout_width="0dp"
@@ -46,7 +46,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/loginTitle"
 
                 >
-                
+
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -85,7 +85,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/etLoginEmailContainer"
                 >
-                
+
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -117,6 +117,8 @@
                 android:padding="16dp"
                 android:text="Login"
                 android:textSize="16sp"
+                android:backgroundTint="#D6C6FF"
+                android:textColor="#6A0DAD"
                 app:layout_constraintEnd_toEndOf="@+id/etLoginPasswordContainer"
                 app:layout_constraintStart_toStartOf="@+id/etLoginPasswordContainer"
                 app:layout_constraintTop_toBottomOf="@+id/etLoginPasswordContainer" />

@@ -2,21 +2,11 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.TextView;
-
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.myapplication.adapters.CrystalAdapter;
-import com.example.myapplication.models.Crystal;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProfileActivity extends BaseActivity {
     @Override
@@ -27,7 +17,30 @@ public class ProfileActivity extends BaseActivity {
 
         TextView tvUsername = findViewById(R.id.tvUsername);
         TextView tvEmail = findViewById(R.id.tvEmail);
-        Button btnViewFavourites = findViewById(R.id.btnViewFavourites);
+        TextView tvFavourites = findViewById(R.id.tvFavourites);
+        tvFavourites.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, FavouritesActivity.class);
+            startActivity(intent);
+        });
+
+        TextView tvTerms = findViewById(R.id.tvTerms);
+        tvTerms.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, TermsActivity.class);
+            startActivity(intent);
+        });
+
+        TextView tvPrivacy = findViewById(R.id.tvPrivacy);
+        tvPrivacy.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, PrivacyPolicyActivity.class);
+            startActivity(intent);
+        });
+
+
+        TextView tvCart = findViewById(R.id.tvCart);
+        tvCart.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, CartActivity.class);
+            startActivity(intent);
+        });
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
@@ -45,8 +58,16 @@ public class ProfileActivity extends BaseActivity {
                     });
         }
 
-        btnViewFavourites.setOnClickListener(v -> {
-            startActivity(new Intent(ProfileActivity.this, FavouritesActivity.class));
+        TextView tvLogout = findViewById(R.id.tvLogout);
+        tvLogout.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();  // Sign out the user
+
+            // Go back to login screen
+            Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clears back stack
+            startActivity(intent);
+            finish();  // Finish profile activity
         });
+
     }
 }

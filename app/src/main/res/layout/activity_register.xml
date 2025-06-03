@@ -175,7 +175,7 @@
 
     </LinearLayout>
 
-    
+
 
 
 
@@ -187,7 +187,7 @@
     android:layout_marginTop="32dp"
     android:padding="16dp"
     android:text="Create Account"
-    android:textSize="16sp"
+    android:textSize="16sp" android:backgroundTint="#D6C6FF" android:textColor="#6A0DAD"
     app:layout_constraintEnd_toEndOf="@+id/etRegistrationConfirmContainer"
     app:layout_constraintStart_toStartOf="@+id/etRegistrationConfirmContainer"
     app:layout_constraintTop_toBottomOf="@+id/etRegistrationConfirmContainer" />
