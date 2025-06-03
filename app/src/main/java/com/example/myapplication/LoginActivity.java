@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     Toolbar toolbar = findViewById(R.id.toolbar);
     setSupportActionBar(toolbar);
     if (getSupportActionBar() != null) {
-      getSupportActionBar().setTitle("Crysta");
+      getSupportActionBar().setTitle("");
     }
 
     toolbar.setNavigationOnClickListener(v -> finish());

@@ -7,80 +7,178 @@
     android:layout_height="match_parent"
     tools:context=".RegistrationActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:menu="@menu/top_app_bar_menu"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/back_button"/>
+
      <TextView
-                android:id="@+id/RegistrationTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Registration Screen"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.2" />
+        android:id="@+id/RegistrationTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create and Account"
+        android:textSize="32sp"
+         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.2" />
 
-    <EditText
-        android:id = "@+id/etUserName"
+    <LinearLayout
+        android:id="@+id/etRegistrationUserContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="32dp"
-        android:hint="Username" 
-        android:inputType="text"
-        android:padding="16dp"
+        android:padding="8dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/search_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/RegistrationTitle"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/RegistrationTitle" >
 
-    <EditText 
-        android:id = "@+id/etEmail"
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/account"/>
+
+        <EditText
+            android:id = "@+id/etUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Username"
+            android:inputType="text"
+            android:padding="16dp"
+            android:background="@null"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/etRegistrationEmailContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="32dp"
-        android:hint="Email" 
-        android:inputType="textEmailAddress"
-        android:padding="16dp"
+        android:padding="8dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/search_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etUserName"
+        app:layout_constraintTop_toBottomOf="@+id/etRegistrationUserContainer" >
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/email"/>
+
+
+
+        <EditText
+            android:id = "@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Email"
+            android:inputType="text"
+            android:padding="16dp"
+            android:background="@null"
+            />
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/etRegistrationPasswordContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="32dp"
+        android:padding="8dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/search_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etRegistrationEmailContainer" >
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/lock_outline"/>
+
+        <EditText
+            android:id = "@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Password"
+            android:inputType="text"
+            android:padding="16dp"
+            android:background="@null"/>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/etRegistrationConfirmContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="32dp"
+        android:padding="8dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/search_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etRegistrationPasswordContainer" >
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/lock_outline"/>
+
+        <EditText
+            android:id = "@+id/etConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Confirm Password"
+            android:inputType="text"
+            android:padding="16dp"
+            android:background="@null"/>
+
+            />
+
+    </LinearLayout>
+
     
-    />
 
-    <EditText 
-        android:id = "@+id/etPassword"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="32dp"
-        android:hint="Password" 
-        android:inputType="textPassword"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etEmail"
-    
-    />
 
-    <EditText 
-        android:id = "@+id/etConfirmPassword"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="32dp"
-        android:hint="Confirm Password" 
-        android:inputType="textPassword"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword"
-    
-    />
+
 
     <Button
     android:id="@+id/btnRegister"
@@ -90,9 +188,9 @@
     android:padding="16dp"
     android:text="Create Account"
     android:textSize="16sp"
-    app:layout_constraintEnd_toEndOf="@+id/etConfirmPassword"
-    app:layout_constraintStart_toStartOf="@+id/etConfirmPassword"
-    app:layout_constraintTop_toBottomOf="@+id/etConfirmPassword" />
+    app:layout_constraintEnd_toEndOf="@+id/etRegistrationConfirmContainer"
+    app:layout_constraintStart_toStartOf="@+id/etRegistrationConfirmContainer"
+    app:layout_constraintTop_toBottomOf="@+id/etRegistrationConfirmContainer" />
 
 
 
