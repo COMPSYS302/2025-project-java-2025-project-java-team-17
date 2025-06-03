@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+
 import android.os.Bundle;
 import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
@@ -128,4 +129,4 @@ public class CartActivity extends AppCompatActivity {
       Log.e("CartActivity", "Error in populateItems", e);
     }
   }
-}
+
