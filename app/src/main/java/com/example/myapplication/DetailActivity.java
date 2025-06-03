@@ -43,6 +43,7 @@ public class DetailActivity extends BaseActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setTitle(""); // <- Clears the default title
         }
         toolbar.setNavigationOnClickListener(v -> finish());
 
