@@ -2,7 +2,8 @@ package com.example.myapplication;
 
 import android.os.Bundle;
 import android.util.Log;
-import androidx.appcompat.app.AppCompatActivity;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.adapters.CartAdapter;
@@ -21,6 +22,8 @@ public class CartActivity extends BaseActivity {
   private FirebaseAuth mAuth;
   private FirebaseUser currentUser;
   private FirebaseFirestore db;
+  private ImageView ivBtnBack;
+  private ImageButton clearCart;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +36,22 @@ public class CartActivity extends BaseActivity {
     cartItems = new ArrayList<>();
     currentUser = mAuth.getCurrentUser();
 
+    ivBtnBack = findViewById(R.id.btn_back);
+    clearCart = findViewById(R.id.btn_clear_cart);
+
     setupBottomNavigation(R.id.nav_cart);
 
+    ivBtnBack.setOnClickListener(
+        v -> {
+          finish();
+        });
 
-      Log.d(
+    clearCart.setOnClickListener(
+        v -> {
+          clearCartData();
+        });
+
+    Log.d(
         "CartActivity",
         "onCreate completed, currentUser: " + (currentUser != null ? "logged in" : "null"));
   }
@@ -53,6 +68,20 @@ public class CartActivity extends BaseActivity {
     if (currentUser != null) {
       loadCartData();
     }
+  }
+
+  private void clearCartData() {
+    db.collection("users")
+        .document(currentUser.getUid())
+        .collection("cart")
+        .get()
+        .addOnSuccessListener(
+            querySnapshot -> {
+              for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                document.getReference().delete();
+              }
+            });
+    loadCartData();
   }
 
   private void loadCartData() {
