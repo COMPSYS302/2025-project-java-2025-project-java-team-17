@@ -2,7 +2,9 @@ package com.example.myapplication;
 
 import android.os.Bundle;
 import android.util.Log;
-import androidx.appcompat.app.AppCompatActivity;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.adapters.CartAdapter;
@@ -15,12 +17,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
-public class CartActivity extends BaseActivity {
+public class CartActivity extends BaseActivity implements CartAdapter.CartItemClickListener {
   private List<CartItem> cartItems;
   private FirebaseAuth mAuth;
   private FirebaseUser currentUser;
   private FirebaseFirestore db;
+  private ImageView ivBtnBack;
+  private ImageButton clearCart;
+  private TextView tvTotalItems;
+  private TextView tvPrice;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +40,24 @@ public class CartActivity extends BaseActivity {
     cartItems = new ArrayList<>();
     currentUser = mAuth.getCurrentUser();
 
+    ivBtnBack = findViewById(R.id.btn_back);
+    clearCart = findViewById(R.id.btn_clear_cart);
+    tvTotalItems = findViewById(R.id.tv_total_items);
+    tvPrice = findViewById(R.id.tv_total_price);
+
     setupBottomNavigation(R.id.nav_cart);
 
+    ivBtnBack.setOnClickListener(
+        v -> {
+          finish();
+        });
 
-      Log.d(
+    clearCart.setOnClickListener(
+        v -> {
+          clearCartData();
+        });
+
+    Log.d(
         "CartActivity",
         "onCreate completed, currentUser: " + (currentUser != null ? "logged in" : "null"));
   }
@@ -53,6 +74,55 @@ public class CartActivity extends BaseActivity {
     if (currentUser != null) {
       loadCartData();
     }
+  }
+
+  @Override
+  public void onDeleteItem(CartItem item, int position) {
+    if (currentUser == null) return;
+
+    db.collection("users")
+        .document(currentUser.getUid())
+        .collection("cart")
+        .document(item.getCrystal().getId())
+        .delete()
+        .addOnSuccessListener(
+            aVoid -> {
+              loadCartData();
+            });
+  }
+
+  @Override
+  public void onQuantityChanged(CartItem item, int change) {
+    if (currentUser == null) return;
+
+    int newQuantity = item.getQuantity() + change;
+
+    db.collection("users")
+        .document(currentUser.getUid())
+        .collection("cart")
+        .document(item.getCrystal().getId())
+        .update("quantity", newQuantity)
+        .addOnSuccessListener(
+            aVoid -> {
+              loadCartData();
+            });
+  }
+
+  private void clearCartData() {
+    db.collection("users")
+        .document(currentUser.getUid())
+        .collection("cart")
+        .get()
+        .addOnSuccessListener(
+            querySnapshot -> {
+              AtomicInteger documentsLeft = new AtomicInteger(querySnapshot.getDocuments().size());
+              for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                document.getReference().delete();
+                if (documentsLeft.decrementAndGet() == 0) {
+                  loadCartData();
+                }
+              }
+            });
   }
 
   private void loadCartData() {
@@ -72,9 +142,19 @@ public class CartActivity extends BaseActivity {
             querySnapshot -> {
               List<DocumentSnapshot> documents = querySnapshot.getDocuments();
               AtomicInteger queriesLeft = new AtomicInteger(documents.size());
+              AtomicReference<Double> price = new AtomicReference<>(0.0);
+              AtomicInteger totalItems = new AtomicInteger(0);
+
+              if (documents.size() == 0) {
+                tvTotalItems.setText("No items in cart");
+                tvPrice.setText("NZD 0.00");
+                populateItems();
+                return;
+              }
 
               for (DocumentSnapshot document : documents) {
                 String crystalId = document.getId();
+
                 db.collection("crystals")
                     .document(crystalId)
                     .get()
@@ -90,13 +170,20 @@ public class CartActivity extends BaseActivity {
                             }
                             return;
                           }
+
                           Long quantityLong = document.getLong("quantity");
                           int quantity = (quantityLong != null) ? quantityLong.intValue() : 1;
-
+                          price.updateAndGet(
+                              currentPrice -> currentPrice + (crystal.getPrice() * quantity));
+                          totalItems.updateAndGet(currentItems -> currentItems + (quantity));
                           CartItem cartItem = new CartItem(crystal, quantity);
                           cartItems.add(cartItem);
                           Log.d("CartActivity", "Added cart item: " + crystal.getName());
                           if (queriesLeft.decrementAndGet() == 0) {
+                            tvTotalItems.setText(
+                                "Total Items: " + String.valueOf(totalItems.get()));
+                            tvPrice.setText("NZD " + String.format("%.2f", price.get()));
+
                             Log.d("CartActivity", "Populate Items Called ");
 
                             populateItems();
@@ -110,7 +197,7 @@ public class CartActivity extends BaseActivity {
     Log.d("CartActivity", "Populate Items Entered ");
 
     try {
-      CartAdapter cartAdapter = new CartAdapter(this, cartItems);
+      CartAdapter cartAdapter = new CartAdapter(this, cartItems, this);
       Log.d("CartActivity", "CartAdapter created successfully");
 
       RecyclerView recyclerCartItems = findViewById(R.id.recycler_cart_items);

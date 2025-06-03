@@ -18,11 +18,19 @@ import java.util.List;
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
   private List<CartItem> cartList;
   private Context context;
+  private CartItemClickListener listener;
 
-  public CartAdapter(Context context, List<CartItem> cartList) {
+
+  public interface CartItemClickListener {
+    void onDeleteItem(CartItem item, int position);
+    void onQuantityChanged(CartItem item, int newQuantity);
+  }
+
+  public CartAdapter(Context context, List<CartItem> cartList, CartItemClickListener listener) {
     Log.d("CartAdapter", "Constructor called with " + cartList.size() + " items");
     this.context = context;
     this.cartList = cartList;
+    this.listener = listener;
 
     for (int i = 0; i < cartList.size(); i++) {
       CartItem item = cartList.get(i);
@@ -45,6 +53,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     ImageView ivProductImage;
     TextView tvProductName;
     TextView tvProductPrice;
+    ImageButton btn_delete;
     ImageButton btn_decrease;
     TextView tvQuantity;
     ImageButton btn_increase;
@@ -55,6 +64,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
       ivProductImage = itemView.findViewById(R.id.img_product);
       tvProductName = itemView.findViewById(R.id.tv_product_name);
       tvProductPrice = itemView.findViewById(R.id.tv_product_price);
+      btn_delete = itemView.findViewById(R.id.btn_delete);
       btn_decrease = itemView.findViewById(R.id.btn_decrease);
       tvQuantity = itemView.findViewById(R.id.tv_quantity);
       btn_increase = itemView.findViewById(R.id.btn_increase);
@@ -104,6 +114,22 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
       holder.tvQuantity.setText(String.valueOf(cartItem.getQuantity()));
 
       Log.d("CartAdapter", "Successfully bound item at position: " + position);
+
+
+      holder.btn_delete.setOnClickListener(v->{
+
+        if (listener != null) {
+          listener.onDeleteItem(cartItem, position);
+        }
+      });
+
+      holder.btn_decrease.setOnClickListener(v-> {
+        listener.onQuantityChanged(cartItem, -1);
+      });
+
+      holder.btn_increase.setOnClickListener(v-> {
+        listener.onQuantityChanged(cartItem, 1);
+      });
 
     } catch (Exception e) {
       Log.e("CartAdapter", "Error in onBindViewHolder at position: " + position, e);
