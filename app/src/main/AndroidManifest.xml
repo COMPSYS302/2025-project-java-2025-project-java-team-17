@@ -47,6 +47,7 @@
         <activity android:name=".FavouritesActivity"/>
         <activity android:name=".CartActivity" />
         <activity android:name=".DetailActivity"/>
+        <activity android:name=".SearchResultsActivity"/>
     </application>
 
 </manifest>

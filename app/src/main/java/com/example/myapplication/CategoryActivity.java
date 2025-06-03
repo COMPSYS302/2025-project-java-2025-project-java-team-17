@@ -3,7 +3,10 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,8 +23,12 @@ import java.util.List;
 
 public class CategoryActivity extends BaseActivity {
 
-    private CrystalAdapter adapter;
     private final List<Crystal> crystalList = new ArrayList<>();
+    private final List<String> favouriteIds = new ArrayList<>();
+
+    private CrystalAdapter adapter;
+    private RecyclerView crystalGrid;
+    private TextView noResultsMessage;
     private String categoryName;
 
     @Override
@@ -36,71 +43,113 @@ public class CategoryActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(categoryName);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
         toolbar.setNavigationOnClickListener(v -> finish());
 
-        RecyclerView crystalGrid = findViewById(R.id.crystalGrid);
+        crystalGrid = findViewById(R.id.crystalGrid);
         crystalGrid.setLayoutManager(new GridLayoutManager(this, 2));
 
-        reloadCrystals(); // Initial load
+        noResultsMessage = findViewById(R.id.noResultsMessage);
+
+        SearchView searchView = findViewById(R.id.searchView);
+        searchView.setQueryHint("Search for crystals...");
+
+// Make the whole bar behave like a text field
+        searchView.setIconified(false);
+        searchView.clearFocus(); // optional: remove focus if you don't want keyboard to pop immediately
+
+// Optional: open keyboard on tap anywhere on the bar
+        searchView.setOnClickListener(v -> {
+            searchView.setIconified(false);
+            searchView.requestFocusFromTouch(); // shows keyboard
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) { return false; }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterCrystals(newText);
+                return true;
+            }
+        });
+
+        fetchFavouritesAndCrystals();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        reloadCrystals(); // Reload on return from DetailActivity
+        fetchFavouritesAndCrystals(); // re-fetch favourites and crystals
     }
 
-    private void reloadCrystals() {
-        crystalList.clear(); // Clear existing data
-
+    private void fetchFavouritesAndCrystals() {
+        favouriteIds.clear();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (currentUser != null) {
-            String userId = currentUser.getUid();
-
-            db.collection("users").document(userId).get()
-                    .addOnSuccessListener(documentSnapshot -> {
-                        List<String> favourites = (List<String>) documentSnapshot.get("favourites");
-                        if (favourites == null) favourites = new ArrayList<>();
-
-                        adapter = new CrystalAdapter(this, crystalList, favourites, false, crystal -> {
-                            Intent intent = new Intent(this, DetailActivity.class);
-                            intent.putExtra("crystalId", crystal.getId());
-                            startActivity(intent);
-                        });
-                        RecyclerView crystalGrid = findViewById(R.id.crystalGrid);
-                        crystalGrid.setAdapter(adapter);
-
-                        fetchCrystalsByCategory(db);
+            db.collection("users").document(currentUser.getUid()).get()
+                    .addOnSuccessListener(document -> {
+                        List<String> ids = (List<String>) document.get("favourites");
+                        if (ids != null) favouriteIds.addAll(ids);
+                        fetchCrystals(db);
                     })
-                    .addOnFailureListener(e -> Log.e("CategoryActivity", "Failed to load favourites", e));
+                    .addOnFailureListener(e -> {
+                        Log.e("CategoryActivity", "Failed to fetch favourites", e);
+                        fetchCrystals(db);
+                    });
         } else {
-            adapter = new CrystalAdapter(this, crystalList, new ArrayList<>(), false, crystal -> {
-                Intent intent = new Intent(this, DetailActivity.class);
-                intent.putExtra("crystalId", crystal.getId());
-                startActivity(intent);
-            });
-            RecyclerView crystalGrid = findViewById(R.id.crystalGrid);
-            crystalGrid.setAdapter(adapter);
-
-            fetchCrystalsByCategory(db);
+            fetchCrystals(db); // if no user, just fetch crystals without favourites
         }
     }
 
-    private void fetchCrystalsByCategory(FirebaseFirestore db) {
+    private void fetchCrystals(FirebaseFirestore db) {
         db.collection("crystals")
                 .whereEqualTo("category", categoryName)
                 .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                .addOnSuccessListener(querySnapshot -> {
+                    crystalList.clear();
+                    for (DocumentSnapshot doc : querySnapshot) {
                         Crystal crystal = doc.toObject(Crystal.class);
-                        crystalList.add(crystal);
+                        if (crystal != null) {
+                            crystalList.add(crystal);
+                        }
                     }
-                    adapter.notifyDataSetChanged();
+                    noResultsMessage.setVisibility(View.GONE);
+                    setupAdapter(crystalList);
                 })
-                .addOnFailureListener(e -> Log.e("Firestore", "Error fetching crystals", e));
+                .addOnFailureListener(e -> Log.e("CategoryActivity", "Failed to fetch crystals", e));
+    }
+
+    private void setupAdapter(List<Crystal> displayList) {
+        adapter = new CrystalAdapter(this, displayList, favouriteIds, false, crystal -> {
+            Intent intent = new Intent(this, DetailActivity.class);
+            intent.putExtra("crystalId", crystal.getId());
+            startActivity(intent);
+        });
+        crystalGrid.setAdapter(adapter);
+    }
+
+    private void filterCrystals(String query) {
+        List<Crystal> filtered = new ArrayList<>();
+        for (Crystal crystal : crystalList) {
+            String name = crystal.getName().toLowerCase();
+            List<String> tags = crystal.getTags();
+
+            if (name.contains(query.toLowerCase()) ||
+                    (tags != null && tags.stream().anyMatch(tag -> tag.toLowerCase().contains(query.toLowerCase())))) {
+                filtered.add(crystal);
+            }
+        }
+
+        if (filtered.isEmpty()) {
+            noResultsMessage.setVisibility(View.VISIBLE);
+        } else {
+            noResultsMessage.setVisibility(View.GONE);
+        }
+
+        setupAdapter(filtered);
     }
 }
