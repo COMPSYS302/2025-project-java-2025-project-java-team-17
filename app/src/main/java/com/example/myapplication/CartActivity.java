@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class CartActivity extends AppCompatActivity {
+public class CartActivity extends BaseActivity {
   private List<CartItem> cartItems;
   private FirebaseAuth mAuth;
   private FirebaseUser currentUser;
@@ -33,7 +33,10 @@ public class CartActivity extends AppCompatActivity {
     cartItems = new ArrayList<>();
     currentUser = mAuth.getCurrentUser();
 
-    Log.d(
+    setupBottomNavigation(R.id.nav_cart);
+
+
+      Log.d(
         "CartActivity",
         "onCreate completed, currentUser: " + (currentUser != null ? "logged in" : "null"));
   }

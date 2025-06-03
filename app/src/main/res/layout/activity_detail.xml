@@ -1,216 +1,218 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DetailActivity">
 
-    <!-- Toolbar -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:menu="@menu/top_app_bar_menu"
-        app:navigationIcon="@drawable/back_button">
-
-    </androidx.appcompat.widget.Toolbar>
-
-
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/crystalImages"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.3"
-        android:padding="0dp"
-        android:clipToPadding="false"
-
-        android:scrollbars="horizontal" />
-
-
     <LinearLayout
-        android:id="@+id/dotsLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="8dp"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.4"
+        android:id="@+id/contentLayout"
         android:orientation="vertical"
-        android:background="@drawable/curved_detail_view"
-        android:padding="16dp">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNavigationView">
 
-        <TextView
-            android:id="@+id/crystalName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="#000000"
-            android:layout_marginBottom="8dp" />
-
-        <TextView
-            android:id="@+id/crystalPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:textColor="#2D0C57"
-            android:layout_marginTop="4dp" />
-
-
-
-        <TextView
-            android:id="@+id/crystalLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="#2D0C57"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="8dp"
-            android:text = "@string/crystal_location"/>
-
-
-        <TextView
-            android:id="@+id/crystalDescription"
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="#666666"
-            android:layout_marginTop="8dp"/>
-    </LinearLayout>
+            app:menu="@menu/top_app_bar_menu"
+            app:navigationIcon="@drawable/back_button" />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/crystalImages"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.3"
+            android:padding="0dp"
+            android:clipToPadding="false"
+            android:scrollbars="horizontal" />
 
+        <LinearLayout
+            android:id="@+id/dotsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="8dp" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.4"
+            android:orientation="vertical"
+            android:background="@drawable/curved_detail_view"
+            android:padding="16dp">
 
+            <TextView
+                android:id="@+id/crystalName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_marginBottom="8dp" />
 
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:background="#F0EFEF">
+            <TextView
+                android:id="@+id/crystalPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="24sp"
+                android:textColor="#2D0C57"
+                android:layout_marginTop="4dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+            <TextView
+                android:id="@+id/crystalLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#2D0C57"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/crystal_location" />
 
-        <ImageButton
-            android:id="@+id/wishlistButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/rounded_border"
-            android:src="@drawable/favourite_icon"
-            android:contentDescription="add_to_wishlist"
-            android:padding="4dp" />
+            <TextView
+                android:id="@+id/crystalDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="#666666"
+                android:layout_marginTop="8dp" />
+        </LinearLayout>
 
         <FrameLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="16dp">
+            android:padding="16dp"
+            android:background="#F0EFEF">
 
             <LinearLayout
-                android:id="@+id/cartButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="12dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="@drawable/rounded_cart"
-                android:gravity="center">
+                android:gravity="center_vertical">
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_cart"
-                    android:contentDescription="add_to_cart" />
+                <ImageButton
+                    android:id="@+id/wishlistButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/rounded_border"
+                    android:src="@drawable/favourite_icon"
+                    android:contentDescription="add_to_wishlist"
+                    android:padding="4dp" />
 
-                <TextView
-                    android:id="@+id/cartButtonText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Add to Cart"
-                    android:layout_marginStart="8dp"
-                    android:textColor="#000000" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/quantityControlLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="12dp"
-                android:background="@drawable/rounded_cart"
-                android:gravity="center_vertical"
-                android:visibility="gone">
-
-                <TextView
-                    android:id="@+id/goToCartButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Go to Cart"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="#6C0EE4"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:background="?attr/selectableItemBackground"/>
-
-                <View
+                <FrameLayout
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"/>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:layout_weight="1"
+                    android:layout_marginStart="16dp">
 
-                    <Button
-                        android:id="@+id/decreaseQuantityButton"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:text="-"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="#FFFFFF"
-                        android:backgroundTint="#666666"
-                        android:padding="0dp"/>
-
-                    <TextView
-                        android:id="@+id/quantityTextView"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/cartButton"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="1"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="#000000"
-                        android:paddingHorizontal="12dp"/>
+                        android:orientation="horizontal"
+                        android:padding="12dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="@drawable/rounded_cart"
+                        android:gravity="center">
 
-                    <Button
-                        android:id="@+id/increaseQuantityButton"
-                        android:layout_width="36dp"
-                        android:layout_height="36dp"
-                        android:text="+"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="#FFFFFF"
-                        android:backgroundTint="#666666"
-                        android:padding="0dp"/>
-                </LinearLayout>
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_cart"
+                            android:contentDescription="add_to_cart" />
+
+                        <TextView
+                            android:id="@+id/cartButtonText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Add to Cart"
+                            android:layout_marginStart="8dp"
+                            android:textColor="#000000" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/quantityControlLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="12dp"
+                        android:background="@drawable/rounded_cart"
+                        android:gravity="center_vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/goToCartButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Go to Cart"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="#6C0EE4"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:background="?attr/selectableItemBackground" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <Button
+                                android:id="@+id/decreaseQuantityButton"
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:text="-"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:textColor="#FFFFFF"
+                                android:backgroundTint="#666666"
+                                android:padding="0dp" />
+
+                            <TextView
+                                android:id="@+id/quantityTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="1"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:textColor="#000000"
+                                android:paddingHorizontal="12dp" />
+
+                            <Button
+                                android:id="@+id/increaseQuantityButton"
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:text="+"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                android:textColor="#FFFFFF"
+                                android:backgroundTint="#666666"
+                                android:padding="0dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </FrameLayout>
             </LinearLayout>
         </FrameLayout>
     </LinearLayout>
-</FrameLayout>
-</LinearLayout>
+
+    <!-- Bottom Navigation View -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        app:menu="@menu/bottom_nav_menu" />
+</RelativeLayout>
