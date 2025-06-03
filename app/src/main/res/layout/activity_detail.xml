@@ -93,13 +93,23 @@
                 android:text = "@string/crystal_location"/>
 
 
-            <TextView
-                android:id="@+id/crystalDescription"
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textColor="#666666"
-                android:layout_marginTop="8dp"/>
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:overScrollMode="ifContentScrolls"
+                android:scrollbars="vertical">
+
+                <TextView
+                    android:id="@+id/crystalDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textColor="#666666"
+                    android:paddingEnd="4dp"
+                    android:paddingBottom="4dp" />
+            </ScrollView>
+
 
         </LinearLayout>
     </ScrollView>
