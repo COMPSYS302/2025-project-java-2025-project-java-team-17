@@ -1,8 +1,10 @@
 // Updated DetailActivity.java
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -74,8 +76,9 @@ public class DetailActivity extends AppCompatActivity {
 
     goToCartButton.setOnClickListener(
         v -> {
-          // Intent intent = new Intent(DetailActivity.this, CartActivity.class);
-          // startActivity(intent);
+          Log.d("CartActivity", "Navigating to CartActivity");
+          Intent intent = new Intent(DetailActivity.this, CartActivity.class);
+          startActivity(intent);
         });
 
     // Initialize the RecyclerView for images
@@ -169,9 +172,6 @@ public class DetailActivity extends AppCompatActivity {
                       .addOnSuccessListener(
                           aVoid -> {
                             updateCartButtonUI(0);
-                            Snackbar.make(
-                                    cartButton, "Item removed from card", Snackbar.LENGTH_SHORT)
-                                .show();
                           });
                 } else {
                   Map<String, Object> updates = new HashMap<>();

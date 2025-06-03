@@ -1,0 +1,84 @@
+<!-- res/layout/item_cart.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:gravity="center_vertical">
+
+    <!-- Product Image -->
+    <ImageView
+        android:id="@+id/img_product"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/placeholder_crystal"
+        android:background="@drawable/rounded_image_bg"
+        android:layout_marginEnd="12dp" />
+
+    <!-- Middle Section: Name, Price, Quantity Controls -->
+    <LinearLayout
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_product_name"
+            android:text="Amethyst"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_product_price"
+            android:text="NZD 15"
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Quantity Controls -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <ImageButton
+                android:id="@+id/btn_decrease"
+                android:src="@drawable/ic_minus"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_width="32dp"
+                android:layout_height="32dp" />
+
+            <TextView
+                android:id="@+id/tv_quantity"
+                android:text="1"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="#000000" />
+
+            <ImageButton
+                android:id="@+id/btn_increase"
+                android:src="@drawable/ic_plus"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_width="32dp"
+                android:layout_height="32dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Trash/Delete Icon -->
+    <ImageButton
+        android:id="@+id/btn_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_trash"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:layout_marginStart="8dp"/>
+</LinearLayout>
