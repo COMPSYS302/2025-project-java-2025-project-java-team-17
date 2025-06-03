@@ -54,6 +54,16 @@ public class CategoryActivity extends BaseActivity {
 
         SearchView searchView = findViewById(R.id.searchView);
         searchView.setQueryHint("Search for crystals...");
+
+// Make the whole bar behave like a text field
+        searchView.setIconified(false);
+        searchView.clearFocus(); // optional: remove focus if you don't want keyboard to pop immediately
+
+// Optional: open keyboard on tap anywhere on the bar
+        searchView.setOnClickListener(v -> {
+            searchView.setIconified(false);
+            searchView.requestFocusFromTouch(); // shows keyboard
+        });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) { return false; }
