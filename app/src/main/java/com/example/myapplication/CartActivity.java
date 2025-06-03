@@ -77,11 +77,14 @@ public class CartActivity extends BaseActivity {
         .get()
         .addOnSuccessListener(
             querySnapshot -> {
+              AtomicInteger documentsLeft = new AtomicInteger(querySnapshot.getDocuments().size());
               for (DocumentSnapshot document : querySnapshot.getDocuments()) {
                 document.getReference().delete();
+                if (documentsLeft.decrementAndGet() == 0) {
+                  loadCartData();
+                }
               }
             });
-    loadCartData();
   }
 
   private void loadCartData() {
@@ -101,6 +104,10 @@ public class CartActivity extends BaseActivity {
             querySnapshot -> {
               List<DocumentSnapshot> documents = querySnapshot.getDocuments();
               AtomicInteger queriesLeft = new AtomicInteger(documents.size());
+
+              if (documents.size() == 0) {
+                populateItems();
+              }
 
               for (DocumentSnapshot document : documents) {
                 String crystalId = document.getId();
