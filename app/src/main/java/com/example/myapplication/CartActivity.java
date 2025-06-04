@@ -1,7 +1,9 @@
 package com.example.myapplication;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -47,7 +49,22 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
 
     setupBottomNavigation(R.id.nav_cart);
 
-    ivBtnBack.setOnClickListener(
+      RecyclerView recyclerCartItems = findViewById(R.id.recycler_cart_items);
+      recyclerCartItems.setLayoutManager(
+              new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+
+      recyclerCartItems.addItemDecoration(new RecyclerView.ItemDecoration() {
+          @Override
+          public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+              super.getItemOffsets(outRect, view, parent, state);
+              if (parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1) {
+                  outRect.bottom = 16;
+              }
+          }
+      });
+
+
+      ivBtnBack.setOnClickListener(
         v -> {
           finish();
         });
@@ -214,8 +231,11 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
       recyclerCartItems.setAdapter(cartAdapter);
 
       Log.d("CartActivity", "Populate Items Exit - Success");
+
     } catch (Exception e) {
       Log.e("CartActivity", "Error in populateItems", e);
     }
+
+
   }
 }

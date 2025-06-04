@@ -54,19 +54,17 @@ public class CategoryActivity extends BaseActivity {
 
         SearchView searchView = findViewById(R.id.searchView);
         searchView.setQueryHint("Search for crystals...");
-
-// Make the whole bar behave like a text field
         searchView.setIconified(false);
-        searchView.clearFocus(); // optional: remove focus if you don't want keyboard to pop immediately
-
-// Optional: open keyboard on tap anywhere on the bar
+        searchView.clearFocus();
         searchView.setOnClickListener(v -> {
             searchView.setIconified(false);
-            searchView.requestFocusFromTouch(); // shows keyboard
+            searchView.requestFocusFromTouch();
         });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) { return false; }
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
             @Override
             public boolean onQueryTextChange(String newText) {
@@ -81,7 +79,7 @@ public class CategoryActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        fetchFavouritesAndCrystals(); // re-fetch favourites and crystals
+        fetchFavouritesAndCrystals(); // re-fetch on resume
     }
 
     private void fetchFavouritesAndCrystals() {
@@ -101,7 +99,7 @@ public class CategoryActivity extends BaseActivity {
                         fetchCrystals(db);
                     });
         } else {
-            fetchCrystals(db); // if no user, just fetch crystals without favourites
+            fetchCrystals(db);
         }
     }
 
@@ -125,6 +123,7 @@ public class CategoryActivity extends BaseActivity {
 
     private void setupAdapter(List<Crystal> displayList) {
         adapter = new CrystalAdapter(this, displayList, favouriteIds, false, crystal -> {
+            Log.d("CategoryActivity", "Launching DetailActivity for crystal: " + crystal.getId());
             Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtra("crystalId", crystal.getId());
             startActivity(intent);
