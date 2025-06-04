@@ -59,6 +59,7 @@ public class DetailActivity extends BaseActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setTitle(""); // <- Clears the default title
         }
         toolbar.setNavigationOnClickListener(v -> finish());
 
@@ -132,7 +133,8 @@ public class DetailActivity extends BaseActivity {
                 ((TextView) findViewById(R.id.crystalDescription))
                     .setText(crystal.getDescription());
                 ((TextView) findViewById(R.id.crystalPrice))
-                    .setText(String.format("%.2f $ / kg", crystal.getPrice()));
+                        .setText(String.format("NZD %.2f", crystal.getPrice()));
+
               }
             });
 

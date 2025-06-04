@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import androidx.appcompat.widget.Toolbar;
@@ -92,6 +93,17 @@ public class FavouritesActivity extends BaseActivity {
                                     } else {
                                         emptyMessage.setVisibility(View.GONE);
                                         recyclerView.setVisibility(View.VISIBLE);
+                                        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+                                            @Override
+                                            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                                                super.getItemOffsets(outRect, view, parent, state);
+
+                                                // Add bottom spacing between items (e.g., 16 pixels)
+                                                if (parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1) {
+                                                    outRect.bottom = 16; // change this value to control spacing (in pixels)
+                                                }
+                                            }
+                                        });
                                     }
                                 })
                                 .addOnFailureListener(e -> Log.e("FavouritesActivity", "Failed to load crystals", e));
