@@ -2,14 +2,18 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.myapplication.adapters.CrystalAdapter;
 import com.example.myapplication.adapters.CrystalImageAdapter;
 import com.example.myapplication.databinding.ActivityDetailBinding;
 import com.example.myapplication.models.Crystal;
@@ -17,8 +21,11 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +38,11 @@ public class DetailActivity extends BaseActivity {
     private FirebaseUser currentUser;
     private FirebaseFirestore db;
     private String crystalId;
+    private RecyclerView similarProductsRecyclerView;
+    private CrystalAdapter similarProductsAdapter;
+    private List<Crystal> similarCrystals = new ArrayList<>();
+    private List<String> favouriteIds = new ArrayList<>();
+    private String currentCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +65,7 @@ public class DetailActivity extends BaseActivity {
         loadFavoriteStatus();
         loadCrystalData();
         incrementCrystalViews();
+        fetchUserFavourites();
     }
 
     @Override
@@ -62,13 +75,10 @@ public class DetailActivity extends BaseActivity {
         if (crystalId != null && currentUser != null) {
             checkCartStatus();
         }
+        fetchUserFavourites();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        binding = null;
-    }
+
 
     private void setupFirebase() {
         mAuth = FirebaseAuth.getInstance();
@@ -83,6 +93,9 @@ public class DetailActivity extends BaseActivity {
 
     private void setupCrystalImagesRecyclerView() {
         binding.crystalImages.setLayoutManager(
+                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        );
+        binding.similarProducts.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         );
     }
@@ -144,6 +157,17 @@ public class DetailActivity extends BaseActivity {
                     Crystal crystal = documentSnapshot.toObject(Crystal.class);
                     if (crystal != null) {
                         displayCrystalData(crystal);
+                    }
+                });
+
+        db.collection("crystals").document(crystalId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    Crystal crystal = documentSnapshot.toObject(Crystal.class);
+                    if (crystal != null) {
+                        currentCategory = crystal.getCategory();
+                        displayCrystalData(crystal);
+                        loadSimilarProducts();
                     }
                 });
     }
@@ -311,4 +335,60 @@ public class DetailActivity extends BaseActivity {
             dots[i].setImageDrawable(ContextCompat.getDrawable(this, dotResId));
         }
     }
+
+    private void loadSimilarProducts() {
+        if (currentCategory == null) return;
+
+        db.collection("crystals")
+                .whereEqualTo("category", currentCategory)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    similarCrystals.clear();
+                    for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                        // Skip the current crystal
+                        if (doc.getId().equals(crystalId)) continue;
+
+                        Crystal crystal = doc.toObject(Crystal.class);
+                        if (crystal != null) {
+                            similarCrystals.add(crystal);
+                        }
+                    }
+                    setupSimilarProductsAdapter();
+                })
+                .addOnFailureListener(e -> Log.e("DetailActivity", "Error loading similar products", e));
+    }
+
+    private void setupSimilarProductsAdapter() {
+        similarProductsAdapter = new CrystalAdapter(
+                this,
+                similarCrystals,
+                favouriteIds,
+                false,
+                crystal -> {
+                    Intent intent = new Intent(this, DetailActivity.class);
+                    intent.putExtra("crystalId", crystal.getId());
+                    startActivity(intent);
+                }
+        );
+        binding.similarProducts.setAdapter(similarProductsAdapter);
+    }
+
+
+    private void fetchUserFavourites() {
+        if (currentUser == null) return;
+
+        db.collection("users").document(currentUser.getUid())
+                .get()
+                .addOnSuccessListener(document -> {
+                    List<String> ids = (List<String>) document.get("favourites");
+                    if (ids != null) {
+                        favouriteIds.clear();
+                        favouriteIds.addAll(ids);
+                        if (similarProductsAdapter != null) {
+                            similarProductsAdapter.notifyDataSetChanged();
+                        }
+                    }
+                });
+    }
+
 }
