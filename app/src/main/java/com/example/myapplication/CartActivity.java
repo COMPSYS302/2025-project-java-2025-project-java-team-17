@@ -113,22 +113,34 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
             });
   }
 
-  @Override
-  public void onQuantityChanged(CartItem item, int change) {
-    if (currentUser == null) return;
+    @Override
+    public void onQuantityChanged(CartItem item, int change) {
+        if (currentUser == null) return;
 
-    int newQuantity = item.getQuantity() + change;
+        int newQuantity = item.getQuantity() + change;
 
-    db.collection("users")
-        .document(currentUser.getUid())
-        .collection("cart")
-        .document(item.getCrystal().getId())
-        .update("quantity", newQuantity)
-        .addOnSuccessListener(
-            aVoid -> {
-              loadCartData();
-            });
-  }
+        if (newQuantity <= 0) {
+            // Remove the item from Firestore
+            db.collection("users")
+                    .document(currentUser.getUid())
+                    .collection("cart")
+                    .document(item.getCrystal().getId())
+                    .delete()
+                    .addOnSuccessListener(aVoid -> {
+                        loadCartData();
+                    });
+        } else {
+            // Update the quantity in Firestore
+            db.collection("users")
+                    .document(currentUser.getUid())
+                    .collection("cart")
+                    .document(item.getCrystal().getId())
+                    .update("quantity", newQuantity)
+                    .addOnSuccessListener(aVoid -> {
+                        loadCartData();
+                    });
+        }
+    }
 
   private void clearCartData() {
     db.collection("users")
