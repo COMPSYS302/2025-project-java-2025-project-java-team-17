@@ -61,15 +61,9 @@ public class MainActivity extends BaseActivity {
     super.onCreate(savedInstanceState);
     mAuth = FirebaseAuth.getInstance();
     db = FirebaseFirestore.getInstance();
-    EdgeToEdge.enable(this);
+
     setContentView(R.layout.activity_main);
-    ViewCompat.setOnApplyWindowInsetsListener(
-        findViewById(R.id.main),
-        (v, insets) -> {
-          Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-          v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-          return insets;
-        });
+
     setupBottomNavigation(R.id.nav_home);
 
     CrystalSeeder.seedCrystalsToFirestore();

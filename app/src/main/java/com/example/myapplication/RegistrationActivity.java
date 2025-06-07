@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -25,6 +27,8 @@ public class RegistrationActivity extends AppCompatActivity {
   private Toast currentToast;
   private Handler toastHandler = new Handler();
 
+  private ImageView ivBtnBack;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -39,13 +43,18 @@ public class RegistrationActivity extends AppCompatActivity {
     EditText etConfirmPassword = findViewById(R.id.etConfirmPassword);
     Button btnRegister = findViewById(R.id.btnRegister);
 
-    Toolbar toolbar = findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
-    if (getSupportActionBar() != null) {
-      getSupportActionBar().setTitle("");
-    }
+    TextView title = findViewById(R.id.tv_cart_title);
+    title.setText("Register");
 
-    toolbar.setNavigationOnClickListener(v -> finish());
+    ivBtnBack = findViewById(R.id.btn_back);
+
+    ivBtnBack.setOnClickListener(
+            v -> {
+              finish();
+            });
+
+
+
 
     btnRegister.setOnClickListener(
         v -> {

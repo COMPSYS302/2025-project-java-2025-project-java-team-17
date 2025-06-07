@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import androidx.appcompat.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -28,6 +29,7 @@ public class FavouritesActivity extends BaseActivity {
     private List<Crystal> favouriteCrystals = new ArrayList<>();
     private List<String> favouriteIds = new ArrayList<>();
 
+    private ImageView ivBtnBack;
     private TextView emptyMessage;
 
     @Override
@@ -45,18 +47,16 @@ public class FavouritesActivity extends BaseActivity {
         emptyMessage = findViewById(R.id.emptyMessage);
         emptyMessage.setVisibility(View.GONE);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);  // <-- this sets the toolbar as the app bar
+        TextView title = findViewById(R.id.tv_cart_title);
 
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true); // show back button
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
+        title.setText("Favourites");
 
-        toolbar.setNavigationOnClickListener(v -> {
-            finish(); // go back to previous screen (e.g., Profile)
-        });
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Favourites");
+        ivBtnBack = findViewById(R.id.btn_back);
+
+        ivBtnBack.setOnClickListener(
+                v -> {
+                    finish();
+                });
 
 
 

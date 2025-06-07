@@ -57,7 +57,7 @@
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:padding="6dp"
-        android:src="@drawable/ic_cart"
+        android:src="@drawable/add_to_cart"
         android:background="@drawable/rounded_border"
         android:contentDescription="Add to cart" />
 </LinearLayout>

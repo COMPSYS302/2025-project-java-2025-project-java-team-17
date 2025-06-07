@@ -51,10 +51,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         Category category = categoryList.get(position);
         holder.categoryTitle.setText(category.getName());
-        Glide.with(context)
-                .load(category.getImageResId())
-                .placeholder(R.drawable.crystal)
-                .into(holder.categoryImage);
+        holder.categoryImage.setImageResource(category.getImageResId());
     }
 
     @Override

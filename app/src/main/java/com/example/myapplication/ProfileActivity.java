@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -9,11 +10,26 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class ProfileActivity extends BaseActivity {
+
+    private ImageView ivBtnBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         setupBottomNavigation(R.id.nav_profile);
+
+        TextView title = findViewById(R.id.tv_cart_title);
+
+        title.setText("Profile");
+
+
+        ivBtnBack = findViewById(R.id.btn_back);
+
+        ivBtnBack.setOnClickListener(
+                v -> {
+                    finish();
+                });
 
         TextView tvUsername = findViewById(R.id.tvUsername);
         TextView tvEmail = findViewById(R.id.tvEmail);

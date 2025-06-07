@@ -42,6 +42,8 @@ public class DetailActivity extends BaseActivity {
     private Button increaseQuantityButton;
     private TextView tvQuantityTextView;
 
+    private ImageView ivBtnBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,15 +55,17 @@ public class DetailActivity extends BaseActivity {
 
         setupBottomNavigation(R.id.nav_home);
 
+        TextView title = findViewById(R.id.tv_cart_title);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setTitle(""); // <- Clears the default title
-        }
-        toolbar.setNavigationOnClickListener(v -> finish());
+        title.setText("");
+
+        ivBtnBack = findViewById(R.id.btn_back);
+
+        ivBtnBack.setOnClickListener(
+                v -> {
+                    finish();
+                });
+
 
         wishlistButton = findViewById(R.id.wishlistButton);
         tvCartButtonText = findViewById(R.id.cartButtonText);
@@ -174,7 +178,7 @@ public class DetailActivity extends BaseActivity {
     }
 
     private void updateWishlistButton() {
-        wishlistButton.setImageResource(isFavorite ? R.drawable.filled_favourite_icon : R.drawable.favourite_icon);
+        wishlistButton.setImageResource(isFavorite ? R.drawable.purple_heart : R.drawable.heart_outline);
     }
 
     private void addToCart(String crystalId) {

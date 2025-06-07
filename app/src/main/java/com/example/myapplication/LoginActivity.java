@@ -7,6 +7,7 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -21,6 +22,8 @@ public class LoginActivity extends AppCompatActivity {
   private Button btnLogin;
   private TextView tvLoginError;
 
+  private ImageView ivBtnBack;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -33,15 +36,21 @@ public class LoginActivity extends AppCompatActivity {
     btnLogin = findViewById(R.id.btnLogin);
     tvLoginError = findViewById(R.id.tvLoginError);
 
-    Toolbar toolbar = findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
-    if (getSupportActionBar() != null) {
-      getSupportActionBar().setTitle("");
-    }
+      TextView title = findViewById(R.id.tv_cart_title);
+      title.setText("Login");
 
-    toolbar.setNavigationOnClickListener(v -> finish());
+      ivBtnBack = findViewById(R.id.btn_back);
 
-    btnLogin.setOnClickListener(
+      ivBtnBack.setOnClickListener(
+              v -> {
+                  finish();
+              });
+
+
+
+
+
+      btnLogin.setOnClickListener(
         v -> {
           String email = etLoginEmail.getText().toString().trim();
           String password = etLoginPassword.getText().toString().trim();
