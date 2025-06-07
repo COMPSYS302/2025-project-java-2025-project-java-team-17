@@ -15,6 +15,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import android.widget.Toast;
+import java.util.HashMap;
+import java.util.Map;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +43,13 @@ public class FavouritesActivity extends BaseActivity {
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
         recyclerView.setAdapter(adapter);
 
+        adapter = new CrystalAdapter(this, favouriteCrystals, favouriteIds, true, new CrystalAdapter.OnCartClickListener() {
+            @Override
+            public void onCartClick(Crystal crystal) {
+                addToCart(crystal.getId());
+            }
+        });
+
         loadFavouritesFromFirestore();
         emptyMessage = findViewById(R.id.emptyMessage);
         emptyMessage.setVisibility(View.GONE);
@@ -59,6 +69,33 @@ public class FavouritesActivity extends BaseActivity {
 
 
 
+    }
+
+    private void addToCart(String crystalId) {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            Toast.makeText(this, "Please log in to add items to cart", Toast.LENGTH_SHORT).show();
+            return;
+        }
+    
+        String userId = currentUser.getUid();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        
+        Map<String, Object> cartItem = new HashMap<>();
+        cartItem.put("crystalId", crystalId);
+        cartItem.put("quantity", 1);
+    
+        db.collection("users")
+            .document(userId)
+            .collection("cart")
+            .document(crystalId)
+            .set(cartItem)
+            .addOnSuccessListener(aVoid -> {
+                Toast.makeText(this, "Item added to cart", Toast.LENGTH_SHORT).show();
+            })
+            .addOnFailureListener(e -> {
+                Toast.makeText(this, "Failed to add item to cart", Toast.LENGTH_SHORT).show();
+            });
     }
 
     private void loadFavouritesFromFirestore() {

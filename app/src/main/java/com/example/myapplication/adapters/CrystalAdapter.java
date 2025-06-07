@@ -37,6 +37,10 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
         void onCrystalClick(Crystal crystal);
     }
 
+    public interface OnCartClickListener {
+        void onCartClick(Crystal crystal);
+    }
+
     public CrystalAdapter(Context context, List<Crystal> crystalList, List<String> userFavourites, boolean isFavouritesView, onClickListener listener) {
         this.context = context;
         this.crystalList = crystalList;
@@ -76,12 +80,19 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         Crystal crystal = crystalList.get(position);
 
+        holder.addToCart.setOnClickListener(v -> {
+            if (cartClickListener != null) {
+                cartClickListener.onCartClick(crystal);
+            }
+        });
+
         holder.crystalName.setText(crystal.getName());
         holder.crystalPrice.setText("NZD " + (int) crystal.getPrice());
         Glide.with(context)
                 .load(crystal.getImageUrls().get(0))
                 .placeholder(R.drawable.crystal)
                 .into(holder.crystalImage);
+                
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 

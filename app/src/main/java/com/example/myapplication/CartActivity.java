@@ -95,7 +95,18 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
   public void onQuantityChanged(CartItem item, int change) {
     if (currentUser == null) return;
 
-    int newQuantity = item.getQuantity() + change;
+    if (change == -1 && item.getQuantity() == 1) {
+      db.collection("users")
+      .document(currentUser.getUid())
+      .collection("cart")
+      .document(item.getCrystal().getId()).delete().addOnSuccessListener(
+        aVoid -> {
+          loadCartData();
+          return;
+        });
+    }
+
+    int newQuantity = item.getQuantity() + change;0
 
     db.collection("users")
         .document(currentUser.getUid())
