@@ -50,7 +50,7 @@
                 android:id="@+id/wishlistIcon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/favourite_icon"
+                android:src="@drawable/heart_outline"
                 android:layout_gravity="end"
                 android:contentDescription="Favorite Icon" />
         </LinearLayout>

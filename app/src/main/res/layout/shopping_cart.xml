@@ -6,42 +6,13 @@
     android:id="@+id/shopping_cart_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ShoppingCartActivity">
+    tools:context=".CartActivity">
 
     <!-- Header -->
-    <RelativeLayout
-        android:id="@+id/header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:background="@android:color/white">
+    <include
+        layout="@layout/custom_toolbar"
+        android:id="@+id/include_top_bar" />
 
-        <ImageButton
-            android:id="@+id/btn_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/ic_back_arrow" />
-
-        <TextView
-            android:id="@+id/tv_cart_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Shopping Cart"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_centerInParent="true" />
-
-        <ImageButton
-            android:id="@+id/btn_clear_cart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:src="@drawable/ic_trash"
-            android:layout_alignParentEnd="true" />
-    </RelativeLayout>
 
     <!-- RecyclerView for Cart Items -->
     <androidx.recyclerview.widget.RecyclerView
@@ -49,8 +20,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_above="@id/cart_footer"
-        android:layout_below="@id/header"
-        android:padding="8dp" />
+        android:layout_below="@id/include_top_bar"
+        android:padding="10dp" />
 
     <!-- Footer -->
     <LinearLayout
@@ -83,11 +54,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Proceed to Checkout"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="#A991D4"
-            android:drawableEnd="@drawable/ic_arrow_right"
+            android:textSize="16sp"
+            android:backgroundTint="#D6C6FF"
+            android:textColor="#6A0DAD"
+            android:drawableEnd="@drawable/purple_arrow"
             android:drawablePadding="8dp"
             android:layout_marginTop="12dp" />
+
     </LinearLayout>
 
     <!-- Bottom Navigation -->

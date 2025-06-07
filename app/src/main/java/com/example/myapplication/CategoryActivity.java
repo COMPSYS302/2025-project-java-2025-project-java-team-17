@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.SearchView;
@@ -30,25 +31,29 @@ public class CategoryActivity extends BaseActivity {
     private RecyclerView crystalGrid;
     private TextView noResultsMessage;
     private String categoryName;
+    private ImageView ivBtnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
         setupBottomNavigation(R.id.nav_home);
+        TextView title = findViewById(R.id.tv_cart_title);
 
         categoryName = getIntent().getStringExtra("categoryName");
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(categoryName);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        toolbar.setNavigationOnClickListener(v -> finish());
+        title.setText(categoryName);
+
 
         crystalGrid = findViewById(R.id.crystalGrid);
         crystalGrid.setLayoutManager(new GridLayoutManager(this, 2));
+
+        ivBtnBack = findViewById(R.id.btn_back);
+
+        ivBtnBack.setOnClickListener(
+                v -> {
+                    finish();
+                });
 
         noResultsMessage = findViewById(R.id.noResultsMessage);
 

@@ -31,6 +31,8 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
   private TextView tvTotalItems;
   private TextView tvPrice;
 
+
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     Log.d("CartActivity", "onCreate started");
@@ -46,6 +48,9 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
     clearCart = findViewById(R.id.btn_clear_cart);
     tvTotalItems = findViewById(R.id.tv_total_items);
     tvPrice = findViewById(R.id.tv_total_price);
+
+
+    clearCart.setImageResource(R.drawable.ic_trash); // Replace with your actual drawable resource ID = @drawable/ic_trash
 
     setupBottomNavigation(R.id.nav_cart);
 
