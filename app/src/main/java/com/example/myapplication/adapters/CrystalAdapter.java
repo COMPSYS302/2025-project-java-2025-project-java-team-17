@@ -100,7 +100,7 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
         } else {
             boolean isFavourited = userFavourites != null && userFavourites.contains(crystal.getId());
             holder.wishlistIcon.setImageResource(
-                    isFavourited ? R.drawable.filled_favourite_icon : R.drawable.favourite_icon
+                    isFavourited ? R.drawable.purple_heart : R.drawable.heart_outline
             );
 
             holder.wishlistIcon.setOnClickListener(v -> {
@@ -111,12 +111,12 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
                     if (isNowFavourited) {
                         removeFromFavourites(userId, crystal.getId());
                         userFavourites.remove(crystal.getId());
-                        holder.wishlistIcon.setImageResource(R.drawable.favourite_icon);
+                        holder.wishlistIcon.setImageResource(R.drawable.heart_outline);
                         Toast.makeText(context, "Removed from favourites", Toast.LENGTH_SHORT).show();
                     } else {
                         addToFavourites(userId, crystal.getId());
                         userFavourites.add(crystal.getId());
-                        holder.wishlistIcon.setImageResource(R.drawable.filled_favourite_icon);
+                        holder.wishlistIcon.setImageResource(R.drawable.purple_heart);
                         Toast.makeText(context, "Added to favourites", Toast.LENGTH_SHORT).show();
                     }
 
