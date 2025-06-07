@@ -33,6 +33,7 @@ public class CategoryActivity extends BaseActivity {
     private String categoryName;
     private ImageView ivBtnBack;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,28 +133,30 @@ public class CategoryActivity extends BaseActivity {
             Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtra("crystalId", crystal.getId());
             startActivity(intent);
-        });
+        }, null);
         crystalGrid.setAdapter(adapter);
     }
 
     private void filterCrystals(String query) {
         List<Crystal> filtered = new ArrayList<>();
         for (Crystal crystal : crystalList) {
-            String name = crystal.getName().toLowerCase();
-            List<String> tags = crystal.getTags();
-
-            if (name.contains(query.toLowerCase()) ||
-                    (tags != null && tags.stream().anyMatch(tag -> tag.toLowerCase().contains(query.toLowerCase())))) {
+            if (crystal.getName().toLowerCase().contains(query.toLowerCase()) ||
+                    (crystal.getTags() != null && crystal.getTags().stream().anyMatch(tag -> tag.toLowerCase().contains(query.toLowerCase())))) {
                 filtered.add(crystal);
             }
         }
 
-        if (filtered.isEmpty()) {
-            noResultsMessage.setVisibility(View.VISIBLE);
-        } else {
-            noResultsMessage.setVisibility(View.GONE);
-        }
+        adapter = new CrystalAdapter(this, filtered, favouriteIds, false, crystal -> {
+            Intent intent = new Intent(this, DetailActivity.class);
+            intent.putExtra("crystalId", crystal.getId());
+            startActivity(intent);
+        }, null);
 
-        setupAdapter(filtered);
+
+        crystalGrid.setAdapter(adapter);
+
+        noResultsMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
     }
+
+
 }

@@ -27,31 +27,37 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
     private Context context;
     private List<Crystal> crystalList;
     private List<String> userFavourites;
-
     private boolean isFavouritesView;
 
-
     private onClickListener listener;
+    private OnCartClickListener cartClickListener;
 
     public interface onClickListener {
         void onCrystalClick(Crystal crystal);
     }
 
-    public CrystalAdapter(Context context, List<Crystal> crystalList, List<String> userFavourites, boolean isFavouritesView, onClickListener listener) {
+    public interface OnCartClickListener {
+        void onAddToCartClicked(Crystal crystal);
+    }
+
+    public CrystalAdapter(Context context, List<Crystal> crystalList, List<String> userFavourites,
+                          boolean isFavouritesView,
+                          onClickListener listener,
+                          OnCartClickListener cartClickListener) {
         this.context = context;
         this.crystalList = crystalList;
         this.userFavourites = userFavourites;
         this.isFavouritesView = isFavouritesView;
         this.listener = listener;
+        this.cartClickListener = cartClickListener;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView crystalImage;
         TextView crystalName;
-
         TextView crystalPrice;
-
         ImageView wishlistIcon;
+        ImageView addToCart;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -59,6 +65,7 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
             crystalName = itemView.findViewById(R.id.crystalName);
             crystalPrice = itemView.findViewById(R.id.crystalPrice);
             wishlistIcon = itemView.findViewById(R.id.wishlistIcon);
+            addToCart = itemView.findViewById(R.id.addToCart); // Only in favourites layout
         }
     }
 
@@ -86,6 +93,7 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (isFavouritesView) {
+            // Wishlist icon becomes delete icon
             holder.wishlistIcon.setImageResource(R.drawable.close_button);
             holder.wishlistIcon.setOnClickListener(v -> {
                 if (currentUser != null) {
@@ -97,7 +105,19 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
                     Toast.makeText(context, "Removed from favourites", Toast.LENGTH_SHORT).show();
                 }
             });
+
+            if (holder.addToCart != null) {
+                holder.addToCart.setVisibility(View.VISIBLE);
+                holder.addToCart.setOnClickListener(v -> {
+                    if (cartClickListener != null) {
+                        cartClickListener.onAddToCartClicked(crystal);
+                        Toast.makeText(context, "Added to cart", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
         } else {
+            // Wishlist behavior for normal crystal view
             boolean isFavourited = userFavourites != null && userFavourites.contains(crystal.getId());
             holder.wishlistIcon.setImageResource(
                     isFavourited ? R.drawable.purple_heart : R.drawable.heart_outline
@@ -126,13 +146,14 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
                 }
             });
         }
+
+        // Item click
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onCrystalClick(crystal);
             }
         });
     }
-
 
     private void addToFavourites(String userId, String crystalId) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();

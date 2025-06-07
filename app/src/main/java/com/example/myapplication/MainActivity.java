@@ -157,10 +157,10 @@ public class MainActivity extends BaseActivity {
 
     recyclerView.setAdapter(adapter);
 
-      SearchView searchView = findViewById(R.id.searchView);
+    SearchView searchView = findViewById(R.id.searchView);
 
-      searchView.setQueryHint("Search crystals...");
-      searchView.setIconifiedByDefault(false); // Expand search by default (optional)
+    searchView.setQueryHint("Search crystals...");
+    searchView.setIconifiedByDefault(false); // Expand search by default (optional)
 
       searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
           @Override
@@ -176,8 +176,7 @@ public class MainActivity extends BaseActivity {
           @Override
           public boolean onQueryTextChange(String newText) {
               return false; // no real-time search in MainActivity, leave it for SearchResultsActivity
-          }
-      });
+          }});
   }
 
 
