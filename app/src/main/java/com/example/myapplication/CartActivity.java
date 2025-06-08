@@ -4,6 +4,8 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -245,7 +247,11 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
           new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
       Log.d("CartActivity", "Setting adapter with " + cartItems.size() + " items");
+
       recyclerCartItems.setAdapter(cartAdapter);
+      LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_fade_in);
+      recyclerCartItems.setLayoutAnimation(animation);
+      recyclerCartItems.scheduleLayoutAnimation();
 
       Log.d("CartActivity", "Populate Items Exit - Success");
 

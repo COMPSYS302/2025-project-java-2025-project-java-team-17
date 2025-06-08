@@ -3,6 +3,8 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
 import androidx.appcompat.widget.SearchView;
 
@@ -156,6 +158,9 @@ public class MainActivity extends BaseActivity {
             });
 
     recyclerView.setAdapter(adapter);
+    LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_fade_in);
+    recyclerView.setLayoutAnimation(animation);
+    recyclerView.scheduleLayoutAnimation();
 
     SearchView searchView = findViewById(R.id.searchView);
 

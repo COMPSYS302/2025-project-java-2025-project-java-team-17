@@ -3,6 +3,8 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -81,7 +83,6 @@ public class SearchResultsActivity extends BaseActivity {
             startActivity(intent);
         }, null);
         recyclerView.setAdapter(adapter);
-
         searchView.setQueryHint("Search crystals...");
         searchView.setIconifiedByDefault(false);
 
@@ -124,6 +125,7 @@ public class SearchResultsActivity extends BaseActivity {
                         filterCrystals(queryToFilter);
                     } else {
                         adapter.notifyDataSetChanged(); // show full list
+
                     }
                 })
                 .addOnFailureListener(e -> Log.e("SearchActivity", "Error fetching crystals", e));
@@ -144,5 +146,10 @@ public class SearchResultsActivity extends BaseActivity {
         }, null);
         RecyclerView recyclerView = findViewById(R.id.searchRecycler);
         recyclerView.setAdapter(adapter);
+        LayoutAnimationController controller =
+                AnimationUtils.loadLayoutAnimation(this, R.anim.layout_fade_in);
+
+        recyclerView.setLayoutAnimation(controller);
+        recyclerView.scheduleLayoutAnimation();
     }
 }

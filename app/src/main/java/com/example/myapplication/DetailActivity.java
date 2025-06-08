@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -101,7 +103,16 @@ public class DetailActivity extends BaseActivity {
             if (currentUser != null) {
                 String userId = currentUser.getUid();
                 isFavorite = !isFavorite;
-                updateWishlistButton();
+                updateWishlistButton(); // updates the heart icon
+
+                // Animate the button
+                Animation anim = AnimationUtils.loadAnimation(
+                        this,
+                        isFavorite ? R.anim.pop : R.anim.fade_pulse
+                );
+                wishlistButton.startAnimation(anim);
+
+                // Update Firestore
                 DocumentReference userRef = db.collection("users").document(userId);
                 if (isFavorite) {
                     userRef.update("favourites", FieldValue.arrayUnion(crystalId));
@@ -112,6 +123,7 @@ public class DetailActivity extends BaseActivity {
                 Toast.makeText(this, "Please log in to use favourites", Toast.LENGTH_SHORT).show();
             }
         });
+
 
         goToCartButton.setOnClickListener(v -> {
             Intent intent = new Intent(DetailActivity.this, CartActivity.class);

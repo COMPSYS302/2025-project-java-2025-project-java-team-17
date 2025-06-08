@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 import androidx.appcompat.widget.Toolbar;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -73,6 +75,7 @@ public class FavouritesActivity extends BaseActivity {
         emptyMessage = findViewById(R.id.emptyMessage);
         emptyMessage.setVisibility(View.GONE);
 
+
         TextView title = findViewById(R.id.tv_cart_title);
         title.setText("Favourites");
 
@@ -128,6 +131,7 @@ public class FavouritesActivity extends BaseActivity {
                     favouriteIds.clear();
                     favouriteCrystals.clear();
                     adapter.notifyDataSetChanged();
+
                     emptyMessage.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                 })
@@ -161,6 +165,11 @@ public class FavouritesActivity extends BaseActivity {
                                         }
                                     }
                                     adapter.notifyDataSetChanged();
+                                    LayoutAnimationController controller =
+                                            AnimationUtils.loadLayoutAnimation(this, R.anim.layout_fade_in);
+
+                                    recyclerView.setLayoutAnimation(controller);
+                                    recyclerView.scheduleLayoutAnimation();
                                     if (favouriteCrystals.isEmpty()) {
                                         emptyMessage.setVisibility(View.VISIBLE);
                                         recyclerView.setVisibility(View.GONE);

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,6 +50,8 @@ public class CategoryActivity extends BaseActivity {
 
         crystalGrid = findViewById(R.id.crystalGrid);
         crystalGrid.setLayoutManager(new GridLayoutManager(this, 2));
+
+
 
         ivBtnBack = findViewById(R.id.btn_back);
 
@@ -135,6 +139,9 @@ public class CategoryActivity extends BaseActivity {
             startActivity(intent);
         }, null);
         crystalGrid.setAdapter(adapter);
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_fade_in);
+        crystalGrid.setLayoutAnimation(animation);
+        crystalGrid.scheduleLayoutAnimation();
     }
 
     private void filterCrystals(String query) {

@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -97,12 +99,16 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
             holder.wishlistIcon.setImageResource(R.drawable.close_button);
             holder.wishlistIcon.setOnClickListener(v -> {
                 if (currentUser != null) {
+
                     String userId = currentUser.getUid();
                     removeFromFavourites(userId, crystal.getId());
                     userFavourites.remove(crystal.getId());
                     crystalList.remove(position);
                     notifyItemRemoved(position);
                     Toast.makeText(context, "Removed from favourites", Toast.LENGTH_SHORT).show();
+                    Animation fadeAnim = AnimationUtils.loadAnimation(context, R.anim.fade_pulse);
+                    holder.wishlistIcon.startAnimation(fadeAnim);
+
                 }
             });
 
@@ -111,6 +117,9 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
                 holder.addToCart.setOnClickListener(v -> {
                     if (cartClickListener != null) {
                         cartClickListener.onAddToCartClicked(crystal);
+                        Animation pop = AnimationUtils.loadAnimation(context, R.anim.pop);
+                        holder.addToCart.startAnimation(pop);
+
                         Toast.makeText(context, "Added to cart", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -133,11 +142,17 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
                         userFavourites.remove(crystal.getId());
                         holder.wishlistIcon.setImageResource(R.drawable.heart_outline);
                         Toast.makeText(context, "Removed from favourites", Toast.LENGTH_SHORT).show();
+                        Animation fadeAnim = AnimationUtils.loadAnimation(context, R.anim.fade_pulse);
+                        holder.wishlistIcon.startAnimation(fadeAnim);
+
                     } else {
                         addToFavourites(userId, crystal.getId());
                         userFavourites.add(crystal.getId());
                         holder.wishlistIcon.setImageResource(R.drawable.purple_heart);
                         Toast.makeText(context, "Added to favourites", Toast.LENGTH_SHORT).show();
+                        Animation popAnim = AnimationUtils.loadAnimation(context, R.anim.pop);
+                        holder.wishlistIcon.startAnimation(popAnim);
+
                     }
 
                     notifyItemChanged(holder.getAdapterPosition());
