@@ -1,8 +1,8 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.TextView;
+
+import com.example.myapplication.databinding.ActivityTermsBinding;
 
 /**
  * Activity to display the Terms and Conditions.
@@ -11,6 +11,8 @@ import android.widget.TextView;
  * like the bottom navigation.
  */
 public class TermsActivity extends BaseActivity {
+
+    private ActivityTermsBinding binding;
 
     /**
      * Called when the activity is first created.
@@ -26,15 +28,16 @@ public class TermsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_terms);
+        binding = ActivityTermsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         // Initialize the bottom navigation, highlighting the "profile" tab.
         setupBottomNavigation(R.id.nav_profile);
 
         // Set the title of the screen.
-        ((TextView) findViewById(R.id.tv_cart_title)).setText("Terms and Conditions");
+        binding.includeTopBar.tvCartTitle.setText("Terms and Conditions");
 
         // Set up the back button to finish the activity when clicked.
-        ImageView ivBtnBack = findViewById(R.id.btn_back);
-        ivBtnBack.setOnClickListener(v -> finish());
+        binding.includeTopBar.btnBack.setOnClickListener(v -> finish());
     }
 }
