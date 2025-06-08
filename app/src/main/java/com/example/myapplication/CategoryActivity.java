@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.myapplication.databinding.ActivityCategoryBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,9 +40,10 @@ public class CategoryActivity extends BaseActivity {
 
     // UI elements
     private CrystalAdapter adapter;
-    private RecyclerView crystalGrid;
-    private TextView noResultsMessage;
+
+
     private String categoryName; // Name of the category being displayed
+    private ActivityCategoryBinding binding;
 
     /**
      * Called when the activity is first created.
@@ -54,7 +56,8 @@ public class CategoryActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category);
+        binding = ActivityCategoryBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         setupBottomNavigation(R.id.nav_home); // Setup bottom navigation from BaseActivity
 
         // Get the category name passed from the previous activity
@@ -84,15 +87,13 @@ public class CategoryActivity extends BaseActivity {
      * Sets the category title, back button functionality, and RecyclerView.
      */
     private void setupUI() {
-        TextView title = findViewById(R.id.tv_cart_title);
-        title.setText(categoryName); // Set the category name as the title
+        binding.includeTopBar.tvCartTitle.setText(categoryName); // Set the category name as the title
 
-        ImageView ivBtnBack = findViewById(R.id.btn_back);
-        ivBtnBack.setOnClickListener(v -> finish()); // Handle back button click
+        binding.includeTopBar.btnBack.setOnClickListener(v -> finish()); // Handle back button click
 
-        noResultsMessage = findViewById(R.id.noResultsMessage); // TextView to show when no search results
-        crystalGrid = findViewById(R.id.crystalGrid);
-        crystalGrid.setLayoutManager(new GridLayoutManager(this, 2)); // Display crystals in a 2-column grid
+         // TextView to show when no search results
+
+        binding.crystalGrid.setLayoutManager(new GridLayoutManager(this, 2)); // Display crystals in a 2-column grid
     }
 
     /**
@@ -100,18 +101,17 @@ public class CategoryActivity extends BaseActivity {
      * Configures query hints, icon behavior, and query text listeners.
      */
     private void setupSearchView() {
-        SearchView searchView = findViewById(R.id.searchView);
-        searchView.setQueryHint("Search for crystals..."); // Set placeholder text
-        searchView.setIconified(false); // Keep the search view expanded by default
-        searchView.clearFocus(); // Remove focus initially
+        binding.searchView.setQueryHint("Search for crystals..."); // Set placeholder text
+        binding.searchView.setIconified(false); // Keep the search view expanded by default
+        binding.searchView.clearFocus(); // Remove focus initially
 
         // Expand and request focus when the search view is clicked
-        searchView.setOnClickListener(v -> {
-            searchView.setIconified(false);
-            searchView.requestFocusFromTouch();
+        binding.searchView.setOnClickListener(v -> {
+            binding.searchView.setIconified(false);
+            binding.searchView.requestFocusFromTouch();
         });
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // Do nothing on submit, filtering happens on text change
@@ -176,7 +176,7 @@ public class CategoryActivity extends BaseActivity {
                             crystalList.add(crystal);
                         }
                     }
-                    noResultsMessage.setVisibility(View.GONE); // Hide no results message
+                    binding.noResultsMessage.setVisibility(View.GONE); // Hide no results message
                     setupAdapter(crystalList); // Setup adapter with fetched crystals
                 })
                 .addOnFailureListener(e -> Log.e(TAG, "Failed to fetch crystals", e));
@@ -203,11 +203,11 @@ public class CategoryActivity extends BaseActivity {
                 null // No explicit favourite toggle listener needed here, handled by adapter's default
         );
 
-        crystalGrid.setAdapter(adapter);
+        binding.crystalGrid.setAdapter(adapter);
         // Apply layout animation for a fade-in effect when items are added
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_fade_in);
-        crystalGrid.setLayoutAnimation(animation);
-        crystalGrid.scheduleLayoutAnimation();
+        binding.crystalGrid.setLayoutAnimation(animation);
+        binding.crystalGrid.scheduleLayoutAnimation();
     }
 
     /**
@@ -235,6 +235,6 @@ public class CategoryActivity extends BaseActivity {
 
         setupAdapter(filtered); // Update adapter with filtered results
         // Show or hide the "no results" message based on whether the filtered list is empty
-        noResultsMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
+        binding.noResultsMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
     }
 }

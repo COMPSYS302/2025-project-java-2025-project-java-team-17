@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.myapplication.databinding.ActivityAuthBinding;
 
 /**
  * AuthActivity serves as the entry point for user authentication.
@@ -14,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
  * a user explicitly logs out.
  */
 public class AuthActivity extends AppCompatActivity {
+
+  private ActivityAuthBinding binding;
 
   /**
    * Called when the activity is first created.
@@ -29,7 +32,8 @@ public class AuthActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     // Set the user interface layout for this activity.
     // The layout file is defined in res/layout/activity_auth.xml
-    setContentView(R.layout.activity_auth);
+    binding = ActivityAuthBinding.inflate(getLayoutInflater());
+    setContentView(binding.getRoot());
 
     // Initialize the interactive elements on the screen.
     initButtons();
@@ -43,18 +47,9 @@ public class AuthActivity extends AppCompatActivity {
    * Clicking the register button will navigate to the RegistrationActivity.
    */
   private void initButtons() {
-    // Find the login button view from the layout.
-    Button loginButton = findViewById(R.id.loginButton);
-    // Find the register button view from the layout.
-    Button registerButton = findViewById(R.id.registerButton);
-
-    // Set a click listener for the login button.
-    // When clicked, it will call the openLogin() method.
-    loginButton.setOnClickListener(v -> openLogin());
-
-    // Set a click listener for the register button.
-    // When clicked, it will call the openRegister() method.
-    registerButton.setOnClickListener(v -> openRegister());
+    // Find the login button view from the layout and set a click listener.
+    binding.loginButton.setOnClickListener(v -> openLogin());
+    binding.registerButton.setOnClickListener(v -> openRegister());
   }
 
   /**

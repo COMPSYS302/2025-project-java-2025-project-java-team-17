@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.myapplication.databinding.ActivityFavouritesBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,19 +31,22 @@ import java.util.List;
  */
 public class FavouritesActivity extends BaseActivity {
 
-    private RecyclerView recyclerView;
+
     private CrystalAdapter adapter;
-    private TextView emptyMessage;
+
     private List<Crystal> favouriteCrystals = new ArrayList<>();
     private List<String> favouriteIds = new ArrayList<>();
 
     private FirebaseFirestore db;
     private FirebaseUser currentUser;
 
+    private ActivityFavouritesBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favourites);
+        binding = ActivityFavouritesBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         // Set bottom nav state
         setupBottomNavigation(R.id.nav_profile);
@@ -59,26 +63,26 @@ public class FavouritesActivity extends BaseActivity {
      * Initializes toolbar buttons and empty message placeholder.
      */
     private void initViews() {
-        TextView title = findViewById(R.id.tv_cart_title);
-        title.setText("Favourites");
 
-        ImageView ivBtnBack = findViewById(R.id.btn_back);
-        ivBtnBack.setOnClickListener(v -> finish());
+        binding.includeTopBar.tvCartTitle.setText("Favourites");
 
-        ImageButton clearCart = findViewById(R.id.btn_clear_cart);
-        clearCart.setImageResource(R.drawable.ic_trash);
-        clearCart.setOnClickListener(v -> clearFavourites());
 
-        emptyMessage = findViewById(R.id.emptyMessage);
-        emptyMessage.setVisibility(View.GONE);
+        binding.includeTopBar.btnBack.setOnClickListener(v -> finish());
+
+
+        binding.includeTopBar.btnClearCart.setImageResource(R.drawable.ic_trash);
+        binding.includeTopBar.btnClearCart.setOnClickListener(v -> clearFavourites());
+
+
+        binding.emptyMessage.setVisibility(View.GONE);
     }
 
     /**
      * Configures the favourites RecyclerView with a grid layout and adapter.
      */
     private void setupRecyclerView() {
-        recyclerView = findViewById(R.id.favouritesRecycler);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
+
+        binding.favouritesRecycler.setLayoutManager(new GridLayoutManager(this, 1));
 
         adapter = new CrystalAdapter(
                 this,
@@ -90,7 +94,7 @@ public class FavouritesActivity extends BaseActivity {
                 this::addToCart // Add to cart from favourite
         );
 
-        recyclerView.setAdapter(adapter);
+        binding.favouritesRecycler.setAdapter(adapter);
     }
 
     /**
@@ -148,14 +152,14 @@ public class FavouritesActivity extends BaseActivity {
         // Apply layout animation for a smoother entry
         LayoutAnimationController animation =
                 AnimationUtils.loadLayoutAnimation(this, R.anim.layout_fade_in);
-        recyclerView.setLayoutAnimation(animation);
-        recyclerView.scheduleLayoutAnimation();
+        binding.favouritesRecycler.setLayoutAnimation(animation);
+        binding.favouritesRecycler.scheduleLayoutAnimation();
 
-        recyclerView.setVisibility(View.VISIBLE);
-        emptyMessage.setVisibility(View.GONE);
+        binding.favouritesRecycler.setVisibility(View.VISIBLE);
+        binding.emptyMessage.setVisibility(View.GONE);
 
         // Add spacing between items
-        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+        binding.favouritesRecycler.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
                 if (parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1) {
@@ -169,8 +173,8 @@ public class FavouritesActivity extends BaseActivity {
      * Shows the empty state message if no favourites exist.
      */
     private void showEmptyState() {
-        emptyMessage.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.GONE);
+        binding.emptyMessage.setVisibility(View.VISIBLE);
+        binding.favouritesRecycler.setVisibility(View.GONE);
     }
 
     /**

@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.myapplication.databinding.ShoppingCartBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,11 +46,7 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
     private FirebaseFirestore db;
 
     // UI Elements
-    private ImageView ivBtnBack; // Button to navigate back
-    private ImageButton clearCart; // Button to clear all items from the cart
-    private TextView tvTotalItems; // TextView to display the total number of items in the cart
-    private TextView tvPrice; // TextView to display the total price of items in the cart
-    private RecyclerView recyclerCartItems; // RecyclerView to display the list of cart items
+    private ShoppingCartBinding binding;
 
     // Data for RecyclerView
     private List<CartItem> cartItems; // List to hold cart item objects
@@ -70,7 +67,8 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate started");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.shopping_cart); // Set the layout for the cart screen
+        binding = ShoppingCartBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot()); // Set the layout for the cart screen
 
         // Initialize Firebase Auth and Firestore
         mAuth = FirebaseAuth.getInstance();
@@ -80,15 +78,6 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
         // Initialize the list for cart items
         cartItems = new ArrayList<>();
 
-        // Initialize UI elements
-        ivBtnBack = findViewById(R.id.btn_back);
-        clearCart = findViewById(R.id.btn_clear_cart);
-        tvTotalItems = findViewById(R.id.tv_total_items);
-        tvPrice = findViewById(R.id.tv_total_price);
-        recyclerCartItems = findViewById(R.id.recycler_cart_items);
-
-        // Set the icon for the clear cart button
-        clearCart.setImageResource(R.drawable.ic_trash);
 
         // Setup bottom navigation, highlighting the "cart" tab
         setupBottomNavigation(R.id.nav_cart);
@@ -105,9 +94,9 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
      * Configures the LayoutManager and adds item decoration for spacing.
      */
     private void setupRecyclerView() {
-        recyclerCartItems.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        binding.recyclerCartItems.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         // Add item decoration for spacing between cart items
-        recyclerCartItems.addItemDecoration(new RecyclerView.ItemDecoration() {
+        binding.recyclerCartItems.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
                 // Add bottom margin to all items except the last one
@@ -118,11 +107,11 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
         });
         // Initialize the CartAdapter
         cartAdapter = new CartAdapter(this, cartItems, this);
-        recyclerCartItems.setAdapter(cartAdapter);
+        binding.recyclerCartItems.setAdapter(cartAdapter);
 
         // Apply layout animation for items appearing in the RecyclerView
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_fade_in);
-        recyclerCartItems.setLayoutAnimation(animation);
+        binding.recyclerCartItems.setLayoutAnimation(animation);
     }
 
     /**
@@ -130,9 +119,9 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
      */
     private void setupListeners() {
         // Set listener for the back button to finish the activity
-        ivBtnBack.setOnClickListener(v -> finish());
+        binding.includeTopBar.btnBack.setOnClickListener(v -> finish());
         // Set listener for the clear cart button to call clearCartData method
-        clearCart.setOnClickListener(v -> clearCartData());
+        binding.includeTopBar.btnClearCart.setOnClickListener(v -> clearCartData());
     }
 
     /**
@@ -153,8 +142,8 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
             if (cartAdapter != null) {
                 cartAdapter.notifyDataSetChanged();
             }
-            tvTotalItems.setText("No items in cart");
-            tvPrice.setText("NZD 0.00");
+            binding.tvTotalItems.setText("No items in cart");
+            binding.tvTotalPrice.setText("NZD 0.00");
             // Optionally, prompt user to log in or disable cart functionality
             Log.w(TAG, "No user logged in. Cart cannot be loaded.");
         }
@@ -299,8 +288,8 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
         if (currentUser == null) {
             Log.w(TAG, "User not logged in, cannot load cart data.");
             // Update UI to reflect empty cart
-            tvTotalItems.setText("No items in cart");
-            tvPrice.setText("NZD 0.00");
+            binding.tvTotalItems.setText("No items in cart");
+            binding.tvTotalPrice.setText("NZD 0.00");
             if (cartAdapter != null) {
                 cartAdapter.notifyDataSetChanged(); // Ensure RecyclerView is also cleared/updated
             }
@@ -325,8 +314,8 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
                     if (cartItemDocs.isEmpty()) {
                         // If the cart is empty, update UI and return
                         Log.d(TAG, "User's cart is empty.");
-                        tvTotalItems.setText("No items in cart");
-                        tvPrice.setText("NZD 0.00");
+                        binding.tvTotalItems.setText("No items in cart");
+                        binding.tvTotalPrice.setText("NZD 0.00");
                         populateItems(); // Refresh RecyclerView (will be empty)
                         return;
                     }
@@ -342,8 +331,8 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
                             Log.w(TAG, "Skipping cart item with invalid quantity: " + crystalId + ", quantity: " + quantity);
                             if (pendingCrystalFetches.decrementAndGet() == 0) {
                                 // If this was the last item and it was invalid, finalize totals
-                                tvTotalItems.setText("Total Items: " + accumulatedTotalItems.get());
-                                tvPrice.setText("NZD " + String.format("%.2f", accumulatedTotalPrice.get()));
+                                binding.tvTotalItems.setText("Total Items: " + accumulatedTotalItems.get());
+                                binding.tvTotalPrice.setText("NZD " + String.format("%.2f", accumulatedTotalPrice.get()));
                                 populateItems();
                             }
                             continue; // Skip fetching crystal details for this item
@@ -372,8 +361,8 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
                                     if (pendingCrystalFetches.decrementAndGet() == 0) {
                                         Log.d(TAG, "All crystal details fetched. Finalizing totals.");
                                         // All asynchronous fetches are complete, update the UI totals
-                                        tvTotalItems.setText("Total Items: " + accumulatedTotalItems.get());
-                                        tvPrice.setText("NZD " + String.format("%.2f", accumulatedTotalPrice.get()));
+                                        binding.tvTotalItems.setText("Total Items: " + accumulatedTotalItems.get());
+                                        binding.tvTotalItems.setText("NZD " + String.format("%.2f", accumulatedTotalPrice.get()));
                                         populateItems(); // Refresh the RecyclerView with all loaded items
                                     }
                                 })
@@ -382,8 +371,8 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
                                     // Decrement pending count even on failure to avoid deadlock
                                     if (pendingCrystalFetches.decrementAndGet() == 0) {
                                         Log.d(TAG, "All crystal details fetched (some with errors). Finalizing totals.");
-                                        tvTotalItems.setText("Total Items: " + accumulatedTotalItems.get());
-                                        tvPrice.setText("NZD " + String.format("%.2f", accumulatedTotalPrice.get()));
+                                        binding.tvTotalItems.setText("Total Items: " + accumulatedTotalItems.get());
+                                        binding.tvTotalItems.setText("NZD " + String.format("%.2f", accumulatedTotalPrice.get()));
                                         populateItems();
                                     }
                                 });
@@ -392,8 +381,8 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
                 .addOnFailureListener(e -> {
                     Log.e(TAG, "Error fetching cart items from " + userCartPath, e);
                     // Handle failure to load cart (e.g., show error message)
-                    tvTotalItems.setText("Error loading cart");
-                    tvPrice.setText("NZD ---");
+                    binding.tvTotalItems.setText("Error loading cart");
+                    binding.tvTotalPrice.setText("NZD ---");
                     cartItems.clear(); // Ensure list is empty on error
                     populateItems(); // Refresh RecyclerView
                 });
@@ -413,7 +402,7 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
                 Log.w(TAG, "CartAdapter was null in populateItems. Re-initializing.");
                 // This is a fallback, ideally adapter is set up in onCreate/setupRecyclerView
                 cartAdapter = new CartAdapter(this, cartItems, this);
-                recyclerCartItems.setAdapter(cartAdapter);
+                binding.recyclerCartItems.setAdapter(cartAdapter);
             } else {
                 // If adapter exists, notify it that the underlying data set has changed.
                 // The CartAdapter should be designed to handle updates to its list.
@@ -423,12 +412,12 @@ public class CartActivity extends BaseActivity implements CartAdapter.CartItemCl
             }
 
             // Schedule the layout animation to run for the updated items
-            if (recyclerCartItems.getLayoutAnimation() == null) {
+            if (binding.recyclerCartItems.getLayoutAnimation() == null) {
                 // If animation controller was not set or got removed, re-apply
                 LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_fade_in);
-                recyclerCartItems.setLayoutAnimation(animation);
+                binding.recyclerCartItems.setLayoutAnimation(animation);
             }
-            recyclerCartItems.scheduleLayoutAnimation();
+            binding.recyclerCartItems.scheduleLayoutAnimation();
             Log.d(TAG, "RecyclerView populated and animation scheduled.");
 
         } catch (Exception e) {

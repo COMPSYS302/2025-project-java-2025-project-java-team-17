@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.myapplication.databinding.ActivityLoginBinding;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -22,18 +23,9 @@ public class LoginActivity extends AppCompatActivity {
 
     // Firebase Authentication instance for handling user sign-in.
     private FirebaseAuth mAuth;
-    // EditText field for the user to enter their email address.
-    private EditText etLoginEmail;
-    // EditText field for the user to enter their password.
-    private EditText etLoginPassword;
-    // Button to trigger the login process.
-    private Button btnLogin;
-    // TextView to display login error messages to the user.
-    private TextView tvLoginError;
-    // TextView for the title of the activity (e.g., "Login").
-    private TextView title;
-    // ImageView that acts as a back button to navigate to the previous screen.
-    private ImageView ivBtnBack;
+
+    //binding initialisation
+    private ActivityLoginBinding binding;
 
     /**
      * Called when the activity is first created.
@@ -49,7 +41,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // Set the user interface layout for this Activity.
         // The layout file is defined in res/layout/activity_login.xml
-        setContentView(R.layout.activity_login);
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         // Initialize all the view components from the layout.
         initViews();
@@ -65,16 +58,12 @@ public class LoginActivity extends AppCompatActivity {
         // Get the shared instance of the FirebaseAuth object.
         mAuth = FirebaseAuth.getInstance();
 
-        // Find and assign UI elements from the layout to their respective variables.
-        etLoginEmail = findViewById(R.id.etLoginEmail);
-        etLoginPassword = findViewById(R.id.etLoginPassword);
-        btnLogin = findViewById(R.id.btnLogin);
-        tvLoginError = findViewById(R.id.tvLoginError); // For displaying login errors
-        title = findViewById(R.id.tv_cart_title);     // The title TextView in the custom toolbar
-        ivBtnBack = findViewById(R.id.btn_back);        // The back button ImageView in the custom toolbar
+
+             // The title TextView in the custom toolbar
+
 
         // Set the title of the activity in the custom toolbar.
-        title.setText("Login");
+        binding.includeTopBar.tvCartTitle.setText("Login");
     }
 
     /**
@@ -84,26 +73,26 @@ public class LoginActivity extends AppCompatActivity {
     private void setupListeners() {
         // Set a click listener for the back button.
         // When clicked, it finishes the current activity, returning to the previous one.
-        ivBtnBack.setOnClickListener(v -> finish());
+        binding.includeTopBar.btnBack.setOnClickListener(v -> finish());
 
         // Set a click listener for the login button.
-        btnLogin.setOnClickListener(v -> {
+        binding.btnLogin.setOnClickListener(v -> {
             // Retrieve email and password from EditText fields, trimming whitespace.
-            String email = etLoginEmail.getText().toString().trim();
-            String password = etLoginPassword.getText().toString().trim();
+            String email = binding.etLoginEmail.getText().toString().trim();
+            String password = binding.etLoginPassword.getText().toString().trim();
 
             // Flag to track if input is valid.
             boolean valid = true;
 
             // Validate the email field.
             if (email.isEmpty()) {
-                etLoginEmail.setError("Email is required"); // Show error on the EditText.
+                binding.etLoginEmail.setError("Email is required"); // Show error on the EditText.
                 valid = false;
             }
 
             // Validate the password field.
             if (password.isEmpty()) {
-                etLoginPassword.setError("Password is required"); // Show error on the EditText.
+                binding.etLoginPassword.setError("Password is required"); // Show error on the EditText.
                 valid = false;
             }
 
@@ -145,13 +134,13 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void showLoginError() {
         // Make the error TextView visible.
-        tvLoginError.setVisibility(View.VISIBLE);
+        binding.tvLoginError.setVisibility(View.VISIBLE);
         // Use a Handler to delay hiding the error message.
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             // Ensure tvLoginError is still not null (e.g., activity not destroyed).
-            if (tvLoginError != null) {
+            if (binding.tvLoginError != null) {
                 // Hide the error TextView after 5 seconds.
-                tvLoginError.setVisibility(View.GONE);
+                binding.tvLoginError.setVisibility(View.GONE);
             }
         }, 5000); // 5000 milliseconds = 5 seconds
     }

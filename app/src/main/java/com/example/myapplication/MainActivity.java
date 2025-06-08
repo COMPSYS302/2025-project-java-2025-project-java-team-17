@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.myapplication.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,6 +45,8 @@ public class MainActivity extends BaseActivity {
     private FirebaseUser currentUser;
     private FirebaseFirestore db;
 
+    private ActivityMainBinding binding;
+
     // Data structures for managing top crystals
     private PriorityQueue<Crystal> pq; // Priority queue to find top 3 crystals by views
     private Crystal[] topCrystals = new Crystal[3]; // Array to store the top 3 Crystal objects
@@ -51,9 +54,10 @@ public class MainActivity extends BaseActivity {
     private String[] crystalTitles = new String[3]; // Titles of the top crystals
     private double[] crystalPrices = new double[3]; // Prices of the top crystals
 
-    // UI elements for displaying crystal information synchronized with the image slider
-    private TextView crystalTitleBar;
-    private TextView crystalPriceBar;
+
+
+
+
 
     /**
      * Called when the activity is first created.
@@ -69,7 +73,8 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         // Initialize Firebase Authentication and Firestore
         mAuth = FirebaseAuth.getInstance();
@@ -79,16 +84,13 @@ public class MainActivity extends BaseActivity {
         // Seed initial crystal data to Firestore (typically run once or for development)
         CrystalSeeder.seedCrystals();
 
-        // Initialize UI elements for the top crystal information display
-        crystalTitleBar = findViewById(R.id.crystalTitleBar);
-        crystalPriceBar = findViewById(R.id.crystalPriceBar);
-        RecyclerView crystalImages = findViewById(R.id.crystalImages);
+
         // Configure RecyclerView for horizontal image scrolling
-        crystalImages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        crystalImages.setHorizontalScrollBarEnabled(false); // Hide the default horizontal scrollbar
+        binding.crystalImages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        binding.crystalImages.setHorizontalScrollBarEnabled(false); // Hide the default horizontal scrollbar
 
         // Setup the different sections of the main screen
-        setupTopCrystals(crystalImages);
+        setupTopCrystals(binding.crystalImages);
         setupCategories();
         setupSearchBar();
     }
@@ -169,8 +171,8 @@ public class MainActivity extends BaseActivity {
      * @param recyclerView The RecyclerView used for the image slider.
      */
     private void setupDotsIndicator(int count, RecyclerView recyclerView) {
-        LinearLayout dotsLayout = findViewById(R.id.dotsLayout);
-        dotsLayout.removeAllViews(); // Clear any existing dots
+
+        binding.dotsLayout.removeAllViews(); // Clear any existing dots
 
         ImageView[] dots = new ImageView[count];
         for (int i = 0; i < count; i++) {
@@ -184,7 +186,7 @@ public class MainActivity extends BaseActivity {
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
             params.setMargins(8, 0, 8, 0); // Margin between dots
-            dotsLayout.addView(dots[i], params);
+            binding.dotsLayout.addView(dots[i], params);
         }
 
         // Add a scroll listener to update dots and info based on the visible item
@@ -199,8 +201,8 @@ public class MainActivity extends BaseActivity {
 
                 // Update crystal title and price if the position is valid
                 if (pos >= 0 && pos < crystalTitles.length && crystalTitles[pos] != null) {
-                    crystalTitleBar.setText(crystalTitles[pos]);
-                    crystalPriceBar.setText(String.format("%.2f /kg", crystalPrices[pos]));
+                    binding.crystalTitleBar.setText(crystalTitles[pos]);
+                    binding.crystalPriceBar.setText(String.format("%.2f /kg", crystalPrices[pos]));
                 }
 
                 // Update the active dot
@@ -213,8 +215,8 @@ public class MainActivity extends BaseActivity {
 
         // Initialize the title and price display with the first crystal's info
         if (crystalTitles.length > 0 && crystalTitles[0] != null) {
-            crystalTitleBar.setText(crystalTitles[0]);
-            crystalPriceBar.setText(String.format("%.2f /kg", crystalPrices[0]));
+            binding.crystalTitleBar.setText(crystalTitles[0]);
+            binding.crystalPriceBar.setText(String.format("%.2f /kg", crystalPrices[0]));
         }
     }
 
@@ -231,12 +233,12 @@ public class MainActivity extends BaseActivity {
                 new Category("Success", R.drawable.cat_2),
                 new Category("Meditation", R.drawable.cat_3));
 
-        RecyclerView recyclerView = findViewById(R.id.categoryRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this)); // Vertical list layout
+
+        binding.categoryRecyclerView.setLayoutManager(new LinearLayoutManager(this)); // Vertical list layout
 
         // Adapter for displaying categories
         CategoryAdapter adapter = new CategoryAdapter(this, categories, view -> {
-            int position = recyclerView.getChildAdapterPosition(view); // Get clicked item's position
+            int position = binding.categoryRecyclerView.getChildAdapterPosition(view); // Get clicked item's position
             String selectedCategory = categories.get(position).getName();
             // Navigate to CategoryActivity with the selected category name
             Intent intent = new Intent(MainActivity.this, CategoryActivity.class);
@@ -244,11 +246,11 @@ public class MainActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        recyclerView.setAdapter(adapter);
+        binding.categoryRecyclerView.setAdapter(adapter);
         // Apply a layout animation for items fading in
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_fade_in);
-        recyclerView.setLayoutAnimation(animation);
-        recyclerView.scheduleLayoutAnimation(); // Start the animation
+        binding.categoryRecyclerView.setLayoutAnimation(animation);
+        binding.categoryRecyclerView.scheduleLayoutAnimation(); // Start the animation
     }
 
     /**
