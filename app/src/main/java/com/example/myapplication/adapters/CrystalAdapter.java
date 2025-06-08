@@ -26,13 +26,12 @@ import java.util.List;
 
 public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHolder> {
 
-    private Context context;
-    private List<Crystal> crystalList;
-    private List<String> userFavourites;
-    private boolean isFavouritesView;
-
-    private onClickListener listener;
-    private OnCartClickListener cartClickListener;
+    private final Context context;
+    private final List<Crystal> crystalList;
+    private final List<String> userFavourites;
+    private final boolean isFavouritesView;
+    private final onClickListener listener;
+    private final OnCartClickListener cartClickListener;
 
     public interface onClickListener {
         void onCrystalClick(Crystal crystal);
@@ -55,11 +54,8 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView crystalImage;
-        TextView crystalName;
-        TextView crystalPrice;
-        ImageView wishlistIcon;
-        ImageView addToCart;
+        ImageView crystalImage, wishlistIcon, addToCart;
+        TextView crystalName, crystalPrice;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -67,7 +63,7 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
             crystalName = itemView.findViewById(R.id.crystalName);
             crystalPrice = itemView.findViewById(R.id.crystalPrice);
             wishlistIcon = itemView.findViewById(R.id.wishlistIcon);
-            addToCart = itemView.findViewById(R.id.addToCart); // Only in favourites layout
+            addToCart = itemView.findViewById(R.id.addToCart);
         }
     }
 
@@ -95,20 +91,16 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (isFavouritesView) {
-            // Wishlist icon becomes delete icon
             holder.wishlistIcon.setImageResource(R.drawable.close_button);
             holder.wishlistIcon.setOnClickListener(v -> {
                 if (currentUser != null) {
-
                     String userId = currentUser.getUid();
                     removeFromFavourites(userId, crystal.getId());
                     userFavourites.remove(crystal.getId());
                     crystalList.remove(position);
                     notifyItemRemoved(position);
                     Toast.makeText(context, "Removed from favourites", Toast.LENGTH_SHORT).show();
-                    Animation fadeAnim = AnimationUtils.loadAnimation(context, R.anim.fade_pulse);
-                    holder.wishlistIcon.startAnimation(fadeAnim);
-
+                    holder.wishlistIcon.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_pulse));
                 }
             });
 
@@ -117,20 +109,15 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
                 holder.addToCart.setOnClickListener(v -> {
                     if (cartClickListener != null) {
                         cartClickListener.onAddToCartClicked(crystal);
-                        Animation pop = AnimationUtils.loadAnimation(context, R.anim.pop);
-                        holder.addToCart.startAnimation(pop);
-
+                        holder.addToCart.startAnimation(AnimationUtils.loadAnimation(context, R.anim.pop));
                         Toast.makeText(context, "Added to cart", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
 
         } else {
-            // Wishlist behavior for normal crystal view
             boolean isFavourited = userFavourites != null && userFavourites.contains(crystal.getId());
-            holder.wishlistIcon.setImageResource(
-                    isFavourited ? R.drawable.purple_heart : R.drawable.heart_outline
-            );
+            holder.wishlistIcon.setImageResource(isFavourited ? R.drawable.purple_heart : R.drawable.heart_outline);
 
             holder.wishlistIcon.setOnClickListener(v -> {
                 if (currentUser != null) {
@@ -142,17 +129,13 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
                         userFavourites.remove(crystal.getId());
                         holder.wishlistIcon.setImageResource(R.drawable.heart_outline);
                         Toast.makeText(context, "Removed from favourites", Toast.LENGTH_SHORT).show();
-                        Animation fadeAnim = AnimationUtils.loadAnimation(context, R.anim.fade_pulse);
-                        holder.wishlistIcon.startAnimation(fadeAnim);
-
+                        holder.wishlistIcon.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_pulse));
                     } else {
                         addToFavourites(userId, crystal.getId());
                         userFavourites.add(crystal.getId());
                         holder.wishlistIcon.setImageResource(R.drawable.purple_heart);
                         Toast.makeText(context, "Added to favourites", Toast.LENGTH_SHORT).show();
-                        Animation popAnim = AnimationUtils.loadAnimation(context, R.anim.pop);
-                        holder.wishlistIcon.startAnimation(popAnim);
-
+                        holder.wishlistIcon.startAnimation(AnimationUtils.loadAnimation(context, R.anim.pop));
                     }
 
                     notifyItemChanged(holder.getAdapterPosition());
@@ -162,7 +145,6 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
             });
         }
 
-        // Item click
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onCrystalClick(crystal);
@@ -171,25 +153,21 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
     }
 
     private void addToFavourites(String userId, String crystalId) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference userRef = db.collection("users").document(userId);
-
-        userRef.update("favourites", FieldValue.arrayUnion(crystalId))
-                .addOnSuccessListener(aVoid ->
-                        Log.d("FAV", "Added to favourites: " + crystalId))
-                .addOnFailureListener(e ->
-                        Log.e("FAV", "Error adding to favourites", e));
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(userId)
+                .update("favourites", FieldValue.arrayUnion(crystalId))
+                .addOnSuccessListener(aVoid -> Log.d("FAV", "Added to favourites: " + crystalId))
+                .addOnFailureListener(e -> Log.e("FAV", "Error adding to favourites", e));
     }
 
     private void removeFromFavourites(String userId, String crystalId) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference userRef = db.collection("users").document(userId);
-
-        userRef.update("favourites", FieldValue.arrayRemove(crystalId))
-                .addOnSuccessListener(aVoid ->
-                        Log.d("FAV", "Removed from favourites: " + crystalId))
-                .addOnFailureListener(e ->
-                        Log.e("FAV", "Error removing from favourites", e));
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(userId)
+                .update("favourites", FieldValue.arrayRemove(crystalId))
+                .addOnSuccessListener(aVoid -> Log.d("FAV", "Removed from favourites: " + crystalId))
+                .addOnFailureListener(e -> Log.e("FAV", "Error removing from favourites", e));
     }
 
     @Override

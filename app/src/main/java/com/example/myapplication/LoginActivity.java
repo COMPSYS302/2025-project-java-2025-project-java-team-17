@@ -10,91 +10,82 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
-  private static final String TAG = "LoginActivity";
-  private FirebaseAuth mAuth;
-  private EditText etLoginEmail;
-  private EditText etLoginPassword;
-  private Button btnLogin;
-  private TextView tvLoginError;
 
-  private ImageView ivBtnBack;
+    private FirebaseAuth mAuth;
+    private EditText etLoginEmail, etLoginPassword;
+    private Button btnLogin;
+    private TextView tvLoginError, title;
+    private ImageView ivBtnBack;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_login);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
 
-    mAuth = FirebaseAuth.getInstance();
+        initViews();
+        setupListeners();
+    }
 
-    etLoginEmail = findViewById(R.id.etLoginEmail);
-    etLoginPassword = findViewById(R.id.etLoginPassword);
-    btnLogin = findViewById(R.id.btnLogin);
-    tvLoginError = findViewById(R.id.tvLoginError);
+    private void initViews() {
+        mAuth = FirebaseAuth.getInstance();
 
-      TextView title = findViewById(R.id.tv_cart_title);
-      title.setText("Login");
+        etLoginEmail = findViewById(R.id.etLoginEmail);
+        etLoginPassword = findViewById(R.id.etLoginPassword);
+        btnLogin = findViewById(R.id.btnLogin);
+        tvLoginError = findViewById(R.id.tvLoginError);
+        title = findViewById(R.id.tv_cart_title);
+        ivBtnBack = findViewById(R.id.btn_back);
 
-      ivBtnBack = findViewById(R.id.btn_back);
+        title.setText("Login");
+    }
 
-      ivBtnBack.setOnClickListener(
-              v -> {
-                  finish();
-              });
+    private void setupListeners() {
+        ivBtnBack.setOnClickListener(v -> finish());
 
+        btnLogin.setOnClickListener(v -> {
+            String email = etLoginEmail.getText().toString().trim();
+            String password = etLoginPassword.getText().toString().trim();
 
+            boolean valid = true;
 
+            if (email.isEmpty()) {
+                etLoginEmail.setError("Email is required");
+                valid = false;
+            }
 
+            if (password.isEmpty()) {
+                etLoginPassword.setError("Password is required");
+                valid = false;
+            }
 
-      btnLogin.setOnClickListener(
-        v -> {
-          String email = etLoginEmail.getText().toString().trim();
-          String password = etLoginPassword.getText().toString().trim();
-
-          if (email.isEmpty()) {
-            etLoginEmail.setError("Email is Required");
-          }
-
-          if (password.isEmpty()) {
-            etLoginEmail.setError("Password is Required");
-          }
-
-          if (!password.isEmpty() && !email.isEmpty()) {
-
-            loginUser(email, password);
-          }
+            if (valid) {
+                loginUser(email, password);
+            }
         });
-  }
+    }
 
-  private void loginUser(String email, String password) {
-    mAuth
-        .signInWithEmailAndPassword(email, password)
-        .addOnCompleteListener(
-            this,
-            task -> {
-              if (task.isSuccessful()) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-              } else {
-                tvLoginError.setVisibility(View.VISIBLE);
+    private void loginUser(String email, String password) {
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
+                    } else {
+                        showLoginError();
+                    }
+                });
+    }
 
-                new Handler(Looper.getMainLooper())
-                    .postDelayed(
-                        new Runnable() {
-                          @Override
-                          public void run() {
-                            if (tvLoginError != null) {
-                              tvLoginError.setVisibility(View.GONE);
-                            }
-                          }
-                        },
-                        5000);
-              }
-            });
-  }
+    private void showLoginError() {
+        tvLoginError.setVisibility(View.VISIBLE);
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            if (tvLoginError != null) {
+                tvLoginError.setVisibility(View.GONE);
+            }
+        }, 5000);
+    }
 }

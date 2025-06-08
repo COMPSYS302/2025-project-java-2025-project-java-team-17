@@ -1,12 +1,10 @@
 package com.example.myapplication;
 
 import android.content.Intent;
-import android.os.Bundle;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import android.view.MenuItem;
+
 
 public class BaseActivity extends AppCompatActivity {
     protected void setupBottomNavigation(int selectedItemId) {

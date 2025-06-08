@@ -14,13 +14,11 @@ import com.example.myapplication.R;
 import java.util.List;
 
 public class CrystalImageAdapter extends RecyclerView.Adapter<CrystalImageAdapter.ViewHolder> {
-    private Context context;
-    private List<String> imageUrls;
 
-    private onClickListener listener;
-    private boolean isClickable;
-
-
+    private final Context context;
+    private final List<String> imageUrls;
+    private final boolean isClickable;
+    private final onClickListener listener;
 
     public interface onClickListener {
         void onClick(int position);
@@ -33,7 +31,6 @@ public class CrystalImageAdapter extends RecyclerView.Adapter<CrystalImageAdapte
         this.listener = listener;
     }
 
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
 
@@ -45,12 +42,9 @@ public class CrystalImageAdapter extends RecyclerView.Adapter<CrystalImageAdapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context)
-                .inflate(R.layout.crystal_image_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.crystal_image_item, parent, false);
         return new ViewHolder(view);
     }
-
-
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
@@ -59,14 +53,13 @@ public class CrystalImageAdapter extends RecyclerView.Adapter<CrystalImageAdapte
                 .placeholder(R.drawable.crystal)
                 .into(holder.imageView);
 
-        if(isClickable) {
+        if (isClickable) {
             holder.itemView.setOnClickListener(v -> {
                 if (listener != null) {
                     listener.onClick(position);
                 }
             });
-
-        }else{
+        } else {
             holder.itemView.setOnClickListener(null);
             holder.itemView.setClickable(false);
         }

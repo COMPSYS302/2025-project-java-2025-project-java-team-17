@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,55 +32,17 @@ public class CategoryActivity extends BaseActivity {
     private RecyclerView crystalGrid;
     private TextView noResultsMessage;
     private String categoryName;
-    private ImageView ivBtnBack;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
         setupBottomNavigation(R.id.nav_home);
-        TextView title = findViewById(R.id.tv_cart_title);
 
         categoryName = getIntent().getStringExtra("categoryName");
 
-        title.setText(categoryName);
-
-
-        crystalGrid = findViewById(R.id.crystalGrid);
-        crystalGrid.setLayoutManager(new GridLayoutManager(this, 2));
-
-
-
-        ivBtnBack = findViewById(R.id.btn_back);
-
-        ivBtnBack.setOnClickListener(
-                v -> {
-                    finish();
-                });
-
-        noResultsMessage = findViewById(R.id.noResultsMessage);
-
-        SearchView searchView = findViewById(R.id.searchView);
-        searchView.setQueryHint("Search for crystals...");
-        searchView.setIconified(false);
-        searchView.clearFocus();
-        searchView.setOnClickListener(v -> {
-            searchView.setIconified(false);
-            searchView.requestFocusFromTouch();
-        });
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                filterCrystals(newText);
-                return true;
-            }
-        });
+        setupUI();
+        setupSearchView();
 
         fetchFavouritesAndCrystals();
     }
@@ -89,7 +50,41 @@ public class CategoryActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        fetchFavouritesAndCrystals(); // re-fetch on resume
+        fetchFavouritesAndCrystals(); // Re-fetch on return
+    }
+
+    private void setupUI() {
+        TextView title = findViewById(R.id.tv_cart_title);
+        title.setText(categoryName);
+
+        ImageView ivBtnBack = findViewById(R.id.btn_back);
+        ivBtnBack.setOnClickListener(v -> finish());
+
+        noResultsMessage = findViewById(R.id.noResultsMessage);
+        crystalGrid = findViewById(R.id.crystalGrid);
+        crystalGrid.setLayoutManager(new GridLayoutManager(this, 2));
+    }
+
+    private void setupSearchView() {
+        SearchView searchView = findViewById(R.id.searchView);
+        searchView.setQueryHint("Search for crystals...");
+        searchView.setIconified(false);
+        searchView.clearFocus();
+
+        searchView.setOnClickListener(v -> {
+            searchView.setIconified(false);
+            searchView.requestFocusFromTouch();
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override public boolean onQueryTextSubmit(String query) { return false; }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filterCrystals(newText);
+                return true;
+            }
+        });
     }
 
     private void fetchFavouritesAndCrystals() {
@@ -98,7 +93,8 @@ public class CategoryActivity extends BaseActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (currentUser != null) {
-            db.collection("users").document(currentUser.getUid()).get()
+            db.collection("users").document(currentUser.getUid())
+                    .get()
                     .addOnSuccessListener(document -> {
                         List<String> ids = (List<String>) document.get("favourites");
                         if (ids != null) favouriteIds.addAll(ids);
@@ -121,9 +117,7 @@ public class CategoryActivity extends BaseActivity {
                     crystalList.clear();
                     for (DocumentSnapshot doc : querySnapshot) {
                         Crystal crystal = doc.toObject(Crystal.class);
-                        if (crystal != null) {
-                            crystalList.add(crystal);
-                        }
+                        if (crystal != null) crystalList.add(crystal);
                     }
                     noResultsMessage.setVisibility(View.GONE);
                     setupAdapter(crystalList);
@@ -132,12 +126,20 @@ public class CategoryActivity extends BaseActivity {
     }
 
     private void setupAdapter(List<Crystal> displayList) {
-        adapter = new CrystalAdapter(this, displayList, favouriteIds, false, crystal -> {
-            Log.d("CategoryActivity", "Launching DetailActivity for crystal: " + crystal.getId());
-            Intent intent = new Intent(this, DetailActivity.class);
-            intent.putExtra("crystalId", crystal.getId());
-            startActivity(intent);
-        }, null);
+        adapter = new CrystalAdapter(
+                this,
+                displayList,
+                favouriteIds,
+                false,
+                crystal -> {
+                    Log.d("CategoryActivity", "Launching DetailActivity for crystal: " + crystal.getId());
+                    Intent intent = new Intent(this, DetailActivity.class);
+                    intent.putExtra("crystalId", crystal.getId());
+                    startActivity(intent);
+                },
+                null
+        );
+
         crystalGrid.setAdapter(adapter);
         LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_fade_in);
         crystalGrid.setLayoutAnimation(animation);
@@ -147,23 +149,14 @@ public class CategoryActivity extends BaseActivity {
     private void filterCrystals(String query) {
         List<Crystal> filtered = new ArrayList<>();
         for (Crystal crystal : crystalList) {
-            if (crystal.getName().toLowerCase().contains(query.toLowerCase()) ||
-                    (crystal.getTags() != null && crystal.getTags().stream().anyMatch(tag -> tag.toLowerCase().contains(query.toLowerCase())))) {
-                filtered.add(crystal);
-            }
+            boolean nameMatch = crystal.getName().toLowerCase().contains(query.toLowerCase());
+            boolean tagMatch = crystal.getTags() != null &&
+                    crystal.getTags().stream().anyMatch(tag -> tag.toLowerCase().contains(query.toLowerCase()));
+
+            if (nameMatch || tagMatch) filtered.add(crystal);
         }
 
-        adapter = new CrystalAdapter(this, filtered, favouriteIds, false, crystal -> {
-            Intent intent = new Intent(this, DetailActivity.class);
-            intent.putExtra("crystalId", crystal.getId());
-            startActivity(intent);
-        }, null);
-
-
-        crystalGrid.setAdapter(adapter);
-
+        setupAdapter(filtered);
         noResultsMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
     }
-
-
 }

@@ -4,14 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-
 public class ProfileActivity extends BaseActivity {
 
     private ImageView ivBtnBack;
+    private TextView tvUsername, tvEmail, tvFavourites, tvTerms, tvPrivacy, tvCart, tvLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,44 +21,29 @@ public class ProfileActivity extends BaseActivity {
         setupBottomNavigation(R.id.nav_profile);
 
         TextView title = findViewById(R.id.tv_cart_title);
-
         title.setText("Profile");
 
+        // Initialize views
+        ivBtnBack     = findViewById(R.id.btn_back);
+        tvUsername    = findViewById(R.id.tvUsername);
+        tvEmail       = findViewById(R.id.tvEmail);
+        tvFavourites  = findViewById(R.id.tvFavourites);
+        tvTerms       = findViewById(R.id.tvTerms);
+        tvPrivacy     = findViewById(R.id.tvPrivacy);
+        tvCart        = findViewById(R.id.tvCart);
+        tvLogout      = findViewById(R.id.tvLogout);
 
-        ivBtnBack = findViewById(R.id.btn_back);
+        // Back navigation
+        ivBtnBack.setOnClickListener(v -> finish());
 
-        ivBtnBack.setOnClickListener(
-                v -> {
-                    finish();
-                });
+        // Set up click listeners
+        tvFavourites.setOnClickListener(v -> launchActivity(FavouritesActivity.class));
+        tvTerms.setOnClickListener(v -> launchActivity(TermsActivity.class));
+        tvPrivacy.setOnClickListener(v -> launchActivity(PrivacyPolicyActivity.class));
+        tvCart.setOnClickListener(v -> launchActivity(CartActivity.class));
+        tvLogout.setOnClickListener(v -> logout());
 
-        TextView tvUsername = findViewById(R.id.tvUsername);
-        TextView tvEmail = findViewById(R.id.tvEmail);
-        TextView tvFavourites = findViewById(R.id.tvFavourites);
-        tvFavourites.setOnClickListener(v -> {
-            Intent intent = new Intent(ProfileActivity.this, FavouritesActivity.class);
-            startActivity(intent);
-        });
-
-        TextView tvTerms = findViewById(R.id.tvTerms);
-        tvTerms.setOnClickListener(v -> {
-            Intent intent = new Intent(ProfileActivity.this, TermsActivity.class);
-            startActivity(intent);
-        });
-
-        TextView tvPrivacy = findViewById(R.id.tvPrivacy);
-        tvPrivacy.setOnClickListener(v -> {
-            Intent intent = new Intent(ProfileActivity.this, PrivacyPolicyActivity.class);
-            startActivity(intent);
-        });
-
-
-        TextView tvCart = findViewById(R.id.tvCart);
-        tvCart.setOnClickListener(v -> {
-            Intent intent = new Intent(ProfileActivity.this, CartActivity.class);
-            startActivity(intent);
-        });
-
+        // Load and display user info
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             String uid = currentUser.getUid();
@@ -73,17 +59,18 @@ public class ProfileActivity extends BaseActivity {
                         tvEmail.setText(email != null ? email : "Email");
                     });
         }
+    }
 
-        TextView tvLogout = findViewById(R.id.tvLogout);
-        tvLogout.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();  // Sign out the user
+    private void launchActivity(Class<?> cls) {
+        startActivity(new Intent(ProfileActivity.this, cls));
+    }
 
-            // Go back to login screen
-            Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clears back stack
-            startActivity(intent);
-            finish();  // Finish profile activity
-        });
+    private void logout() {
+        FirebaseAuth.getInstance().signOut();
 
+        Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear back stack
+        startActivity(intent);
+        finish();
     }
 }
