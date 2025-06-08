@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.myapplication.R;
 import com.example.myapplication.models.Crystal;
 import com.google.firebase.auth.FirebaseAuth;
@@ -79,6 +81,9 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Crystal crystal = crystalList.get(position);
+
+        Glide.with(context).load(crystal.getImageUrls()).apply(new RequestOptions()).fitCenter()
+                        .into(holder.crystalImage);
 
         holder.crystalName.setText(crystal.getName());
         holder.crystalPrice.setText("NZD " + (int) crystal.getPrice());
