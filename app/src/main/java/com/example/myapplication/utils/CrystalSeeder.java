@@ -523,7 +523,6 @@ public class CrystalSeeder {
 
     }
 
-
     private static void seedSingleCrystalIfMissing(Crystal crystal) {
         db.collection("crystals").document(crystal.getId())
                 .get()

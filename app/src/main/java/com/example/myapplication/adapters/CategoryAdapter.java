@@ -12,16 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.myapplication.R;
 import com.example.myapplication.models.Category;
-import com.example.myapplication.models.Crystal;
 
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
 
-    private Context context;
-    private List<Category> categoryList;
-
-    private View.OnClickListener clickListener;
+    private final Context context;
+    private final List<Category> categoryList;
+    private final View.OnClickListener clickListener;
 
     public CategoryAdapter(Context context, List<Category> categoryList, View.OnClickListener clickListener) {
         this.context = context;
@@ -30,8 +28,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView categoryTitle;
-        ImageView categoryImage;
+        final TextView categoryTitle;
+        final ImageView categoryImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -41,7 +39,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     }
 
     @Override
-    public CategoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.category_card_item, parent, false);
         view.setOnClickListener(clickListener);
         return new ViewHolder(view);
