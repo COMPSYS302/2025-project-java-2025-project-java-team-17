@@ -2,9 +2,8 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.TextView;
 
+import com.example.myapplication.databinding.ActivityProfileBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -18,9 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
  */
 public class ProfileActivity extends BaseActivity {
 
-    // UI Elements
-    private ImageView ivBtnBack;
-    private TextView tvUsername, tvEmail, tvFavourites, tvTerms, tvPrivacy, tvCart, tvLogout;
+    private ActivityProfileBinding binding;
 
     /**
      * Called when the activity is first created.
@@ -37,33 +34,23 @@ public class ProfileActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        binding = ActivityProfileBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         // Initialize the bottom navigation, highlighting the "profile" tab.
         setupBottomNavigation(R.id.nav_profile);
 
         // Set the title of the screen.
-        TextView title = findViewById(R.id.tv_cart_title);
-        title.setText("Profile");
-
-        // Initialize UI views
-        ivBtnBack = findViewById(R.id.btn_back);
-        tvUsername = findViewById(R.id.tvUsername);
-        tvEmail = findViewById(R.id.tvEmail);
-        tvFavourites = findViewById(R.id.tvFavourites);
-        tvTerms = findViewById(R.id.tvTerms);
-        tvPrivacy = findViewById(R.id.tvPrivacy);
-        tvCart = findViewById(R.id.tvCart);
-        tvLogout = findViewById(R.id.tvLogout);
-
+        binding.includeTopBar.tvCartTitle.setText("Profile");
         // Set up back navigation
-        ivBtnBack.setOnClickListener(v -> finish()); // Finish current activity to go back
+        binding.includeTopBar.btnBack.setOnClickListener(v -> finish());
 
         // Set up click listeners for navigation TextViews
-        tvFavourites.setOnClickListener(v -> launchActivity(FavouritesActivity.class));
-        tvTerms.setOnClickListener(v -> launchActivity(TermsActivity.class));
-        tvPrivacy.setOnClickListener(v -> launchActivity(PrivacyPolicyActivity.class));
-        tvCart.setOnClickListener(v -> launchActivity(CartActivity.class));
-        tvLogout.setOnClickListener(v -> logout()); // Handle logout process
+        binding.tvFavourites.setOnClickListener(v -> launchActivity(FavouritesActivity.class));
+        binding.tvTerms.setOnClickListener(v -> launchActivity(TermsActivity.class));
+        binding.tvPrivacy.setOnClickListener(v -> launchActivity(PrivacyPolicyActivity.class));
+        binding.tvCart.setOnClickListener(v -> launchActivity(CartActivity.class));
+        binding.tvLogout.setOnClickListener(v -> logout()); // Handle logout process
 
         // Load and display user information if a user is logged in
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -80,26 +67,24 @@ public class ProfileActivity extends BaseActivity {
                             String email = document.getString("email");
 
                             // Display fetched username or default if null
-                            tvUsername.setText(username != null ? username : "Username");
+                            binding.tvUsername.setText(username != null ? username : "Username");
                             // Display fetched email or default if null
-                            tvEmail.setText(email != null ? email : "Email");
+                            binding.tvEmail.setText(email != null ? email : "Email");
                         } else {
                             // Document doesn't exist, use default values
-                            tvUsername.setText("Username");
-                            tvEmail.setText("Email");
+                            binding.tvUsername.setText("Username");
+                            binding.tvEmail.setText("Email");
                         }
                     })
                     .addOnFailureListener(e -> {
                         // Handle failure to fetch user data, e.g., log error or show default
-                        tvUsername.setText("Username");
-                        tvEmail.setText("Email");
-                        // Log.e("ProfileActivity", "Error fetching user data", e);
+                        binding.tvUsername.setText("Username");
+                        binding.tvEmail.setText("Email");
                     });
         } else {
             // No user is logged in, display default values
-            // This case might not be reached if the activity is protected and requires login
-            tvUsername.setText("Username");
-            tvEmail.setText("Email");
+            binding.tvUsername.setText("Username");
+            binding.tvEmail.setText("Email");
         }
     }
 

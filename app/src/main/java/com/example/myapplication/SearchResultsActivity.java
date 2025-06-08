@@ -6,14 +6,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.adapters.CrystalAdapter;
+import com.example.myapplication.databinding.ActivitySearchResultsBinding;
 import com.example.myapplication.models.Crystal;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,11 +32,9 @@ public class SearchResultsActivity extends BaseActivity {
     private List<Crystal> crystalList = new ArrayList<>();
     private List<String> favouriteIds = new ArrayList<>();
     private CrystalAdapter adapter;
-    private RecyclerView recyclerView;
-    private SearchView searchView;
     private String queryFromIntent;
-    private TextView noResultsMessage;
 
+    private ActivitySearchResultsBinding binding;
 
     /**
      * Called when the activity is first created.
@@ -55,20 +51,19 @@ public class SearchResultsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_results);
+        binding = ActivitySearchResultsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
         // Initialize the bottom navigation, highlighting the "home" tab.
         setupBottomNavigation(R.id.nav_home);
 
         initViews();
-        // Get the search query passed from the previous activity.
         queryFromIntent = getIntent().getStringExtra("query");
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
-            // If user is logged in, fetch their favourites first, then all crystals.
             fetchFavouritesThenCrystals(currentUser.getUid());
         } else {
-            // If user is not logged in, fetch all crystals directly.
             fetchAllCrystals(queryFromIntent);
         }
 
@@ -80,20 +75,12 @@ public class SearchResultsActivity extends BaseActivity {
      * This includes the SearchView, title TextView, RecyclerView, and back button.
      */
     private void initViews() {
-        searchView = findViewById(R.id.searchView);
-        TextView title = findViewById(R.id.tv_cart_title);
-        noResultsMessage = findViewById(R.id.noResultsMessage); // TextView to show when no results are found.
+        binding.includeTopBar.tvCartTitle.setText("Search Results");
+        binding.includeTopBar.btnBack.setOnClickListener(v -> finish());
 
-        title.setText("Search Results");
-
-        ImageView ivBtnBack = findViewById(R.id.btn_back);
-        ivBtnBack.setOnClickListener(v -> finish()); // Finish activity when back button is pressed.
-
-        recyclerView = findViewById(R.id.searchRecycler);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // Display items in a 2-column grid.
-        searchView.setQueryHint("Search for crystals...");
-        searchView.setIconifiedByDefault(false); // Expand the search view by default.
-
+        binding.searchRecycler.setLayoutManager(new GridLayoutManager(this, 2));
+        binding.searchView.setQueryHint("Search for crystals...");
+        binding.searchView.setIconifiedByDefault(false);
     }
 
     /**
@@ -111,10 +98,9 @@ public class SearchResultsActivity extends BaseActivity {
                     if (favs != null) {
                         favouriteIds.addAll(favs);
                     }
-                    // After fetching favourites, fetch all crystals and apply the initial query.
                     fetchAllCrystals(queryFromIntent);
                 })
-                .addOnFailureListener(e -> Log.e("SearchActivity", "Error fetching user favourites", e)); // Log error if fetching favourites fails.
+                .addOnFailureListener(e -> Log.e("SearchActivity", "Error fetching user favourites", e));
     }
 
     /**
@@ -128,7 +114,7 @@ public class SearchResultsActivity extends BaseActivity {
         FirebaseFirestore.getInstance().collection("crystals")
                 .get()
                 .addOnSuccessListener(snapshot -> {
-                    crystalList.clear(); // Clear existing list before adding new data.
+                    crystalList.clear();
                     for (DocumentSnapshot doc : snapshot) {
                         Crystal crystal = doc.toObject(Crystal.class);
                         if (crystal != null) {
@@ -136,16 +122,16 @@ public class SearchResultsActivity extends BaseActivity {
                         }
                     }
 
-                    setupAdapter(); // Setup the RecyclerView adapter with the fetched data.
-                    // If an initial query was passed, apply it.
+                    setupAdapter();
+
                     if (queryToFilter != null && !queryToFilter.isEmpty()) {
-                        searchView.setQuery(queryToFilter, false); // Set the query in the SearchView but don't submit.
-                        filterCrystals(queryToFilter); // Apply the filter.
+                        binding.searchView.setQuery(queryToFilter, false);
+                        filterCrystals(queryToFilter);
                     } else {
-                        adapter.notifyDataSetChanged(); // If no initial query, just update the adapter.
+                        adapter.notifyDataSetChanged();
                     }
                 })
-                .addOnFailureListener(e -> Log.e("SearchActivity", "Error fetching crystals", e)); // Log error if fetching crystals fails.
+                .addOnFailureListener(e -> Log.e("SearchActivity", "Error fetching crystals", e));
     }
 
     /**
@@ -155,28 +141,25 @@ public class SearchResultsActivity extends BaseActivity {
      */
     private void setupAdapter() {
         adapter = new CrystalAdapter(this, crystalList, favouriteIds, false, false, crystal -> {
-            // When a crystal is clicked, open DetailActivity with the crystal's ID.
             Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtra("crystalId", crystal.getId());
             startActivity(intent);
-        }, null); // The last parameter is for a favourite button click listener, null here.
-        recyclerView.setAdapter(adapter);
+        }, null);
+        binding.searchRecycler.setAdapter(adapter);
     }
 
     /**
      * Sets up the listener for the SearchView to filter crystals as the user types.
      */
     private void setupSearchListener() {
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // Submission is handled by onQueryTextChange, so return false.
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                // Filter the crystal list based on the new text.
                 filterCrystals(newText);
                 return true;
             }
@@ -193,7 +176,6 @@ public class SearchResultsActivity extends BaseActivity {
      */
     private void filterCrystals(String query) {
         List<Crystal> filtered = new ArrayList<>();
-        // Iterate through all crystals and add matching ones to the filtered list.
         for (Crystal crystal : crystalList) {
             if (crystal.getName().toLowerCase().contains(query.toLowerCase()) ||
                     (crystal.getTags() != null &&
@@ -202,30 +184,24 @@ public class SearchResultsActivity extends BaseActivity {
             }
         }
 
-        // Show or hide the "no results" message based on whether the filtered list is empty.
         if (filtered.isEmpty()) {
-            noResultsMessage.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
+            binding.noResultsMessage.setVisibility(View.VISIBLE);
+            binding.searchRecycler.setVisibility(View.GONE);
         } else {
-            noResultsMessage.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
+            binding.noResultsMessage.setVisibility(View.GONE);
+            binding.searchRecycler.setVisibility(View.VISIBLE);
         }
 
-        // Create a new adapter with the filtered list and update the RecyclerView.
-        // It's important to re-create the adapter here if its internal list doesn't update dynamically
-        // or to have a method in the adapter to update its list and call notifyDataSetChanged.
-        // For simplicity in this example, a new adapter is created.
         adapter = new CrystalAdapter(this, filtered, favouriteIds, false, false, crystal -> {
             Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtra("crystalId", crystal.getId());
             startActivity(intent);
         }, null);
-        recyclerView.setAdapter(adapter);
+        binding.searchRecycler.setAdapter(adapter);
 
-        // Apply a layout animation for a smooth appearance of items.
         LayoutAnimationController controller =
                 AnimationUtils.loadLayoutAnimation(this, R.anim.layout_fade_in);
-        recyclerView.setLayoutAnimation(controller);
-        recyclerView.scheduleLayoutAnimation();
+        binding.searchRecycler.setLayoutAnimation(controller);
+        binding.searchRecycler.scheduleLayoutAnimation();
     }
 }
