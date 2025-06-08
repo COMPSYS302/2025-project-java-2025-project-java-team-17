@@ -130,7 +130,7 @@ public class CategoryActivity extends BaseActivity {
                 this,
                 displayList,
                 favouriteIds,
-                false,
+                false, false,
                 crystal -> {
                     Log.d("CategoryActivity", "Launching DetailActivity for crystal: " + crystal.getId());
                     Intent intent = new Intent(this, DetailActivity.class);

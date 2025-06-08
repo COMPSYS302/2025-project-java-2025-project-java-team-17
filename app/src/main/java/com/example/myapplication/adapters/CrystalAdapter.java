@@ -1,6 +1,7 @@
 package com.example.myapplication.adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,8 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
     private final List<Crystal> crystalList;
     private final List<String> userFavourites;
     private final boolean isFavouritesView;
+
+    private final boolean isHorizontalGrid;
     private final onClickListener listener;
     private final OnCartClickListener cartClickListener;
 
@@ -42,13 +45,14 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
     }
 
     public CrystalAdapter(Context context, List<Crystal> crystalList, List<String> userFavourites,
-                          boolean isFavouritesView,
+                          boolean isFavouritesView, boolean isHorizontalGrid,
                           onClickListener listener,
                           OnCartClickListener cartClickListener) {
         this.context = context;
         this.crystalList = crystalList;
         this.userFavourites = userFavourites;
         this.isFavouritesView = isFavouritesView;
+        this.isHorizontalGrid = isHorizontalGrid;
         this.listener = listener;
         this.cartClickListener = cartClickListener;
         setHasStableIds(true);
@@ -80,6 +84,14 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+
+        if(isHorizontalGrid) {
+            int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+            ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
+            params.width = screenWidth / 2;
+            holder.itemView.setLayoutParams(params);
+        }
+
         Crystal crystal = crystalList.get(position);
 
         Glide.with(context).load(crystal.getImageUrls()).apply(new RequestOptions()).fitCenter()

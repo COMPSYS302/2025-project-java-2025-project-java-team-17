@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.adapters.CrystalAdapter;
@@ -89,7 +90,9 @@ public class DetailActivity extends BaseActivity {
 
     private void setupRecyclerViews() {
         binding.crystalImages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        binding.similarProducts.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        binding.similarProducts.setLayoutManager(
+                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        );
     }
 
     private void setupClickListeners() {
@@ -306,7 +309,7 @@ public class DetailActivity extends BaseActivity {
     }
 
     private void setupSimilarProductsAdapter() {
-        similarProductsAdapter = new CrystalAdapter(this, similarCrystals, favouriteIds, false, crystal -> {
+        similarProductsAdapter = new CrystalAdapter(this, similarCrystals, favouriteIds, false, true,crystal -> {
             Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtra("crystalId", crystal.getId());
             startActivity(intent);

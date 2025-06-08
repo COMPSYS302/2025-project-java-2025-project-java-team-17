@@ -72,7 +72,7 @@ public class FavouritesActivity extends BaseActivity {
                 this,
                 favouriteCrystals,
                 favouriteIds,
-                true,
+                true, false,
                 crystal -> {},  // No click for now
                 this::addToCart
         );
