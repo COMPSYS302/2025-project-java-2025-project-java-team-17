@@ -103,7 +103,7 @@ public class SearchResultsActivity extends BaseActivity {
     }
 
     private void setupAdapter() {
-        adapter = new CrystalAdapter(this, crystalList, favouriteIds, false, crystal -> {
+        adapter = new CrystalAdapter(this, crystalList, favouriteIds, false, false, crystal -> {
             Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtra("crystalId", crystal.getId());
             startActivity(intent);
@@ -140,7 +140,7 @@ public class SearchResultsActivity extends BaseActivity {
             recyclerView.setVisibility(View.VISIBLE);
         }
 
-        adapter = new CrystalAdapter(this, filtered, favouriteIds, false, crystal -> {
+        adapter = new CrystalAdapter(this, filtered, favouriteIds, false, false, crystal -> {
             Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtra("crystalId", crystal.getId());
             startActivity(intent);
