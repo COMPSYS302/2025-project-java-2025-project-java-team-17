@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,7 +17,6 @@ import com.example.myapplication.R;
 import com.example.myapplication.models.Crystal;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -51,6 +49,7 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
         this.isFavouritesView = isFavouritesView;
         this.listener = listener;
         this.cartClickListener = cartClickListener;
+        setHasStableIds(true);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -94,13 +93,16 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
             holder.wishlistIcon.setImageResource(R.drawable.close_button);
             holder.wishlistIcon.setOnClickListener(v -> {
                 if (currentUser != null) {
-                    String userId = currentUser.getUid();
-                    removeFromFavourites(userId, crystal.getId());
-                    userFavourites.remove(crystal.getId());
-                    crystalList.remove(position);
-                    notifyItemRemoved(position);
-                    Toast.makeText(context, "Removed from favourites", Toast.LENGTH_SHORT).show();
-                    holder.wishlistIcon.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_pulse));
+                    int adapterPosition = holder.getAdapterPosition();
+                    if (adapterPosition != RecyclerView.NO_POSITION) {
+                        String userId = currentUser.getUid();
+                        removeFromFavourites(userId, crystal.getId());
+                        userFavourites.remove(crystal.getId());
+                        crystalList.remove(adapterPosition);
+                        notifyItemRemoved(adapterPosition);
+                        Toast.makeText(context, "Removed from favourites", Toast.LENGTH_SHORT).show();
+                        holder.wishlistIcon.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_pulse));
+                    }
                 }
             });
 
@@ -121,24 +123,27 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
 
             holder.wishlistIcon.setOnClickListener(v -> {
                 if (currentUser != null) {
-                    String userId = currentUser.getUid();
-                    boolean isNowFavourited = userFavourites.contains(crystal.getId());
+                    int adapterPosition = holder.getAdapterPosition();
+                    if (adapterPosition != RecyclerView.NO_POSITION) {
+                        String userId = currentUser.getUid();
+                        boolean isNowFavourited = userFavourites.contains(crystal.getId());
 
-                    if (isNowFavourited) {
-                        removeFromFavourites(userId, crystal.getId());
-                        userFavourites.remove(crystal.getId());
-                        holder.wishlistIcon.setImageResource(R.drawable.heart_outline);
-                        Toast.makeText(context, "Removed from favourites", Toast.LENGTH_SHORT).show();
-                        holder.wishlistIcon.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_pulse));
-                    } else {
-                        addToFavourites(userId, crystal.getId());
-                        userFavourites.add(crystal.getId());
-                        holder.wishlistIcon.setImageResource(R.drawable.purple_heart);
-                        Toast.makeText(context, "Added to favourites", Toast.LENGTH_SHORT).show();
-                        holder.wishlistIcon.startAnimation(AnimationUtils.loadAnimation(context, R.anim.pop));
+                        if (isNowFavourited) {
+                            removeFromFavourites(userId, crystal.getId());
+                            userFavourites.remove(crystal.getId());
+                            holder.wishlistIcon.setImageResource(R.drawable.heart_outline);
+                            Toast.makeText(context, "Removed from favourites", Toast.LENGTH_SHORT).show();
+                            holder.wishlistIcon.startAnimation(AnimationUtils.loadAnimation(context, R.anim.fade_pulse));
+                        } else {
+                            addToFavourites(userId, crystal.getId());
+                            userFavourites.add(crystal.getId());
+                            holder.wishlistIcon.setImageResource(R.drawable.purple_heart);
+                            Toast.makeText(context, "Added to favourites", Toast.LENGTH_SHORT).show();
+                            holder.wishlistIcon.startAnimation(AnimationUtils.loadAnimation(context, R.anim.pop));
+                        }
+
+                        notifyItemChanged(adapterPosition);
                     }
-
-                    notifyItemChanged(holder.getAdapterPosition());
                 } else {
                     Toast.makeText(context, "Please log in to use favourites", Toast.LENGTH_SHORT).show();
                 }
@@ -173,5 +178,10 @@ public class CrystalAdapter extends RecyclerView.Adapter<CrystalAdapter.ViewHold
     @Override
     public int getItemCount() {
         return crystalList.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return crystalList.get(position).getId().hashCode();
     }
 }
