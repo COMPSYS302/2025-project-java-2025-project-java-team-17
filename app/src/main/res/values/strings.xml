@@ -2,5 +2,6 @@
     <string name="app_name">My Application</string>
     <string name="title_activity_splash">Splash Screen</string>
     <string name="crystal_location">New Zealand</string>
+    <string name="similar_products">Similar Products</string>
 
 </resources>
