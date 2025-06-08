@@ -11,9 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.PagerSnapHelper;
+import androidx.recyclerview.widget.SnapHelper;
+
 import com.example.myapplication.adapters.CrystalAdapter;
 import com.example.myapplication.adapters.CrystalImageAdapter;
 import com.example.myapplication.databinding.ActivityDetailBinding;
@@ -25,6 +27,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -157,6 +160,8 @@ public class DetailActivity extends BaseActivity {
         if (imageUrls != null && !imageUrls.isEmpty()) {
             CrystalImageAdapter imageAdapter = new CrystalImageAdapter(this, imageUrls, false, null);
             binding.crystalImages.setAdapter(imageAdapter);
+            SnapHelper snapHelper = new PagerSnapHelper();
+            snapHelper.attachToRecyclerView(binding.crystalImages);
             setupDotsIndicator(imageUrls.size());
         }
         binding.crystalName.setText(crystal.getName());

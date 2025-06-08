@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,6 +14,8 @@ import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.PagerSnapHelper;
+import androidx.recyclerview.widget.SnapHelper;
 
 import com.example.myapplication.adapters.CategoryAdapter;
 import com.example.myapplication.adapters.CrystalImageAdapter;
@@ -60,6 +61,8 @@ public class MainActivity extends BaseActivity {
         crystalPriceBar = findViewById(R.id.crystalPriceBar);
         RecyclerView crystalImages = findViewById(R.id.crystalImages);
         crystalImages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        crystalImages.setHorizontalScrollBarEnabled(false);
+
 
         setupTopCrystals(crystalImages);
         setupCategories();
@@ -103,6 +106,8 @@ public class MainActivity extends BaseActivity {
                     }
                 });
                 crystalImages.setAdapter(adapter);
+                SnapHelper snapHelper = new PagerSnapHelper();
+                snapHelper.attachToRecyclerView(crystalImages);
                 setupDotsIndicator(topImages.size(), crystalImages);
             }
         }).addOnFailureListener(e -> Log.e("MainActivity", "Error loading crystals", e));
