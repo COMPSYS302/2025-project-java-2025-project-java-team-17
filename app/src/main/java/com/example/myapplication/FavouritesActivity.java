@@ -24,6 +24,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Displays a list of crystals the user has marked as favourites.
+ * Users can also add these items to their cart or clear all favourites.
+ */
 public class FavouritesActivity extends BaseActivity {
 
     private RecyclerView recyclerView;
@@ -39,6 +43,8 @@ public class FavouritesActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourites);
+
+        // Set bottom nav state
         setupBottomNavigation(R.id.nav_profile);
 
         db = FirebaseFirestore.getInstance();
@@ -49,6 +55,9 @@ public class FavouritesActivity extends BaseActivity {
         loadFavouritesFromFirestore();
     }
 
+    /**
+     * Initializes toolbar buttons and empty message placeholder.
+     */
     private void initViews() {
         TextView title = findViewById(R.id.tv_cart_title);
         title.setText("Favourites");
@@ -64,6 +73,9 @@ public class FavouritesActivity extends BaseActivity {
         emptyMessage.setVisibility(View.GONE);
     }
 
+    /**
+     * Configures the favourites RecyclerView with a grid layout and adapter.
+     */
     private void setupRecyclerView() {
         recyclerView = findViewById(R.id.favouritesRecycler);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
@@ -72,14 +84,18 @@ public class FavouritesActivity extends BaseActivity {
                 this,
                 favouriteCrystals,
                 favouriteIds,
-                true, false,
-                crystal -> {},  // No click for now
-                this::addToCart
+                true,  // This is a favourite view
+                false, // Not for main home view
+                crystal -> {},  // No click action defined
+                this::addToCart // Add to cart from favourite
         );
 
         recyclerView.setAdapter(adapter);
     }
 
+    /**
+     * Loads the list of favourite crystal IDs from Firestore.
+     */
     private void loadFavouritesFromFirestore() {
         if (currentUser == null) return;
 
@@ -99,6 +115,9 @@ public class FavouritesActivity extends BaseActivity {
                 .addOnFailureListener(e -> Log.e("FavouritesActivity", "Failed to load favourites", e));
     }
 
+    /**
+     * Fetches full crystal data from Firestore for the given list of IDs.
+     */
     private void fetchCrystalsByIds(List<String> ids) {
         db.collection("crystals")
                 .whereIn("id", ids)
@@ -120,9 +139,13 @@ public class FavouritesActivity extends BaseActivity {
                 .addOnFailureListener(e -> Log.e("FavouritesActivity", "Failed to load crystals", e));
     }
 
+    /**
+     * Updates the RecyclerView with new data and triggers animations.
+     */
     private void updateRecyclerView() {
         adapter.notifyDataSetChanged();
 
+        // Apply layout animation for a smoother entry
         LayoutAnimationController animation =
                 AnimationUtils.loadLayoutAnimation(this, R.anim.layout_fade_in);
         recyclerView.setLayoutAnimation(animation);
@@ -131,21 +154,28 @@ public class FavouritesActivity extends BaseActivity {
         recyclerView.setVisibility(View.VISIBLE);
         emptyMessage.setVisibility(View.GONE);
 
+        // Add spacing between items
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
                 if (parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1) {
-                    outRect.bottom = 16; // Spacing in pixels
+                    outRect.bottom = 16; // 16 pixels of spacing
                 }
             }
         });
     }
 
+    /**
+     * Shows the empty state message if no favourites exist.
+     */
     private void showEmptyState() {
         emptyMessage.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
     }
 
+    /**
+     * Clears the entire list of favourites for the current user.
+     */
     private void clearFavourites() {
         if (currentUser == null) return;
 
@@ -161,6 +191,11 @@ public class FavouritesActivity extends BaseActivity {
                 .addOnFailureListener(e -> Log.e("FavouritesActivity", "Failed to clear favourites", e));
     }
 
+    /**
+     * Adds a given crystal to the user's cart, incrementing quantity if it already exists.
+     *
+     * @param crystal The crystal to add to cart
+     */
     private void addToCart(Crystal crystal) {
         if (currentUser == null) return;
 
@@ -173,6 +208,7 @@ public class FavouritesActivity extends BaseActivity {
                 .get()
                 .addOnSuccessListener(doc -> {
                     int newQuantity = 1;
+
                     if (doc.exists()) {
                         Long existingQty = doc.getLong("quantity");
                         if (existingQty != null) {

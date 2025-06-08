@@ -33,6 +33,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Activity that shows detailed information about a specific crystal.
+ * Includes images, description, price, cart functionality, favorites, and similar items.
+ */
 public class DetailActivity extends BaseActivity {
 
     private ActivityDetailBinding binding;
@@ -80,38 +84,49 @@ public class DetailActivity extends BaseActivity {
         fetchUserFavourites();
     }
 
+    /**
+     * Initializes Firebase Authentication and Firestore instances.
+     */
     private void setupFirebase() {
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
     }
 
+    /**
+     * Sets up toolbar back button and title.
+     */
     private void setupToolbar() {
         binding.includeTopBar.tvCartTitle.setText("");
         binding.includeTopBar.btnBack.setOnClickListener(v -> finish());
     }
 
+    /**
+     * Configures the layout managers for RecyclerViews in the activity.
+     */
     private void setupRecyclerViews() {
         binding.crystalImages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        binding.similarProducts.setLayoutManager(
-                new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        );
+        binding.similarProducts.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     }
 
+    /**
+     * Attaches click listeners to interactive buttons.
+     */
     private void setupClickListeners() {
         binding.wishlistButton.setOnClickListener(v -> toggleFavoriteStatus());
         binding.goToCartButton.setOnClickListener(v -> startActivity(new Intent(this, CartActivity.class)));
-
         binding.cartButton.setOnClickListener(v -> {
             if (currentUser != null) {
                 addToCart();
             }
         });
-
         binding.decreaseQuantityButton.setOnClickListener(v -> updateQuantityInCart(-1));
         binding.increaseQuantityButton.setOnClickListener(v -> updateQuantityInCart(1));
     }
 
+    /**
+     * Loads the current user's favorite status for this crystal.
+     */
     private void loadFavoriteStatus() {
         if (currentUser == null) return;
 
@@ -126,6 +141,9 @@ public class DetailActivity extends BaseActivity {
                 .addOnFailureListener(e -> Toast.makeText(this, "Failed to load favourites", Toast.LENGTH_SHORT).show());
     }
 
+    /**
+     * Toggles the crystal's favorite status for the current user.
+     */
     private void toggleFavoriteStatus() {
         if (currentUser == null) {
             Toast.makeText(this, "Please log in to use favourites", Toast.LENGTH_SHORT).show();
@@ -143,6 +161,9 @@ public class DetailActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Fetches the crystal data from Firestore and displays it.
+     */
     private void loadCrystalData() {
         db.collection("crystals").document(crystalId).get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -155,35 +176,50 @@ public class DetailActivity extends BaseActivity {
                 });
     }
 
+    /**
+     * Displays all crystal data on the screen including images, description, and price.
+     */
     private void displayCrystalData(Crystal crystal) {
         List<String> imageUrls = crystal.getImageUrls();
         if (imageUrls != null && !imageUrls.isEmpty()) {
             CrystalImageAdapter imageAdapter = new CrystalImageAdapter(this, imageUrls, false, null);
             binding.crystalImages.setAdapter(imageAdapter);
+
+            // Attach snapping behavior for clean swiping
             SnapHelper snapHelper = new PagerSnapHelper();
             snapHelper.attachToRecyclerView(binding.crystalImages);
+
             setupDotsIndicator(imageUrls.size());
         }
+
         binding.crystalName.setText(crystal.getName());
         binding.crystalDescription.setText(crystal.getDescription());
         binding.crystalPrice.setText(String.format("NZD %.2f", crystal.getPrice()));
     }
 
+    /**
+     * Increments the view count of the crystal in Firestore.
+     */
     private void incrementCrystalViews() {
         db.collection("crystals").document(crystalId).update("views", FieldValue.increment(1));
     }
 
-
+    /**
+     * Updates the wishlist heart icon and triggers animation.
+     */
     private void updateWishlistButton() {
         int iconResId = isFavorite ? R.drawable.purple_heart : R.drawable.heart_outline;
         binding.wishlistButton.setImageResource(iconResId);
 
-        // Optional: add animation
         Animation anim = AnimationUtils.loadAnimation(
                 this, isFavorite ? R.anim.pop : R.anim.fade_pulse
         );
         binding.wishlistButton.startAnimation(anim);
     }
+
+    /**
+     * Adds the crystal to the user's cart in Firestore.
+     */
     private void addToCart() {
         if (currentUser == null) return;
 
@@ -201,6 +237,9 @@ public class DetailActivity extends BaseActivity {
         checkCartStatus();
     }
 
+    /**
+     * Updates quantity of the item in cart. Removes it if quantity drops to 0.
+     */
     private void updateQuantityInCart(int change) {
         if (currentUser == null) return;
 
@@ -221,6 +260,9 @@ public class DetailActivity extends BaseActivity {
                 });
     }
 
+    /**
+     * Removes the crystal from the cart.
+     */
     private void removeFromCart() {
         db.collection("users").document(currentUser.getUid())
                 .collection("cart").document(crystalId)
@@ -228,6 +270,9 @@ public class DetailActivity extends BaseActivity {
                 .addOnSuccessListener(aVoid -> updateCartButtonUI(0));
     }
 
+    /**
+     * Updates cart document with new quantity.
+     */
     private void updateCartQuantity(int newQuantity) {
         Map<String, Object> updates = new HashMap<>();
         updates.put("quantity", newQuantity);
@@ -237,6 +282,9 @@ public class DetailActivity extends BaseActivity {
         updateCartButtonUI(newQuantity);
     }
 
+    /**
+     * Checks if the item is in the user's cart and updates UI accordingly.
+     */
     private void checkCartStatus() {
         if (currentUser == null) return;
 
@@ -249,6 +297,9 @@ public class DetailActivity extends BaseActivity {
                 .addOnFailureListener(e -> updateCartButtonUI(0));
     }
 
+    /**
+     * Updates UI based on cart quantity (show "Add to cart" or +/- controls).
+     */
     private void updateCartButtonUI(int quantity) {
         if (quantity == 0) {
             binding.cartButton.setVisibility(View.VISIBLE);
@@ -260,6 +311,9 @@ public class DetailActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Displays indicator dots that sync with crystal image scroller.
+     */
     private void setupDotsIndicator(int count) {
         binding.dotsLayout.removeAllViews();
         ImageView[] dots = new ImageView[count];
@@ -275,6 +329,7 @@ public class DetailActivity extends BaseActivity {
             binding.dotsLayout.addView(dots[i], params);
         }
 
+        // Sync active dot with scroll position
         binding.crystalImages.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -287,6 +342,9 @@ public class DetailActivity extends BaseActivity {
         });
     }
 
+    /**
+     * Highlights the dot corresponding to the currently visible image.
+     */
     private void updateDotsIndicator(int position, ImageView[] dots) {
         for (int i = 0; i < dots.length; i++) {
             dots[i].setImageDrawable(ContextCompat.getDrawable(this,
@@ -294,6 +352,9 @@ public class DetailActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Loads products from the same category as the current crystal.
+     */
     private void loadSimilarProducts() {
         if (currentCategory == null) return;
 
@@ -313,8 +374,11 @@ public class DetailActivity extends BaseActivity {
                 .addOnFailureListener(e -> Log.e("DetailActivity", "Error loading similar products", e));
     }
 
+    /**
+     * Sets up the adapter for similar products and binds them to the RecyclerView.
+     */
     private void setupSimilarProductsAdapter() {
-        similarProductsAdapter = new CrystalAdapter(this, similarCrystals, favouriteIds, false, true,crystal -> {
+        similarProductsAdapter = new CrystalAdapter(this, similarCrystals, favouriteIds, false, true, crystal -> {
             Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtra("crystalId", crystal.getId());
             startActivity(intent);
@@ -322,6 +386,9 @@ public class DetailActivity extends BaseActivity {
         binding.similarProducts.setAdapter(similarProductsAdapter);
     }
 
+    /**
+     * Fetches the current user's favorite crystal IDs and updates similar product list.
+     */
     private void fetchUserFavourites() {
         if (currentUser == null) return;
 
