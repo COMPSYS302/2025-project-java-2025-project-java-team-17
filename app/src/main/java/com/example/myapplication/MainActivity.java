@@ -175,7 +175,7 @@ public class MainActivity extends BaseActivity {
 
     private void setupSearchBar() {
         SearchView searchView = findViewById(R.id.searchView);
-        searchView.setQueryHint("Search crystals...");
+        searchView.setQueryHint("Search for crystals...");
         searchView.setIconifiedByDefault(false);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

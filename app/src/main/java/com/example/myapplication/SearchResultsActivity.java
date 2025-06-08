@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.ImageView;
@@ -30,6 +31,8 @@ public class SearchResultsActivity extends BaseActivity {
     private RecyclerView recyclerView;
     private SearchView searchView;
     private String queryFromIntent;
+    private TextView noResultsMessage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,8 @@ public class SearchResultsActivity extends BaseActivity {
     private void initViews() {
         searchView = findViewById(R.id.searchView);
         TextView title = findViewById(R.id.tv_cart_title);
+        noResultsMessage = findViewById(R.id.noResultsMessage);
+
         title.setText("Search Results");
 
         ImageView ivBtnBack = findViewById(R.id.btn_back);
@@ -60,8 +65,9 @@ public class SearchResultsActivity extends BaseActivity {
 
         recyclerView = findViewById(R.id.searchRecycler);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        searchView.setQueryHint("Search crystals...");
+        searchView.setQueryHint("Search for crystals...");
         searchView.setIconifiedByDefault(false);
+
     }
 
     private void fetchFavouritesThenCrystals(String userId) {
@@ -126,6 +132,14 @@ public class SearchResultsActivity extends BaseActivity {
             }
         }
 
+        if (filtered.isEmpty()) {
+            noResultsMessage.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            noResultsMessage.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+
         adapter = new CrystalAdapter(this, filtered, favouriteIds, false, crystal -> {
             Intent intent = new Intent(this, DetailActivity.class);
             intent.putExtra("crystalId", crystal.getId());
@@ -138,4 +152,5 @@ public class SearchResultsActivity extends BaseActivity {
         recyclerView.setLayoutAnimation(controller);
         recyclerView.scheduleLayoutAnimation();
     }
+
 }
